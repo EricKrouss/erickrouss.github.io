@@ -116,13 +116,12 @@ body {
 #menu {
   position: absolute;
   width: 315px;
-  margin: -100px 0 0 -50px;
+  margin: -100px 0 0 -40px;
   padding: 50px;
   padding-top: 130px;
-  padding-bottom: 45px;
+  padding-bottom: 100%;
   opacity: 80%;
-  border-bottom-right-radius: 10%;
-  border-bottom-left-radius: 10%;
+
   background: #5a5a5a;
   list-style-type: none;
   -webkit-font-smoothing: antialiased;
@@ -280,6 +279,13 @@ body {
     margin: 20px auto; /* Center the bio and provide some spacing */
   }
   #menu{
-    width: 305px;
+    width: 100%;
+    padding-bottom: 45px;
+    box-sizing: border-box;
+    border-bottom-right-radius: 40px;
+    border-bottom-left-radius: 40px;
+  }
+  body {
+    overflow-x: hidden; /* Prevent horizontal scrolling */
   }
 }
