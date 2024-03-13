@@ -21,9 +21,7 @@ body {
   position: relative;
   top: 50px;
   left: 40px;
-
   z-index: 1;
-
   -webkit-user-select: none;
   user-select: none;
 }
@@ -249,6 +247,11 @@ body {
     text-align: center;
     margin-bottom: 15px;
   }
+
+  #menuToggle {
+    left: 10px; /* Adjust so it fits within mobile screens */
+  }
+
   /* Adjust the name and occupation size */
   .personal-info h1 {
     font-size: 1.5em; /* Make the font size smaller for mobile */
