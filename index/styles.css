@@ -36,7 +36,7 @@ body {
 }
 
 #menuToggle a:hover {
-  color: tomato;
+  color: rgb(255, 135, 114);
 }
 
 #menuToggle input {
@@ -91,7 +91,7 @@ body {
 #menuToggle input:checked ~ span {
   opacity: 1;
   transform: rotate(45deg) translate(-2px, -1px);
-  background: #232323;
+  background: #ffffff;
 }
 
 /*
@@ -119,10 +119,11 @@ body {
   margin: -100px 0 0 -50px;
   padding: 50px;
   padding-top: 130px;
-  padding-bottom: 5000px;
+  padding-bottom: 130px;
   opacity: 80%;
-  
-  background: #ededed;
+  border-top-right-radius: 10%;
+  border-bottom-right-radius: 10%;
+  background: #5a5a5a;
   list-style-type: none;
   -webkit-font-smoothing: antialiased;
   /* to stop flickering of text in safari */
@@ -135,7 +136,8 @@ body {
 
 #menu li {
   padding: 10px 0;
-  font-size: 30px;
+  color: white;
+  font-size: 40px;
   font-weight: bold;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
@@ -145,4 +147,119 @@ body {
  */
 #menuToggle input:checked ~ ul {
   transform: none;
+}
+
+
+/*END OF HEADER*/
+
+
+.container {
+  display: grid;
+  grid-template-columns: auto min-content 1fr; /* Adjust the column sizes */
+  grid-template-rows: auto auto; /* Two rows: one for the image/socials/info, one for the bio */
+  grid-template-areas: 
+    "profile socials info"
+    "bio bio bio"; /* Bio spans all columns on the second row */
+  gap: 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+
+.profile-image {
+  grid-area: profile;
+  width: 100%;
+  max-width: 300px; /* Adjust based on your actual image size */
+  border-radius: 15%;
+}
+
+.social-media-links {
+  grid-area: socials;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start; /* Align items to the start */
+}
+
+.social-logo {
+  width: 65px;
+  height: 65px;
+}
+
+
+
+.personal-info {
+  grid-area: info;
+  color: white;
+  padding: 20px; /* Adjusted padding */
+  border-radius: 15px; /* Ensure border-radius is visible */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center the content */
+  box-sizing: border-box; /* Include padding in the element's total width and height */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size:30px;
+}
+
+.personal-info h1, .personal-info .subtitle {
+  margin: 0;
+  padding: 0; /* Reset default margin and padding */
+}
+
+.personal-info h1 {
+  font-size: 3.5em; /* Increase font size for name */
+}
+
+.personal-info .subtitle {
+  font-size: 1.2em; /* Increase font size for occupation */
+}
+
+.bio {
+  position: relative;
+  grid-area: bio;
+  background: #343434; /* Solid background color for the bio section */
+  color: #c0c0c0; /* Text color */
+  padding: 20px;
+  border-radius: 15px;
+  box-sizing: border-box;
+  margin: 30px; /* Adjust margin to ensure space for the border */
+  overflow: hidden; /* Important for the gradient border */
+  font-size: 30px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+
+
+@media (max-width: 767px) {
+  .container {
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+      "profile"
+      "info"
+      "socials"
+      "bio";
+  }
+
+  .profile-image {
+    max-width: 300px; /* Adjust if needed */
+    margin: 0 auto; /* Center the image horizontally */
+  }
+
+  .social-media-links {
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .social-media-links a {
+    display: inline-block;
+  }
+
+  .personal-info, .bio {
+    text-align: center;
+  }
+
+  .personal-info {
+    order: -1; /* Position personal info above social links on mobile */
+  }
 }
