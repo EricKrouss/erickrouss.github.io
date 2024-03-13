@@ -243,6 +243,9 @@ body {
 
 
 @media (max-width: 767px) {
+  #menubar-name{
+    margin-bottom: 15px;
+  }
   /* Adjust the name and occupation size */
   .personal-info h1 {
     font-size: 1.5em; /* Make the font size smaller for mobile */
