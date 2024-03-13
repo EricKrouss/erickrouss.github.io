@@ -245,12 +245,12 @@ body {
 @media (max-width: 767px) {
   /* Adjust the name and occupation size */
   .personal-info h1 {
-    font-size: 1.75em; /* Make the font size smaller for mobile */
+    font-size: 1.5em; /* Make the font size smaller for mobile */
     text-align: center;
   }
 
   .personal-info .subtitle {
-    font-size: 1em; /* Adjust subtitle size as needed */
+    font-size: .75em; /* Adjust subtitle size as needed */
     text-align: center;
   }
 
@@ -274,6 +274,10 @@ body {
     margin-top: -20px; /* Add some space above the social media links */
   }
 
+  .social-logo{
+    width: 50px;
+    height: 50px;
+  }
   .personal-info {
     order: 2; /* Ensure name/occupation comes before social media links */
     text-align: center;
@@ -291,6 +295,7 @@ body {
     order: 4; /* Ensure bio is at the bottom */
     width: 90%;
     margin: -5px auto; /* Center the bio and provide some spacing */
+    font-size: 23px;
   }
   #menu{
     width: 100%;
