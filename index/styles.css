@@ -115,14 +115,14 @@ body {
  */
 #menu {
   position: absolute;
-  width: 350px;
+  width: 315px;
   margin: -100px 0 0 -50px;
   padding: 50px;
   padding-top: 130px;
   padding-bottom: 45px;
   opacity: 80%;
-  border-top-right-radius: 10%;
   border-bottom-right-radius: 10%;
+  border-bottom-left-radius: 10%;
   background: #5a5a5a;
   list-style-type: none;
   -webkit-font-smoothing: antialiased;
@@ -278,5 +278,8 @@ body {
     order: 4; /* Ensure bio is at the bottom */
     width: 90%;
     margin: 20px auto; /* Center the bio and provide some spacing */
+  }
+  #menu{
+    width: 100%;
   }
 }
