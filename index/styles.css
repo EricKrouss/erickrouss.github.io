@@ -271,12 +271,13 @@ body {
     flex-direction: row;
     justify-content: center;
     gap: 10px;
-    margin-top: 20px; /* Add some space above the social media links */
+    margin-top: -20px; /* Add some space above the social media links */
   }
 
   .personal-info {
     order: 2; /* Ensure name/occupation comes before social media links */
     text-align: center;
+    margin-top: -50px;
   }
 
   .profile-image {
@@ -289,7 +290,7 @@ body {
   .bio {
     order: 4; /* Ensure bio is at the bottom */
     width: 90%;
-    margin: 20px auto; /* Center the bio and provide some spacing */
+    margin: -5px auto; /* Center the bio and provide some spacing */
   }
   #menu{
     width: 100%;
