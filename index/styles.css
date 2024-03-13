@@ -231,35 +231,49 @@ body {
 
 
 @media (max-width: 767px) {
-  .container {
-    grid-template-columns: 1fr;
-    grid-template-areas: 
-      "profile"
-      "info"
-      "socials"
-      "bio";
-  }
-
-  .profile-image {
-    max-width: 300px; /* Adjust if needed */
-    margin: 0 auto; /* Center the image horizontally */
-  }
-
-  .social-media-links {
-    flex-direction: row;
-    justify-content: center;
-    gap: 20px;
-  }
-
-  .social-media-links a {
-    display: inline-block;
-  }
-
-  .personal-info, .bio {
+  /* Adjust the name and occupation size */
+  .personal-info h1 {
+    font-size: 1.75em; /* Make the font size smaller for mobile */
     text-align: center;
   }
 
+  .personal-info .subtitle {
+    font-size: 1em; /* Adjust subtitle size as needed */
+  }
+
+  /* Change order and layout for social media links */
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  /* Specific adjustments to place social media icons below name/occupation */
+  .social-media-links {
+    order: 3; /* Place social media links below the name/occupation on mobile */
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px; /* Add some space above the social media links */
+  }
+
   .personal-info {
-    order: -1; /* Position personal info above social links on mobile */
+    order: 2; /* Ensure name/occupation comes before social media links */
+  }
+
+  .profile-image {
+    order: 1; /* Profile image remains at the top */
+    width: 50%; /* Adjust image size for mobile */
+    max-width: 200px;
+    margin: 20px auto;
+  }
+
+  .bio {
+    order: 4; /* Ensure bio is at the bottom */
+    width: 90%;
+    margin: 20px auto; /* Center the bio and provide some spacing */
   }
 }
