@@ -250,6 +250,7 @@ body {
     width: 100vw;
     max-width: 100%;
     overflow: hidden;
+    text-align: center;
   }
 
   /* Specific adjustments to place social media icons below name/occupation */
@@ -263,6 +264,7 @@ body {
 
   .personal-info {
     order: 2; /* Ensure name/occupation comes before social media links */
+    text-align: center;
   }
 
   .profile-image {
