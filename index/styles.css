@@ -244,6 +244,9 @@ body {
 
 @media (max-width: 767px) {
   #menubar-name{
+    font-size: 2.5em;
+    padding-left: 0px;
+    text-align: center;
     margin-bottom: 15px;
   }
   /* Adjust the name and occupation size */
