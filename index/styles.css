@@ -239,6 +239,7 @@ body {
 
   .personal-info .subtitle {
     font-size: 1em; /* Adjust subtitle size as needed */
+    text-align: center;
   }
 
   /* Change order and layout for social media links */
