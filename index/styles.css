@@ -159,17 +159,26 @@ body, html {
 
 .container {
   display: grid;
-  grid-template-columns: auto min-content 1fr; /* Adjust the column sizes */
-  grid-template-rows: auto auto; /* Two rows: one for the image/socials/info, one for the bio */
+  grid-template-columns: auto min-content 1fr; /* Keep your column sizes */
+  grid-template-rows: auto auto auto; /* Add a third row for the video */
   grid-template-areas: 
     "profile socials info"
-    "bio bio bio"; /* Bio spans all columns on the second row */
+    "bio bio bio"
+    "video video video"; /* New line for the video */
   gap: 20px;
   max-width: 1000px;
   margin: auto;
 }
 
 
+.container {
+  display: grid;
+  grid-template-areas: 
+    "profile socials info"
+    "bio bio bio"
+    "video video video"; /* Assuming you add this area */
+  gap: 20px;
+}
 .profile-image {
   grid-area: profile;
   width: 100%;
@@ -244,6 +253,112 @@ body, html {
   font-family: "Roboto Condensed";
 }
 
+.video-container {
+  grid-area: video; /* Assign it to the 'video' area */
+  display: flex;
+  justify-content: center; /* Centers the iframe horizontally */
+  padding: 20px 0; /* Optional padding for spacing */
+}
+
+
+.video-container iframe {
+  width: 100%; /* Let it fill the container */
+  max-width: auto; /* Adjust to limit its maximum size */
+  height: auto; /* Height is auto to maintain aspect ratio */
+  aspect-ratio: 3 / 2; /* Maintain a 16:9 aspect ratio */
+  border-radius: 30px; /* Apply your desired border-radius */
+}
+
+/*end of homepage */
+
+.project-container {
+  max-width: 900px; /* Example: Adjust this to match the bio's width */
+  margin: 20px auto; /* Centers the container */
+  display: block;
+}
+
+.project-container .content p {
+  font-size: 1.5em; /* Larger text */
+  text-align: center;
+  color: #333; /* Darker color for better readability */
+  font-weight: 400; /* Adjust based on preference */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+
+.collapsible{
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 30px;
+}
+
+.project-container {
+  margin-bottom: 20px; /* Space between each project container */
+}
+
+.collapsible {
+  background-color: #5a5a5a;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 2em;
+  border-radius: 10px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.collapsible:after {
+  content: '\002B'; /* Unicode character for "+" sign */
+  color: white;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.collapsible.active:after {
+  content: "\2212"; /* Unicode character for "-" sign */
+}
+
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #f1f1f1;
+  border-radius: 0 0 10px 10px;
+}
+
+.project-links {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Adjust the space between icons */
+}
+
+.project-links a {
+  color: #232323; /* Icon color, adjust as needed */
+  font-size: 24px; /* Icon size */
+}
+
+.project-links a:hover {
+  color: #5a5a5a; /* Icon hover color, adjust as needed */
+}
+
+.project-container .content img {
+  display: block;
+  margin: 0 auto; /* Centers the image */
+  max-width: 100%; /* Ensures the image is responsive and doesn't overflow its container */
+}
+
+.project-date {
+  font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; /* Choose a different font */
+  font-size: 0.9em; /* Adjust size as needed */
+  font-weight: normal;
+  color: #ffffff; /* Softer color for less emphasis */
+  margin-left: 10px; /* Add some space between the title and date */
+}
 
 
 @media (max-width: 767px) {
@@ -319,4 +434,16 @@ body, html {
   body {
     overflow-x: hidden; /* Prevent horizontal scrolling */
   }
+
+  
+
+
+    .video-container {
+      order: 4; /* Position the video after the bio */
+      width: 90%; /* Adjust width to match the bio's mobile styling */
+      height: auto; /* Height can be auto or adjust based on the aspect ratio */
+      border-radius: 30px; /* Your adjusted border-radius */
+    }
+  }
+  
 }
