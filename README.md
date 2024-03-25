@@ -1,6 +1,6 @@
 erickrouss.github.io
-The GitHub repository for my website, including my projects, contact information, and more.
-If you have any questions, email eric@krouss.net.
+This repository hosts the source code for my personal website, featuring my portfolio of projects, ways to get in touch with me, and additional information.
+For any inquiries, feel free to reach out at eric@krouss.net.
 
-Roadmap:
-Become far more fluent in the JavaScript coding language.
+Future Plans:
+Enhance my proficiency in JavaScript to a higher level.
