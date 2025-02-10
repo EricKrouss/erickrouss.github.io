@@ -23,7 +23,7 @@ const Contact = () => {
           <img
             src={LinkedInIcon}
             alt="LinkedIn"
-            className="w-12 h-12 hover:scale-110 transition-transform duration-300 shadow-md hover:shadow-xl"
+            className="w-12 h-12 hover:scale-110 transition-transform duration-300 shadow-md hover:shadow-xl rounded-xl"
           />
         </a>
         <a
@@ -35,7 +35,7 @@ const Contact = () => {
           <img
             src={GitHubIcon}
             alt="GitHub"
-            className="w-12 h-12 hover:scale-110 transition-transform duration-300 shadow-md hover:shadow-xl"
+            className="w-12 h-12 hover:scale-110 transition-transform duration-300 shadow-md hover:shadow-xl rounded-xl"
           />
         </a>
         <a
@@ -47,7 +47,7 @@ const Contact = () => {
           <img
             src={BlueskyIcon}
             alt="Bluesky"
-            className="w-12 h-12 hover:scale-110 transition-transform duration-300 shadow-md hover:shadow-xl rounded-lg"
+            className="w-12 h-12 hover:scale-110 transition-transform duration-300 shadow-md hover:shadow-xl rounded-xl"
           />
         </a>
         <a
@@ -59,7 +59,7 @@ const Contact = () => {
           <img
             src={EmailIcon}
             alt="Email"
-            className="w-12 h-12 hover:scale-110 transition-transform duration-300 shadow-md hover:shadow-xl"
+            className="relative bottom-0.75 w-13.5 h-13.5 hover:scale-110 transition-transform duration-300 shadow-md hover:shadow-xl rounded-xl"
           />
         </a>
       </div>
