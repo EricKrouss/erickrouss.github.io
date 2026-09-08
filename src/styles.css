@@ -918,10 +918,15 @@ button.text-link:hover {
 }
 .bottom-grid {
   display: grid;
-  grid-template-columns: 2.28fr 0.82fr;
+  grid-template-columns: minmax(0, 2.28fr) minmax(0, 0.82fr);
   gap: 15px;
   margin-top: 20px;
   align-items: center;
+}
+#links:not(.maximized) {
+  width: max-content;
+  max-width: 100%;
+  justify-self: start;
 }
 #links .window-content {
   padding: 12px 14px 14px;
@@ -1424,7 +1429,7 @@ button.text-link:hover {
     margin-top: 0;
   }
   .bottom-grid {
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
   }
   .task-buttons button {
     width: auto;
@@ -1537,7 +1542,7 @@ button.text-link:hover {
     width: 100%;
   }
   .bottom-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .links-intro {
     display: flex;

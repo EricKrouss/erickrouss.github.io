@@ -21,7 +21,7 @@ export default function Startup({
   const audio = useRef(null);
   const generation = useRef(0);
   const powerButton = useRef(null);
-  const skipButton = useRef(null);
+  const startupScreen = useRef(null);
   const [audioUnavailable, setAudioUnavailable] = useState(false);
 
   const stop = () => {
@@ -52,7 +52,8 @@ export default function Startup({
       setAudioUnavailable(false);
       powerButton.current?.focus({ preventScroll: true });
     }
-    if (phase === "splash") skipButton.current?.focus({ preventScroll: true });
+    if (phase === "splash")
+      startupScreen.current?.focus({ preventScroll: true });
   }, [phase]);
 
   const finish = () => {
@@ -136,6 +137,8 @@ export default function Startup({
   if (phase === "ready") return null;
   return (
     <section
+      ref={startupScreen}
+      tabIndex={-1}
       className={`startup startup-${phase}`}
       aria-label="Computer startup"
     >
@@ -186,18 +189,13 @@ export default function Startup({
               />
             </picture>
           )}
-          <div className="boot-actions">
-            <span role="status">
-              {audioUnavailable
-                ? "Sound unavailable — starting desktop…"
-                : phase === "splash"
-                  ? "Starting Windows 98…"
-                  : "Loading /home/eric… don’t tell Microsoft."}
-            </span>
-            <button ref={skipButton} onClick={skip}>
-              Skip startup
-            </button>
-          </div>
+          <span className="startup-status" role="status">
+            {audioUnavailable
+              ? "Sound unavailable — starting desktop…"
+              : phase === "splash"
+                ? "Starting Windows 98…"
+                : "Loading desktop…"}
+          </span>
         </>
       )}
     </section>

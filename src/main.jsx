@@ -9,5 +9,5 @@ createRoot(document.getElementById("root")).render(
   </React.StrictMode>,
 );
 import "./windows98.css";
-import "./ie6.css";
+import "./ie5.css";
 import "./dos.css";

@@ -3,11 +3,25 @@ import React, { useEffect, useRef, useState } from "react";
 const homeAddress = "http://youtube.com";
 const playerPage = "/2007-youtube/watch.html";
 
-function BrowserIcon({ name, size = 24 }) {
+function BrowserIcon({ name, size = 20, width = size, hot = false }) {
+  if (hot)
+    return (
+      <span className="ie-toolbar-icon" style={{ width, height: size }}>
+        <BrowserIcon name={name} size={size} width={width} />
+        <img
+          className="ie-icon-hot"
+          src={`/assets/ie5/${name}-hot.png`}
+          width={width}
+          height={size}
+          alt=""
+          draggable="false"
+        />
+      </span>
+    );
   return (
     <img
-      src={`/assets/ie6/${name}.png`}
-      width={size}
+      src={`/assets/ie5/${name}.png`}
+      width={width}
       height={size}
       alt=""
       draggable="false"
@@ -75,6 +89,53 @@ export default function InternetExplorer({
       );
     }
   };
+  const stopLoading = () => {
+    frame.current?.contentWindow?.stop();
+    pause();
+    setLoading(false);
+  };
+  const toolbarActions = [
+    {
+      name: "home",
+      label: "Home",
+      action: reload,
+      className: "ie-compact-extra",
+    },
+    {
+      name: "search",
+      label: "Search",
+      className: "ie-compact-extra",
+      action: () =>
+        frame.current?.contentWindow?.postMessage(
+          { type: "eric-desktop-search" },
+          location.origin,
+        ),
+    },
+    {
+      name: "favorites",
+      label: "Favorites",
+      action: () => setMenu("Favorites"),
+      className: "ie-extra",
+    },
+    {
+      name: "history",
+      label: "History",
+      className: "ie-extra",
+      action: () => showNotice("History\n\nToday: http://youtube.com/"),
+    },
+    {
+      name: "mail",
+      label: "Mail",
+      className: "ie-extra",
+      action: () => showNotice("Outlook Express\n\nNo new messages."),
+    },
+    {
+      name: "print",
+      label: "Print",
+      action: () => frame.current?.contentWindow?.print(),
+      className: "ie-extra",
+    },
+  ];
   const menus = {
     File: [
       ["Open…", () => input.current?.focus()],
@@ -91,14 +152,7 @@ export default function InternetExplorer({
     ],
     View: [
       ["Refresh", reload],
-      [
-        "Stop",
-        () => {
-          frame.current?.contentWindow?.stop();
-          pause();
-          setLoading(false);
-        },
-      ],
+      ["Stop", stopLoading],
     ],
     Favorites: [["YouTube — Broadcast Yourself", reload]],
     Tools: [
@@ -115,7 +169,7 @@ export default function InternetExplorer({
         "About Internet Explorer",
         () =>
           showNotice(
-            "Microsoft Internet Explorer 6\n\nA desktop recreation using archived interface graphics. The page inside is a local copy of Eric’s 2007 YouTube Player.\n\nThe address bar is decorative; you are still on Eric’s personal site.",
+            "Microsoft Internet Explorer 5\n\nA desktop recreation using original Windows 98 SE toolbar graphics. The page inside is a local copy of Eric’s 2007 YouTube Player.\n\nThe address bar is decorative; you are still on Eric’s personal site.",
           ),
       ],
     ],
@@ -126,6 +180,10 @@ export default function InternetExplorer({
       ref={root}
       onKeyDown={(event) => {
         if (event.key === "Escape") {
+          if (menu === "Toolbar")
+            root.current
+              ?.querySelector(".ie-toolbar-overflow > button")
+              ?.focus();
           setMenu(null);
         }
         if (event.key === "F5") {
@@ -154,7 +212,16 @@ export default function InternetExplorer({
                   }
                 }}
               >
-                {label}
+                {label === "Favorites" ? (
+                  <>
+                    F<u>a</u>vorites
+                  </>
+                ) : (
+                  <>
+                    <u>{label[0]}</u>
+                    {label.slice(1)}
+                  </>
+                )}
               </button>
               {menu === label && (
                 <div className="ie-dropdown">
@@ -184,91 +251,75 @@ export default function InternetExplorer({
         aria-label="Internet Explorer navigation"
       >
         <span className="ie-gripper" aria-hidden="true" />
-        <button disabled title="Back — no previous page" className="ie-back">
-          <BrowserIcon name="back" />
+        <button
+          disabled
+          title="Back — no previous page"
+          className="ie-split-button"
+        >
+          <BrowserIcon name="back-disabled" />
           <span>Back</span>
           <span className="ie-arrow" />
         </button>
-        <button disabled title="Forward — no next page" aria-label="Forward">
-          <BrowserIcon name="forward" />
+        <button
+          disabled
+          title="Forward — no next page"
+          aria-label="Forward"
+          className="ie-split-button"
+        >
+          <BrowserIcon name="forward-disabled" />
+          <span>Forward</span>
           <span className="ie-arrow" />
         </button>
-        <button
-          title="Stop"
-          aria-label="Stop loading"
-          onClick={() => {
-            frame.current?.contentWindow?.stop();
-            pause();
-            setLoading(false);
-          }}
-        >
-          <BrowserIcon name="stop" />
+        <button title="Stop" aria-label="Stop loading" onClick={stopLoading}>
+          <BrowserIcon name="stop" hot />
+          <span>Stop</span>
         </button>
         <button title="Refresh" aria-label="Refresh page" onClick={reload}>
-          <BrowserIcon name="refresh" />
+          <BrowserIcon name="refresh" hot />
+          <span>Refresh</span>
         </button>
-        <button
-          title="Home"
-          aria-label="Internet Explorer home"
-          onClick={reload}
-        >
-          <BrowserIcon name="home" />
-        </button>
-        <span className="ie-divider" aria-hidden="true" />
-        <button
-          title="Search"
-          onClick={() =>
-            frame.current?.contentWindow?.postMessage(
-              { type: "eric-desktop-search" },
-              location.origin,
-            )
-          }
-        >
-          <BrowserIcon name="search" />
-          <span>Search</span>
-        </button>
-        <button
-          title="Favorites"
-          className="ie-extra"
-          onClick={() => setMenu("Favorites")}
-        >
-          <BrowserIcon name="favorites" />
-          <span>Favorites</span>
-        </button>
-        <button
-          title="History"
-          aria-label="History"
-          className="ie-extra"
-          onClick={() =>
-            showNotice(
-              "History\n\nToday: YouTube, 2007.\n\nSome tabs are worth keeping open for nineteen years.",
-            )
-          }
-        >
-          <BrowserIcon name="history" />
-        </button>
-        <span className="ie-divider ie-extra" aria-hidden="true" />
-        <button
-          title="Mail"
-          aria-label="Internet Explorer mail"
-          className="ie-extra"
-          onClick={() =>
-            showNotice(
-              "You have 0 new messages.\n\nEven Outlook Express deserves a day off.",
-            )
-          }
-        >
-          <BrowserIcon name="mail" />
-          <span className="ie-arrow" />
-        </button>
-        <button
-          title="Print"
-          aria-label="Print page"
-          className="ie-extra"
-          onClick={() => frame.current?.contentWindow?.print()}
-        >
-          <BrowserIcon name="print" />
-        </button>
+        {toolbarActions.map(({ name, label, action, className }) => (
+          <React.Fragment key={name}>
+            {(name === "search" || name === "mail") && (
+              <span className={`ie-divider ${className}`} aria-hidden="true" />
+            )}
+            <button
+              title={label}
+              onClick={action}
+              className={`${className}${name === "mail" ? " ie-split-button" : ""}`}
+            >
+              <BrowserIcon name={name} hot />
+              <span>{label}</span>
+              {name === "mail" && <span className="ie-arrow" />}
+            </button>
+          </React.Fragment>
+        ))}
+        <div className="ie-toolbar-overflow">
+          <button
+            title="More toolbar buttons"
+            aria-label="More toolbar buttons"
+            aria-expanded={menu === "Toolbar"}
+            onClick={() => setMenu(menu === "Toolbar" ? null : "Toolbar")}
+          >
+            <BrowserIcon name="chevron" width={10} size={7} />
+          </button>
+          {menu === "Toolbar" && (
+            <div className="ie-dropdown">
+              {toolbarActions.map(({ name, label, action, className }) => (
+                <button
+                  key={name}
+                  className={`ie-overflow-${className}`}
+                  onClick={() => {
+                    setMenu(null);
+                    action();
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
       <form className="ie-address-row" onSubmit={navigate}>
         <span className="ie-gripper" aria-hidden="true" />
@@ -297,7 +348,7 @@ export default function InternetExplorer({
           </button>
         </div>
         <button className="ie-go" type="submit">
-          <BrowserIcon name="go" size={16} />
+          <BrowserIcon name="go" size={16} width={18} hot />
           <span>Go</span>
         </button>
         <span className="ie-divider ie-links-label" aria-hidden="true" />
@@ -324,14 +375,16 @@ export default function InternetExplorer({
       </div>
       <div className="ie-statusbar" role="status">
         <span className="ie-status-message">
-          <BrowserIcon name="page" size={16} />
+          <BrowserIcon name="status-page" size={16} />
           {loading ? "Opening page http://youtube.com/…" : "Done"}
         </span>
+        <span className="ie-status-pane" aria-hidden="true" />
+        <span className="ie-status-pane" aria-hidden="true" />
         <span className="ie-status-zone">
           <BrowserIcon name="internet" size={16} />
           Internet
+          <span className="ie-size-grip" aria-hidden="true" />
         </span>
-        <span className="ie-size-grip" aria-hidden="true" />
       </div>
     </div>
   );

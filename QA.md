@@ -67,3 +67,13 @@ Extraction coordinates, sources and hashes are recorded in `docs/window-asset-pr
 - Verified Skip at every size, the complete normal boot phase sequence, and reduced-motion entry. Startup audio code and reveal timing are unchanged.
 - Rewrote the 28 general and eight Numa-specific fictional comments and screen names into varied short reactions, questions and casual posts. Verified the revised Numa comments, general comments for another video, and different selections for different IDs. Existing vote/reply storage remains intact.
 - Browser exception log empty. Desktop and portrait startup screenshots visually inspected.
+
+## IE5, compact links and clean startup (v2.3.2)
+
+- Production build passed: 74.96 KB gzipped app JavaScript and 10.93 KB CSS. No app dependency was added.
+- links.exe now measures 706px on wide desktops, ending 18px after the last 88×31 button. All seven buttons wrap inside the window at 2560, 1920, 1366, 1024, 768, 540, 390 and 320 CSS pixels. Fixed a tablet grid-minimum overflow found during verification. Maximize, minimize, shortcut restore and restore-down passed on desktop and phone.
+- After Power on, startup contains no buttons or visible status overlay at any reveal stage. Checked full-viewport desktop/phone posters, the normal phase sequence, automatic completion, restored keyboard focus and scrolling, session remembrance, initial silent Skip, and reduced motion. The initial welcome dialog keeps both choices. Audio playback and reveal timing are unchanged.
+- Replaced the IE6/XP asset set with native IE5 resources and reference crops. Eight rendered toolbar icons compare pixel-for-pixel equal to their extracted originals in Chromium at DPR 1. Six also match the archived IE5 screenshot exactly. Original color hover states appear on hover; all browser images load at their native dimensions. Menu/toolbar/address band heights are 24/42/26px.
+- IE5 chrome, status bar and embedded watch page have no horizontal overflow at 2560×1440, 1920×1080, 1366×768, 1024×768, 768×1024, 740×900, 540×900, 390×900, 320×700 and 844×390. Inspected desktop, phone and phone overflow-menu screenshots.
+- Verified toolbar overflow commands, Search focusing the embedded page's search field, Escape focus restoration, About naming IE5, literal simulated address, playback, pause on minimize, maximize/restore, refresh starting paused, invalid-address handling and iframe destruction on close. The local YouTube comments remain present.
+- Browser exception log empty. `git diff --check` passed. The pixel checks concern native icon bitmaps at DPR 1, not a claim of identical browser/GDI text rendering at arbitrary zoom.
