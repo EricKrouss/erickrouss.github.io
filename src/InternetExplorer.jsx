@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import ClassicScrollbars from "./ClassicScrollbars.jsx";
 
 const homeAddress = "http://youtube.com";
 const playerPage = "/2007-youtube/watch.html";
@@ -34,6 +35,7 @@ export default function InternetExplorer({
   onFocus,
   onClose,
   showNotice,
+  playSound,
 }) {
   const [address, setAddress] = useState(homeAddress);
   const [loading, setLoading] = useState(true);
@@ -44,6 +46,7 @@ export default function InternetExplorer({
   const root = useRef(null);
 
   const reload = () => {
+    playSound("navigate");
     setAddress(homeAddress);
     setLoading(true);
     setRevision((value) => value + 1);
@@ -360,7 +363,7 @@ export default function InternetExplorer({
           Links <span>»</span>
         </button>
       </form>
-      <div className="ie-page-area">
+      <div className="ie-page-area classic-scroll-area" data-scroll-y="true">
         <iframe
           ref={frame}
           key={revision}
@@ -371,6 +374,13 @@ export default function InternetExplorer({
             setLoading(false);
             if (!visible) pause();
           }}
+        />
+        <ClassicScrollbars
+          viewportRef={frame}
+          iframe
+          alwaysVertical
+          revision={revision}
+          label="Internet Explorer"
         />
       </div>
       <div className="ie-statusbar" role="status">

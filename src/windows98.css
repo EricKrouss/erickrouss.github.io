@@ -16,6 +16,7 @@
   --outset: inset 1px 1px #fff, inset -1px -1px #808080;
   --inset: inset 1px 1px #808080, inset -1px -1px #fff;
   --shell-font: "MS W98 UI", "MS Sans Serif", sans-serif;
+  --taskbar-height: 28px;
   --mono: var(--shell-font);
   font-family: var(--shell-font);
   font-kerning: none;
@@ -265,6 +266,33 @@ button:active,
 .retro-dialog {
   background: #c0c0c0;
   color: #000;
+  border: 0;
+  padding: 3px;
+  box-shadow:
+    inset -1px -1px #000,
+    inset 1px 1px #dfdfdf,
+    inset -2px -2px #808080,
+    inset 2px 2px #fff;
+}
+.retro-dialog::backdrop {
+  background: transparent;
+}
+.retro-dialog .dialog-ok {
+  width: 75px;
+  min-width: 75px;
+  min-height: 23px;
+  border: 0;
+  padding: 4px;
+  background: #c0c0c0;
+  font: 11px/1 var(--shell-font);
+  box-shadow:
+    inset -1px -1px #000,
+    inset 1px 1px #fff,
+    inset -2px -2px #808080,
+    inset 2px 2px #dfdfdf;
+}
+.retro-dialog .dialog-ok:active {
+  box-shadow: inset 1px 1px #808080;
 }
 .retro-dialog .title-bar strong {
   font-family: var(--shell-font);
@@ -648,6 +676,9 @@ button:active,
 }
 
 @media (max-width: 740px) {
+  :root {
+    --taskbar-height: 38px;
+  }
   .taskbar {
     height: 38px;
     padding: 4px;
@@ -771,6 +802,10 @@ button:active,
   min-width: 0;
   margin: 0;
 }
+body:has(.retro-dialog[open]) .window > .title-bar {
+  background-image: url("/assets/window-controls/title-inactive.png");
+  color: #c0c0c0;
+}
 .title-grip {
   min-width: 0;
   margin-left: 0;
@@ -816,7 +851,8 @@ button:active,
 }
 .window.maximized {
   position: fixed;
-  inset: 34px 12px 48px 112px;
+  /* Native maximization moves the four-pixel sizing border off the work area. */
+  inset: -4px -4px calc(var(--taskbar-height) - 4px);
   display: flex;
   flex-direction: column;
   transform: none !important;
@@ -841,6 +877,26 @@ button:active,
 .window[hidden] {
   display: none !important;
 }
+.title-bar.flying-caption {
+  position: fixed;
+  z-index: 10000;
+  min-height: 0;
+  margin: 0;
+  pointer-events: none;
+  overflow: hidden;
+  cursor: default;
+  background: #1084d0 url("/assets/window-controls/title-active.png") center /
+    100% 100% no-repeat;
+  color: #fff;
+  box-shadow: none;
+}
+.flying-caption .title-grip {
+  display: none;
+}
+.flying-caption h2 {
+  white-space: nowrap;
+  flex: 1;
+}
 @media (max-width: 1049px) {
   .desktop-icons {
     position: static;
@@ -856,9 +912,6 @@ button:active,
   }
   .dock-note {
     display: none;
-  }
-  .window.maximized {
-    inset: 8px 8px 48px;
   }
 }
 @media (max-width: 540px) {

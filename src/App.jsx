@@ -1,9 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { site, projects, links, hardware, minecraft } from "./content.js";
 import { Icon, DesktopComputer, MinecraftArtwork } from "./Art.jsx";
 import StartMenu from "./StartMenu.jsx";
 import InternetExplorer from "./InternetExplorer.jsx";
 import Startup, { hasStarted } from "./Startup.jsx";
+import ClassicScrollbars from "./ClassicScrollbars.jsx";
+import { useWindowActions } from "./windowAnimation.js";
+import { readSoundPreference, useSystemSounds } from "./systemSounds.js";
 
 const programs = [
   ["eric", "computer"],
@@ -54,6 +57,7 @@ function Window({
   className = "",
 }) {
   const drag = useRef(null);
+  const content = useRef(null);
   const startDrag = (e) => {
     if (
       maximized ||
@@ -147,13 +151,16 @@ function Window({
           />
         </div>
       </div>
-      <div className="window-content">{children}</div>
+      <div className="window-body classic-scroll-area">
+        <div className="window-content" ref={content}>
+          {children}
+        </div>
+        <ClassicScrollbars viewportRef={content} label={title || `${id}.exe`} />
+      </div>
       {footer && (
         <div className="window-footer">
           {footer}
-          <span className="resize-grip" aria-hidden="true">
-            ◢
-          </span>
+          <span className="resize-grip" aria-hidden="true" />
         </div>
       )}
     </section>
@@ -166,6 +173,7 @@ function Terminal({
   onSecret,
   onMaximize,
   showNotice,
+  playSound,
 }) {
   const [lines, setLines] = useState(initialLines);
   const [input, setInput] = useState("");
@@ -209,6 +217,7 @@ function Terminal({
     } else if (command === "specs" || command === "neofetch")
       answer = hardware.map(([k, v]) => `${k.padEnd(5)} ${v}`).join("\n");
     else if (command === "date") answer = new Date().toLocaleString();
+    else if (command === "arch") answer = "btw";
     else if (command === "ping")
       answer =
         "PING imagination.local (127.0.0.1)\n64 bytes: time=<1ms  TTL=nostalgia\nSimulated connection: looking good.";
@@ -242,8 +251,10 @@ function Terminal({
     } else if (command === "cowsay")
       answer =
         "  ____________________\n< keep the web weird! >\n  --------------------\n         \\   ^__^\n          \\  (oo)\\_______\n             (__)\\       )\\/\\\n                 ||----w |\n                 ||     ||";
-    else
+    else {
       answer = `Command not found: ${command}\nType help for the little list of things I understand.`;
+      playSound("error");
+    }
     setLines((old) =>
       [
         ...old,
@@ -348,63 +359,66 @@ function Terminal({
           </button>
         ))}
       </div>
-      <div className="dos-screen" ref={screen}>
-        <div
-          className="terminal-output"
-          ref={output}
-          role="log"
-          tabIndex="0"
-          aria-label="Terminal output"
-          aria-live="polite"
-        >
-          {lines.map((line, i) => (
-            <div key={i} className={line.type || ""}>
-              {line.type === "ascii" ? (
-                <span
-                  role="img"
-                  aria-label="An ASCII cow says: keep the web weird!"
-                >
-                  {line.text.split("\n").map((row, rowIndex) => (
-                    <span
-                      className="ascii-row"
-                      key={rowIndex}
-                      aria-hidden="true"
-                    >
-                      {[...row].map((character, column) => (
-                        <span key={column}>{character}</span>
-                      ))}
-                    </span>
-                  ))}
-                </span>
-              ) : (
-                line.text
-              )}
-            </div>
-          ))}
-        </div>
-        <form onSubmit={execute} className="terminal-input">
-          <label htmlFor="command">eric@home:~$</label>
-          <span
-            className="dos-command-field"
-            style={{ "--caret-column": caret }}
+      <div className="dos-scroll-area classic-scroll-area">
+        <div className="dos-screen" ref={screen}>
+          <div
+            className="terminal-output"
+            ref={output}
+            role="log"
+            tabIndex="0"
+            aria-label="Terminal output"
+            aria-live="polite"
           >
-            <input
-              id="command"
-              value={input}
-              onChange={(e) => {
-                setInput(e.target.value);
-                setCaret(e.target.selectionStart);
-              }}
-              onSelect={(e) => setCaret(e.target.selectionStart)}
-              onKeyDown={recall}
-              autoComplete="off"
-              autoCapitalize="off"
-              spellCheck="false"
-              aria-label="Terminal command"
-            />
-            <span className="dos-caret" aria-hidden="true" />
-          </span>
-        </form>
+            {lines.map((line, i) => (
+              <div key={i} className={line.type || ""}>
+                {line.type === "ascii" ? (
+                  <span
+                    role="img"
+                    aria-label="An ASCII cow says: keep the web weird!"
+                  >
+                    {line.text.split("\n").map((row, rowIndex) => (
+                      <span
+                        className="ascii-row"
+                        key={rowIndex}
+                        aria-hidden="true"
+                      >
+                        {[...row].map((character, column) => (
+                          <span key={column}>{character}</span>
+                        ))}
+                      </span>
+                    ))}
+                  </span>
+                ) : (
+                  line.text
+                )}
+              </div>
+            ))}
+          </div>
+          <form onSubmit={execute} className="terminal-input">
+            <label htmlFor="command">eric@home:~$</label>
+            <span
+              className="dos-command-field"
+              style={{ "--caret-column": caret }}
+            >
+              <input
+                id="command"
+                value={input}
+                onChange={(e) => {
+                  setInput(e.target.value);
+                  setCaret(e.target.selectionStart);
+                }}
+                onSelect={(e) => setCaret(e.target.selectionStart)}
+                onKeyDown={recall}
+                autoComplete="off"
+                autoCapitalize="off"
+                spellCheck="false"
+                aria-label="Terminal command"
+              />
+              <span className="dos-caret" aria-hidden="true" />
+            </span>
+          </form>
+        </div>
+        <ClassicScrollbars viewportRef={screen} label="MS-DOS Prompt" />
       </div>
     </div>
   );
@@ -414,7 +428,8 @@ export default function App() {
   const [bootPhase, setBootPhase] = useState(() =>
     hasStarted() ? "ready" : "off",
   );
-  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [soundEnabled, setSoundEnabled] = useState(readSoundPreference);
+  const playSound = useSystemSounds(soundEnabled);
   const shownWindows = useRef(null);
   const [active, setActive] = useState("eric");
   const [minimized, setMinimized] = useState([]);
@@ -424,6 +439,13 @@ export default function App() {
   const [menu, setMenu] = useState(false);
   const [time, setTime] = useState(new Date());
   const [notice, setNotice] = useState(null);
+  const showNotice = useCallback(
+    (message, kind = "alert") => {
+      setNotice(message);
+      if (message) playSound(kind);
+    },
+    [playSound],
+  );
   const [build, setBuild] = useState(34);
   const [buildRunning, setBuildRunning] = useState(false);
   const [recycled, setRecycled] = useState(false);
@@ -452,8 +474,11 @@ export default function App() {
     return () => clearInterval(timer);
   }, [buildRunning]);
   useEffect(() => {
-    if (build === 100) setBuildRunning(false);
-  }, [build]);
+    if (build === 100 && buildRunning) {
+      setBuildRunning(false);
+      playSound("notice");
+    }
+  }, [build, buildRunning, playSound]);
   useEffect(() => {
     if (notice && !dialog.current.open) dialog.current.showModal();
   }, [notice]);
@@ -484,14 +509,15 @@ export default function App() {
         sequence.join(",") ===
         "ArrowUp,ArrowUp,ArrowDown,ArrowDown,ArrowLeft,ArrowRight,ArrowLeft,ArrowRight,b,a"
       )
-        setNotice(
+        showNotice(
           "Cheat code accepted. You now have unlimited curiosity. Use it irresponsibly.",
         );
     };
     window.addEventListener("keydown", secret);
     return () => window.removeEventListener("keydown", secret);
-  }, []);
-  const openProgram = (id) => {
+  }, [showNotice]);
+  const finishOpen = (id) => {
+    if (id === "iexplore" && closed.includes(id)) playSound("navigate");
     shownWindows.current = null;
     setClosed((old) => old.filter((n) => n !== id));
     setMinimized((old) => old.filter((n) => n !== id));
@@ -507,6 +533,7 @@ export default function App() {
     });
   };
   const resetDesktop = () => {
+    windowActions.cancel();
     shownWindows.current = null;
     setOffsets({});
     setMinimized([]);
@@ -515,7 +542,7 @@ export default function App() {
     setActive("eric");
     setMenu(false);
   };
-  const minimizeProgram = (id) => {
+  const finishMinimize = (id) => {
     shownWindows.current = null;
     setMinimized((old) => (old.includes(id) ? old : [...old, id]));
     setActive(
@@ -526,6 +553,7 @@ export default function App() {
     );
   };
   const showDesktop = () => {
+    windowActions.cancel();
     setMenu(false);
     if (shownWindows.current) {
       setMinimized(shownWindows.current.minimized);
@@ -543,19 +571,25 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "instant" });
     setBootPhase("off");
   };
-  const frame = (id) => ({
-    id,
-    icon: programs.find((p) => p[0] === id)[1],
-    active: active === id,
-    hidden: minimized.includes(id) || closed.includes(id),
-    maximized: maximized.includes(id),
-    onMaximize: (n) => {
+  const windowActions = useWindowActions({
+    minimized,
+    closed,
+    maximized,
+    offsets,
+    open: finishOpen,
+    minimize: (id) => {
+      finishMinimize(id);
+      requestAnimationFrame(() =>
+        document.querySelector(`[data-program="${id}"]`)?.focus(),
+      );
+    },
+    maximize: (n) => {
       setMaximized((old) =>
         old.includes(n) ? old.filter((v) => v !== n) : [...old, n],
       );
       setActive(n);
     },
-    onClose: (n) => {
+    close: (n) => {
       setClosed((old) => [...old, n]);
       setMinimized((old) => old.filter((v) => v !== n));
       setMaximized((old) => old.filter((v) => v !== n));
@@ -568,13 +602,19 @@ export default function App() {
         document.querySelector(`[data-shortcut="${n}"]`)?.focus(),
       );
     },
+  });
+  const openProgram = (id) => windowActions.dispatch("open", id);
+  const minimizeProgram = (id) => windowActions.dispatch("minimize", id);
+  const frame = (id) => ({
+    id,
+    icon: programs.find((p) => p[0] === id)[1],
+    active: active === id,
+    hidden: minimized.includes(id) || closed.includes(id),
+    maximized: maximized.includes(id),
+    onMaximize: (n) => windowActions.dispatch("maximize", n),
+    onClose: (n) => windowActions.dispatch("close", n),
     onFocus: setActive,
-    onMinimize: (n) => {
-      minimizeProgram(n);
-      requestAnimationFrame(() =>
-        document.querySelector(`[data-program="${n}"]`)?.focus(),
-      );
-    },
+    onMinimize: minimizeProgram,
     offset: offsets[id] || { x: 0, y: 0 },
     onMove: (n, pos) => setOffsets((old) => ({ ...old, [n]: pos })),
   });
@@ -585,7 +625,7 @@ export default function App() {
       await navigator.clipboard.writeText(code);
       setCopied(true);
     } catch {
-      setNotice(code);
+      showNotice(code);
     }
   };
   return (
@@ -639,7 +679,7 @@ export default function App() {
             <button
               onClick={() => {
                 setRecycled(true);
-                setNotice(
+                showNotice(
                   "Recycle Bin: 3 items\n\nfinal_final_v2.zip\nnew-website-idea-47.txt\nInternet Explorer\n\nSome things are better left here.",
                 );
               }}
@@ -923,9 +963,10 @@ export default function App() {
                     openProgram={openProgram}
                     resetDesktop={resetDesktop}
                     onMaximize={() => frame("terminal").onMaximize("terminal")}
-                    showNotice={setNotice}
+                    showNotice={showNotice}
+                    playSound={playSound}
                     onSecret={() =>
-                      setNotice(
+                      showNotice(
                         "SECRET FOUND\n\nYou have earned the Certified Internet Explorer badge.\n\nNo browser wars were started in the making of this badge.",
                       )
                     }
@@ -1024,7 +1065,7 @@ export default function App() {
                   </p>
                   <button
                     onClick={() =>
-                      setNotice(
+                      showNotice(
                         "You understand the risks.\n\nSymptoms may include opening 14 wiki tabs, reinstalling Linux, and wanting your own homepage.\n\nWelcome to the club.",
                       )
                     }
@@ -1118,7 +1159,8 @@ export default function App() {
               visible={!minimized.includes("iexplore")}
               onFocus={() => setActive("iexplore")}
               onClose={() => frame("iexplore").onClose("iexplore")}
-              showNotice={setNotice}
+              showNotice={showNotice}
+              playSound={playSound}
             />
           </Window>
         )}
@@ -1150,7 +1192,9 @@ export default function App() {
                 minimized={minimized}
                 openProgram={openProgram}
                 resetDesktop={resetDesktop}
-                showNotice={setNotice}
+                showNotice={showNotice}
+                soundEnabled={soundEnabled}
+                toggleSound={() => setSoundEnabled((enabled) => !enabled)}
                 closeMenu={() => setMenu(false)}
                 restart={restart}
               />
@@ -1214,11 +1258,11 @@ export default function App() {
               className={`sound-button ${soundEnabled ? "" : "muted"}`}
               onClick={() => setSoundEnabled((enabled) => !enabled)}
               aria-label={
-                soundEnabled ? "Mute startup sound" : "Enable startup sound"
+                soundEnabled ? "Mute system sounds" : "Enable system sounds"
               }
               aria-pressed={!soundEnabled}
               title={
-                soundEnabled ? "Volume — startup sound on" : "Volume — muted"
+                soundEnabled ? "Volume — system sounds on" : "Volume — muted"
               }
             >
               <img
@@ -1253,7 +1297,7 @@ export default function App() {
             />
           </div>
           <div className="dialog-content">
-            <Icon name="computer" size={44} />
+            <Icon name="computer" size={32} />
             <p>{notice}</p>
           </div>
           <button
@@ -1261,7 +1305,7 @@ export default function App() {
             autoFocus
             onClick={() => dialog.current.close()}
           >
-            OK, got it.
+            OK
           </button>
         </dialog>
       </div>

@@ -119,3 +119,13 @@
     animation: none;
   }
 }
+@media (max-width: 340px) {
+  #utilDiv {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-content: flex-start;
+    margin-left: 130px;
+    padding-left: 0;
+  }
+}

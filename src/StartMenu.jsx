@@ -9,6 +9,8 @@ export default function StartMenu({
   showNotice,
   closeMenu,
   restart,
+  soundEnabled,
+  toggleSound,
 }) {
   const [submenu, setSubmenu] = useState(null);
   const root = useRef(null);
@@ -129,6 +131,15 @@ export default function StartMenu({
               id="settings-submenu"
               aria-label="Settings"
             >
+              <button onClick={toggleSound} aria-pressed={soundEnabled}>
+                <img
+                  src="/assets/win98/speaker.png"
+                  width="16"
+                  height="16"
+                  alt=""
+                />
+                <span>System sounds: {soundEnabled ? "On" : "Off"}</span>
+              </button>
               <button
                 onClick={() => {
                   closeMenu();

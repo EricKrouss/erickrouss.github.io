@@ -1,0 +1,183 @@
+.classic-scroll-area {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 0;
+  grid-template-rows: minmax(0, 1fr) 0;
+  min-width: 0;
+  min-height: 0;
+}
+.classic-scroll-area[data-scroll-y="true"] {
+  grid-template-columns: minmax(0, 1fr) 17px;
+}
+.classic-scroll-area[data-scroll-x="true"] {
+  grid-template-rows: minmax(0, 1fr) 17px;
+}
+.classic-scroll-area > :first-child {
+  grid-area: 1 / 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  scrollbar-width: none;
+}
+.classic-scroll-area > :first-child::-webkit-scrollbar {
+  display: none;
+}
+.classic-scrollbar {
+  display: none;
+  background: #c0c0c0;
+  min-width: 0;
+  min-height: 0;
+  user-select: none;
+  touch-action: none;
+}
+.classic-scrollbar.vertical {
+  grid-area: 1 / 2;
+  flex-direction: column;
+  border-left: 1px solid #fff;
+}
+.classic-scrollbar.horizontal {
+  grid-area: 2 / 1;
+  border-top: 1px solid #fff;
+}
+[data-scroll-y="true"] > .vertical,
+[data-scroll-x="true"] > .horizontal {
+  display: flex;
+}
+.classic-scroll-area button.scroll-arrow,
+.classic-scroll-area button.scroll-arrow:hover,
+.classic-scroll-area button.scroll-arrow:active,
+.classic-scroll-area button.scroll-arrow:disabled {
+  display: block;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  min-height: 16px;
+  flex: 0 0 16px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: var(--arrow) center / 16px 16px no-repeat;
+  image-rendering: pixelated;
+}
+.classic-scroll-area button.scroll-arrow:active {
+  background-image: var(--arrow-pressed);
+}
+.classic-scroll-area button.scroll-arrow:disabled {
+  background-image: var(--arrow-disabled);
+}
+.scroll-arrow.up {
+  --arrow: url("/assets/scrollbars/up-normal.png");
+  --arrow-pressed: url("/assets/scrollbars/up-pressed.png");
+  --arrow-disabled: url("/assets/scrollbars/up-disabled.png");
+}
+.scroll-arrow.down {
+  --arrow: url("/assets/scrollbars/down-normal.png");
+  --arrow-pressed: url("/assets/scrollbars/down-pressed.png");
+  --arrow-disabled: url("/assets/scrollbars/down-disabled.png");
+}
+.scroll-arrow.left {
+  --arrow: url("/assets/scrollbars/left-normal.png");
+  --arrow-pressed: url("/assets/scrollbars/left-pressed.png");
+  --arrow-disabled: url("/assets/scrollbars/left-disabled.png");
+}
+.scroll-arrow.right {
+  --arrow: url("/assets/scrollbars/right-normal.png");
+  --arrow-pressed: url("/assets/scrollbars/right-pressed.png");
+  --arrow-disabled: url("/assets/scrollbars/right-disabled.png");
+}
+.scroll-track {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  background: repeating-conic-gradient(#fff 0% 25%, #c0c0c0 0% 50%) 0 0 / 2px
+    2px;
+}
+.scroll-track:active {
+  background: repeating-conic-gradient(#000 0% 25%, #808080 0% 50%) 0 0 / 2px
+    2px;
+}
+.scroll-track:has(.scroll-thumb:active) {
+  background: repeating-conic-gradient(#fff 0% 25%, #c0c0c0 0% 50%) 0 0 / 2px
+    2px;
+}
+.scroll-thumb {
+  position: absolute;
+  background: #c0c0c0;
+  box-shadow:
+    inset -1px -1px #000,
+    inset 1px 1px #dfdfdf,
+    inset -2px -2px #808080,
+    inset 2px 2px #fff;
+}
+.vertical .scroll-thumb {
+  width: 16px;
+  left: 0;
+}
+.horizontal .scroll-thumb {
+  height: 16px;
+  top: 0;
+}
+.scroll-thumb:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -4px;
+}
+.scroll-corner {
+  display: none;
+  grid-area: 2 / 2;
+  background: #c0c0c0;
+}
+[data-scroll-x="true"][data-scroll-y="true"] > .scroll-corner {
+  display: block;
+}
+.window-body {
+  background: var(--paper);
+}
+.window.maximized > .window-body,
+.ie-window > .window-body {
+  flex: 1;
+}
+.ie-window .window-content {
+  overflow: hidden;
+}
+.dos-scroll-area {
+  height: 252px;
+}
+.dos-scroll-area .dos-screen {
+  height: auto;
+}
+.terminal-window.maximized .dos-scroll-area {
+  flex: 1;
+  height: auto;
+}
+.terminal-window.maximized .window-content {
+  overflow: hidden;
+}
+.resize-grip,
+.ie-size-grip {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 16px;
+  height: 16px;
+  background: url("/assets/scrollbars/size-grip.png") no-repeat;
+  image-rendering: pixelated;
+  clip-path: none;
+}
+.window-footer {
+  padding-right: 19px;
+}
+.ie-size-grip {
+  right: 0;
+  bottom: 0;
+}
+.window.maximized .resize-grip,
+.window.maximized .ie-size-grip {
+  display: none;
+}
+@media (max-width: 540px) {
+  .dos-scroll-area {
+    height: 280px;
+  }
+}

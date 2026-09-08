@@ -10,7 +10,6 @@
 .ie-window.maximized {
   width: auto;
   height: auto;
-  inset: 8px 8px 36px;
 }
 .ie-window .window-content {
   padding: 0;
@@ -340,9 +339,6 @@
   }
 }
 @media (max-width: 740px) {
-  .ie-window.maximized {
-    inset: 0 0 42px;
-  }
   .ie-toolbar .ie-extra,
   .ie-links-label {
     display: none;

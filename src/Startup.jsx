@@ -163,7 +163,7 @@ export default function Startup({
               checked={soundEnabled}
               onChange={(event) => onSoundChange(event.target.checked)}
             />
-            Play the original Windows 98 startup sound
+            Play Windows 98 sounds (startup, alerts and errors)
           </label>
           <div className="power-actions">
             <button ref={powerButton} onClick={start}>
