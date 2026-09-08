@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { site, projects, links, hardware, minecraft } from "./content.js";
 import { Icon, DesktopComputer, MinecraftArtwork } from "./Art.jsx";
 import StartMenu from "./StartMenu.jsx";
+import InternetExplorer from "./InternetExplorer.jsx";
 import Startup, { hasStarted } from "./Startup.jsx";
 
 const programs = [
@@ -11,11 +12,15 @@ const programs = [
   ["computer", "gear"],
   ["links", "network"],
   ["status", "disk"],
-  ["terminal", "terminal"],
+  ["terminal", "dos"],
+  ["iexplore", "ie"],
 ];
 const programNames = programs.map(([name]) => name);
 const initialLines = [
-  { text: "EricOS [Version 2.2.0]", type: "bright" },
+  { text: "Microsoft(R) Windows 98" },
+  { text: "   (C)Copyright Microsoft Corp 1981-1998." },
+  { text: "" },
+  { text: "C:\\WINDOWS> bash" },
   { text: "MS-DOS Prompt. Suspiciously fluent in Bash." },
   { text: "Type “help” to have a look around." },
 ];
@@ -64,7 +69,11 @@ function Window({
       y: e.clientY,
       origin: offset,
       rect,
-      maxY: document.documentElement.scrollHeight - rect.bottom,
+      maxY:
+        (getComputedStyle(e.currentTarget.closest("section")).position ===
+        "fixed"
+          ? innerHeight
+          : document.documentElement.scrollHeight) - rect.bottom,
     };
     e.currentTarget.setPointerCapture(e.pointerId);
   };
@@ -151,14 +160,23 @@ function Window({
   );
 }
 
-function Terminal({ openProgram, resetDesktop, onSecret }) {
+function Terminal({
+  openProgram,
+  resetDesktop,
+  onSecret,
+  onMaximize,
+  showNotice,
+}) {
   const [lines, setLines] = useState(initialLines);
   const [input, setInput] = useState("");
   const [history, setHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(0);
+  const [fontSize, setFontSize] = useState("auto");
+  const [caret, setCaret] = useState(0);
+  const screen = useRef(null);
   const output = useRef(null);
   useEffect(() => {
-    output.current.scrollTop = output.current.scrollHeight;
+    screen.current.scrollTop = screen.current.scrollHeight;
   }, [lines]);
   const execute = (e) => {
     e.preventDefault();
@@ -167,6 +185,7 @@ function Terminal({ openProgram, resetDesktop, onSecret }) {
     const [command, ...args] = raw.toLowerCase().split(/\s+/);
     let answer;
     if (command === "clear") {
+      setCaret(0);
       setLines([]);
       setInput("");
       return;
@@ -235,6 +254,7 @@ function Terminal({ openProgram, resetDesktop, onSecret }) {
     setHistory((old) => [...old, raw]);
     setHistoryIndex(history.length + 1);
     setInput("");
+    setCaret(0);
   };
   const recall = (e) => {
     if (!["ArrowUp", "ArrowDown"].includes(e.key)) return;
@@ -245,58 +265,147 @@ function Terminal({ openProgram, resetDesktop, onSecret }) {
     );
     setHistoryIndex(next);
     setInput(history[next] || "");
+    setCaret((history[next] || "").length);
+  };
+  const mark = () => {
+    const range = document.createRange();
+    range.selectNodeContents(output.current);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+  };
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(
+        window.getSelection()?.toString() || output.current.textContent,
+      );
+    } catch {
+      showNotice("Copy\n\nSelect the text and press Ctrl+C to copy it.");
+    }
+  };
+  const paste = async () => {
+    try {
+      const text = (await navigator.clipboard.readText()).replace(
+        /[\r\n]+/g,
+        " ",
+      );
+      setInput(text);
+      setCaret(text.length);
+      document.getElementById("command")?.focus();
+    } catch {
+      showNotice("Paste\n\nClick the command line and press Ctrl+V to paste.");
+    }
   };
   return (
-    <div className="terminal-shell">
+    <div className={`terminal-shell dos-font-${fontSize}`}>
       <div
-        className="terminal-output"
-        ref={output}
-        role="log"
-        tabIndex="0"
-        aria-label="Terminal output"
-        aria-live="polite"
+        className="dos-toolbar"
+        role="toolbar"
+        aria-label="MS-DOS Prompt toolbar"
       >
-        {lines.map((line, i) => (
-          <div key={i} className={line.type || ""}>
-            {line.type === "ascii" ? (
-              <span
-                role="img"
-                aria-label="An ASCII cow says: keep the web weird!"
-              >
-                {line.text.split("\n").map((row, rowIndex) => (
-                  <span className="ascii-row" key={rowIndex} aria-hidden="true">
-                    {[...row].map((character, column) => (
-                      <span key={column}>{character}</span>
-                    ))}
-                  </span>
-                ))}
-              </span>
-            ) : (
-              line.text
-            )}
-          </div>
+        <select
+          aria-label="Console font size"
+          value={fontSize}
+          onChange={(event) => setFontSize(event.target.value)}
+        >
+          <option value="auto">Auto</option>
+          <option value="small">6 x 8</option>
+          <option value="large">8 x 12</option>
+        </select>
+        {[
+          ["mark", "Mark", mark],
+          ["copy", "Copy", copy],
+          ["paste", "Paste", paste],
+          ["fullscreen", "Full Screen", onMaximize],
+          [
+            "properties",
+            "Properties",
+            () =>
+              showNotice(
+                "MS-DOS Prompt Properties\n\nOriginal Windows 98 Terminal bitmap fonts. Linux commands, because old habits die hard.\n\nThis is a simulated shell; commands never run on your computer.",
+              ),
+          ],
+          ["background", "Background", () => openProgram("eric")],
+          [
+            "font",
+            "Font",
+            () => setFontSize((size) => (size === "large" ? "small" : "large")),
+          ],
+        ].map(([name, label, action]) => (
+          <button
+            key={name}
+            className={`dos-tool dos-${name}`}
+            title={label}
+            aria-label={`Console ${label}`}
+            onClick={action}
+          >
+            <img
+              src={`/assets/dos/${name}.png`}
+              width="22"
+              height="22"
+              alt=""
+            />
+          </button>
         ))}
       </div>
-      <form onSubmit={execute} className="terminal-input">
-        <label htmlFor="command">eric@home:~$</label>
-        <input
-          id="command"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={recall}
-          autoComplete="off"
-          autoCapitalize="off"
-          spellCheck="false"
-          aria-label="Terminal command"
-        />
-        <button
-          type="submit"
-          aria-label="Run terminal command"
-          title="Run command"
+      <div className="dos-screen" ref={screen}>
+        <div
+          className="terminal-output"
+          ref={output}
+          role="log"
+          tabIndex="0"
+          aria-label="Terminal output"
+          aria-live="polite"
         >
-          ↵
-        </button>
-      </form>
+          {lines.map((line, i) => (
+            <div key={i} className={line.type || ""}>
+              {line.type === "ascii" ? (
+                <span
+                  role="img"
+                  aria-label="An ASCII cow says: keep the web weird!"
+                >
+                  {line.text.split("\n").map((row, rowIndex) => (
+                    <span
+                      className="ascii-row"
+                      key={rowIndex}
+                      aria-hidden="true"
+                    >
+                      {[...row].map((character, column) => (
+                        <span key={column}>{character}</span>
+                      ))}
+                    </span>
+                  ))}
+                </span>
+              ) : (
+                line.text
+              )}
+            </div>
+          ))}
+        </div>
+        <form onSubmit={execute} className="terminal-input">
+          <label htmlFor="command">eric@home:~$</label>
+          <span
+            className="dos-command-field"
+            style={{ "--caret-column": caret }}
+          >
+            <input
+              id="command"
+              value={input}
+              onChange={(e) => {
+                setInput(e.target.value);
+                setCaret(e.target.selectionStart);
+              }}
+              onSelect={(e) => setCaret(e.target.selectionStart)}
+              onKeyDown={recall}
+              autoComplete="off"
+              autoCapitalize="off"
+              spellCheck="false"
+              aria-label="Terminal command"
+            />
+            <span className="dos-caret" aria-hidden="true" />
+          </span>
+        </form>
+      </div>
     </div>
   );
 }
@@ -309,7 +418,7 @@ export default function App() {
   const shownWindows = useRef(null);
   const [active, setActive] = useState("eric");
   const [minimized, setMinimized] = useState([]);
-  const [closed, setClosed] = useState([]);
+  const [closed, setClosed] = useState(["iexplore"]);
   const [maximized, setMaximized] = useState([]);
   const [offsets, setOffsets] = useState({});
   const [menu, setMenu] = useState(false);
@@ -401,7 +510,7 @@ export default function App() {
     shownWindows.current = null;
     setOffsets({});
     setMinimized([]);
-    setClosed([]);
+    setClosed(["iexplore"]);
     setMaximized([]);
     setActive("eric");
     setMenu(false);
@@ -519,9 +628,11 @@ export default function App() {
               >
                 <Icon name={icon} size={32} />
                 <span>
-                  {name === "eric"
-                    ? "My computer"
-                    : name.charAt(0).toUpperCase() + name.slice(1)}
+                  {name === "iexplore"
+                    ? "Internet Explorer"
+                    : name === "eric"
+                      ? "My computer"
+                      : name.charAt(0).toUpperCase() + name.slice(1)}
                 </span>
               </button>
             ))}
@@ -805,19 +916,14 @@ export default function App() {
                 </Window>
                 <Window
                   {...frame("terminal")}
-                  footer={
-                    <>
-                      <span>
-                        A Start menu. A Bash prompt. No further questions.
-                      </span>
-                      <span className="footer-right">UTF-8</span>
-                    </>
-                  }
+                  title="MS-DOS Prompt"
                   className="terminal-window"
                 >
                   <Terminal
                     openProgram={openProgram}
                     resetDesktop={resetDesktop}
+                    onMaximize={() => frame("terminal").onMaximize("terminal")}
+                    showNotice={setNotice}
                     onSecret={() =>
                       setNotice(
                         "SECRET FOUND\n\nYou have earned the Certified Internet Explorer badge.\n\nNo browser wars were started in the making of this badge.",
@@ -1002,6 +1108,20 @@ export default function App() {
             </footer>
           </main>
         </div>
+        {!closed.includes("iexplore") && (
+          <Window
+            {...frame("iexplore")}
+            title="YouTube - Microsoft Internet Explorer"
+            className="ie-window"
+          >
+            <InternetExplorer
+              visible={!minimized.includes("iexplore")}
+              onFocus={() => setActive("iexplore")}
+              onClose={() => frame("iexplore").onClose("iexplore")}
+              showNotice={setNotice}
+            />
+          </Window>
+        )}
         <nav className="taskbar" aria-label="Open programs">
           <div className="start-area" ref={menuRef}>
             <button
@@ -1051,9 +1171,9 @@ export default function App() {
               />
             </button>
             <button
-              title="Internet Explorer — links.exe"
-              aria-label="Open links.exe"
-              onClick={() => openProgram("links")}
+              title="Internet Explorer"
+              aria-label="Open Internet Explorer"
+              onClick={() => openProgram("iexplore")}
             >
               <img
                 src="/assets/win98/internet-explorer.png"
@@ -1081,7 +1201,11 @@ export default function App() {
                   title={`${minimized.includes(name) ? "Restore" : active === name ? "Minimize" : "Focus"} ${name}.exe`}
                 >
                   <Icon name={icon} size={16} />
-                  <span>{name}.exe</span>
+                  <span>
+                    {name === "iexplore"
+                      ? "YouTube - Microsoft Internet Explorer"
+                      : `${name}.exe`}
+                  </span>
                 </button>
               ))}
           </div>

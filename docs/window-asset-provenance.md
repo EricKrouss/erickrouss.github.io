@@ -44,3 +44,18 @@ Asset hashes:
 - `win98/startup.wav`: `fc18b965c256f40645d903c1d66dd0e39eb9d1be4136c56bec0b0672f8ce55fb`
 - `fonts/MSW98UI-Regular.woff2`: `efd1813bb6d7206127741d65355adcf7dc70bb1b2b4457f54755c5d3226c8742`
 - `fonts/MSW98UI-Bold.woff2`: `5a07b7e8a9a86eca722d7283ee0d320412fe169135db6b0202d577426819b24b`
+
+## MS-DOS Prompt and 88×31 revision (v2.3)
+
+Reference: https://guidebookgallery.org/pics/gui/system/utilities/commandprompt/win98.png (491×308), SHA-256 `c2ff5894dcf8266b419860ce1478e796a518b866a041c274b841f22b6a640f76`.
+
+The 16px MS-DOS icon is cropped at `(5,5,21,21)`. Seven 22×22 toolbar images come from y=27 through y=49, with x starts 104 (mark), 127 (copy), 149 (paste), 181 (full screen), 212 (properties), 235 (background), and 266 (font). These are original pixels, not generated redraws. The native control row, gray text on black, font selector and underscore caret replace the earlier green terminal panel. Linux syntax and jokes are retained by request.
+
+The web console fonts are converted from the 6×8 and 8×12 bitmap resources in Windows 98 `DOSAPP.FON`, extracted from `WIN98_45.CAB` in the same OKPB Windows archive. DOSAPP.FON hash: `7ba4ef07b8244b46932240dc7be5b0205855d063f2e42745f78ba7bfa4b16a93`. Each set bit becomes a one-pixel square outline (100 font units per pixel), advance widths preserve native character cells, and CP437 maps the glyphs to Unicode. A few typographic punctuation characters alias their ASCII counterparts. The native font file/cabinet is not bundled; only the converted WOFF2 glyphs are served. Original glyph artwork belongs to Microsoft.
+
+- 6×8 WOFF2: `6052822bf948beb5953dd37f814e249c83f945698f024ba1b02bc5b6ab2719cf`
+- 8×12 WOFF2: `beb918554e363e91bdb9cafbb2d3f78e5689541776d89dcf900bfb296426e8a6`
+
+Auto selects 6×8 for compact desktop windows and 8×12 for wider windows or phones. Microsoft describes DOS Auto sizing at https://devblogs.microsoft.com/oldnewthing/20241022-00/?p=110401 . Font conversion does not imply identical GDI rendering at arbitrary browser zoom/device-pixel ratios.
+
+The site's 88×31 SVG button now contains integer-aligned pixel paths, including bitmap-letter paths for `eric.exe` and `PERSONAL PC`, with no browser-dependent SVG text. Its one-pixel border is filled geometry rather than a half-pixel stroke. CSS fixes the image at exactly 88×31 and disables flex shrinking. The desktop's former 1350px content cap has been removed.

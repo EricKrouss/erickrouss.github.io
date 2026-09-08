@@ -30,13 +30,17 @@ export function Icon({
   return (
     <img
       src={
-        name === "start"
-          ? "/assets/win98/start.png"
-          : name === "block"
-            ? "/assets/period/minecraft-launcher.png"
-            : name === "youtube"
-              ? "/assets/period/youtube-2005-2009.png"
-              : `/assets/win98/${variants[size > 20 ? 1 : 0]}.png`
+        name === "ie"
+          ? "/assets/win98/internet-explorer.png"
+          : name === "dos"
+            ? "/assets/dos/msdos.png"
+            : name === "start"
+              ? "/assets/win98/start.png"
+              : name === "block"
+                ? "/assets/period/minecraft-launcher.png"
+                : name === "youtube"
+                  ? "/assets/period/youtube-2005-2009.png"
+                  : `/assets/win98/${variants[size > 20 ? 1 : 0]}.png`
       }
       width={size}
       height={name === "start" ? Math.round((size * 14) / 16) : size}

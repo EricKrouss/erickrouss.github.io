@@ -1,0 +1,121 @@
+/* Reflow the archived desktop geometry only when the IE viewport cannot fit it. */
+@media (max-width: 900px) {
+  #baseDiv {
+    width: 100%;
+  }
+  #gNavDiv #upload {
+    width: 125px;
+  }
+  #gNavDiv .tab {
+    width: 120px;
+  }
+  #gNavDiv .tab b {
+    width: 110px;
+  }
+  #gNavBottom {
+    background-size: 100% 100%;
+  }
+}
+@media (max-width: 780px) {
+  #utilDiv {
+    min-height: 63px;
+    height: auto;
+    padding: 6px 0 8px 130px;
+    line-height: 1.6;
+  }
+  #gNavDiv {
+    clear: both;
+    display: flex;
+    height: auto;
+    min-height: 28px;
+    flex-direction: row-reverse;
+  }
+  #gNavDiv .tab,
+  #gNavDiv .tab b {
+    width: 100%;
+    float: none;
+  }
+  #gNavDiv > .tab {
+    flex: 1;
+    min-width: 0;
+  }
+  #gNavDiv .tab_label {
+    margin-top: 7px;
+    font-size: 11px;
+  }
+  #gNavDiv #upload {
+    display: none;
+  }
+  .watch-layout {
+    row-gap: 14px;
+  }
+  .watch-mid {
+    max-width: 450px;
+  }
+  .related-tabs {
+    max-width: 300px;
+  }
+  .related-body {
+    max-width: 300px;
+    box-sizing: border-box;
+  }
+  .watch-layout.theater-mode .watch-left {
+    display: block;
+  }
+  .watch-layout.theater-mode .watch-mid {
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
+@media (max-width: 480px) {
+  .searchField {
+    width: 65%;
+  }
+  .actionsMatrix {
+    flex-wrap: wrap;
+    row-gap: 5px;
+    padding-bottom: 4px;
+  }
+  #ratingDivWrapper {
+    width: 36%;
+  }
+  .actionsDiv {
+    width: 33%;
+  }
+  .actionsDiv.sm {
+    width: 27%;
+    padding-left: 0;
+  }
+  .actionsDiv:last-child {
+    width: 100%;
+    text-align: center;
+  }
+  .statDivider {
+    margin: 2px 3px;
+  }
+  .statsDiv {
+    font-size: 11px;
+  }
+  .commentsTop {
+    flex-direction: column;
+  }
+  .postLinks {
+    text-align: left;
+  }
+  .postLinks br {
+    display: none;
+  }
+  .postLinks a {
+    margin-right: 6px;
+  }
+  .volume-section,
+  .theater-btn,
+  .theater-left-divider {
+    display: none !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #loadingIndicator {
+    animation: none;
+  }
+}

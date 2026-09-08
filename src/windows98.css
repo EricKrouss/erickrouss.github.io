@@ -807,8 +807,7 @@ button:active,
 }
 .window.maximized {
   position: fixed;
-  inset: 34px max(12px, calc((100vw - 1350px) / 2 + 25px)) 48px
-    max(112px, calc((100vw - 1350px) / 2 + 117px));
+  inset: 34px 12px 48px 112px;
   display: flex;
   flex-direction: column;
   transform: none !important;

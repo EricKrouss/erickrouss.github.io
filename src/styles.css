@@ -114,7 +114,7 @@ button.text-link:hover {
   background-size: 6px 6px;
 }
 .desktop-top {
-  max-width: 1350px;
+  max-width: none;
   margin: 0 auto;
   padding: 10px 27px 9px;
   color: #b6c3c6;
@@ -147,7 +147,7 @@ button.text-link:hover {
   border-color: #926b27;
 }
 .desktop-workspace {
-  max-width: 1350px;
+  max-width: none;
   margin: 0 auto;
   padding: 6px 25px 0;
   display: grid;

@@ -1,0 +1,686 @@
+/* Masthead rules from YouTube, 24 August 2007. See docs/youtube-2007-provenance.md. */
+#baseDiv {
+  position: relative;
+  width: 875px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#logoTagDiv {
+  float: left;
+  padding-top: 6px;
+}
+
+#logoHomeTip {
+  display: none;
+  position: absolute;
+  top: 25px;
+  left: 130px;
+  font-size: 11px;
+  color: #666;
+}
+
+#utilDiv {
+  height: 23px;
+  padding-bottom: 10px;
+  text-align: right;
+  margin: 0px;
+}
+.utilDelim {
+  padding-left: 3px;
+  padding-right: 3px;
+}
+#iconMail {
+  vertical-align: text-bottom;
+  padding: 1px 0px 1px 0px;
+}
+#searchDiv {
+  padding: 8px 0;
+  text-align: center;
+}
+.searchField {
+  width: 250px;
+  color: #000000;
+  font-size: 12px;
+}
+
+/*nav tabs*/
+
+#gNavDiv {
+  height: 28px;
+  text-align: right;
+  clear: right;
+  margin-top: 5px;
+}
+
+#gNavDiv #upload {
+  float: right;
+  width: 175px;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+#gNavDiv .tab {
+  float: right;
+  width: 130px;
+  text-decoration: none;
+}
+
+#gNavDiv .tab_label {
+  margin: 0.5em 0em 0em 0em;
+  font-size: 1em;
+  font-family: arial;
+  color: #003399;
+  text-decoration: none;
+}
+
+#gNavDiv .tab_label:visited {
+  text-decoration: none;
+}
+
+#gNavDiv .tab b {
+  display: block;
+  position: relative;
+  border: solid #adbbe0;
+  height: 28px;
+  width: 120px;
+  border-width: 1px 0px 0px 0px;
+  padding: 0;
+  background: url(assets/archive-2007/tab_nav.gif) repeat-x 0 0;
+  text-decoration: none;
+  float: left;
+  clear: none;
+}
+
+#gNavDiv .tab b b {
+  background: none;
+  margin: 0 -1px;
+  padding: 0;
+  border-width: 0 1px;
+  text-decoration: none;
+}
+
+#gNavDiv .tab b b b {
+  margin: 0;
+  padding: 0em 0em 0em 0em;
+  border-width: 0;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+#gNavDiv .tab_sel .tab_label {
+  color: #333;
+  text-decoration: none;
+}
+
+#gNavDiv .tab_sel b {
+  border-color: #ccc;
+  background: url(assets/archive-2007/tab_nav_sel.gif) repeat-x 0 0;
+  text-decoration: none;
+}
+
+#gNavDiv .tab a {
+  text-decoration: none;
+}
+#gNavDiv .tab_sel a {
+  text-decoration: none;
+}
+
+/*end nav tabs*/
+
+#gSubNavDiv {
+  clear: both;
+  background: #ddd;
+  text-align: center;
+  padding: 8px 0px;
+  margin-bottom: 10px;
+}
+#gNavBottom {
+  height: 36px;
+  background: url("assets/header/grey header bar.png") top left no-repeat;
+  margin-bottom: 12px;
+}
+
+/* Archived watch-page geometry, adapted to the HTML5 player and local controls. */
+body {
+  display: block;
+  margin: 8px;
+  padding: 0;
+  color: #000;
+  background: white;
+  font:
+    12px Arial,
+    Helvetica,
+    sans-serif;
+}
+a,
+a:visited {
+  color: #03c;
+}
+img {
+  border: 0;
+}
+form {
+  margin: 0;
+}
+h1,
+h2,
+h3 {
+  font-weight: bold;
+  margin: 5px 0 3px;
+}
+h1 {
+  font-size: 19px;
+}
+h2 {
+  font-size: 16px;
+}
+h3 {
+  font-size: 14px;
+}
+button,
+input,
+textarea,
+select {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+}
+button,
+input[type="submit"] {
+  cursor: pointer;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: 2px;
+}
+[hidden] {
+  display: none !important;
+}
+.smallText,
+.smallLabel {
+  font-size: 11px;
+}
+.smallLabel {
+  color: #666;
+}
+.noul {
+  text-decoration: none;
+}
+.eLink {
+  text-decoration: none;
+  border-bottom: 1px dotted #03c;
+}
+.eLink:hover {
+  border-bottom-style: solid;
+}
+#utilDiv {
+  padding-top: 15px;
+}
+#utilDiv img,
+#upload img {
+  vertical-align: middle;
+}
+#gNavDiv #upload {
+  text-align: center;
+}
+#searchDiv input {
+  height: auto;
+}
+#ytInputError {
+  margin: 0;
+  min-height: 0;
+  color: #c00;
+  font: 11px Arial;
+}
+#ytInputError:not(:empty) {
+  margin: 0 0 8px;
+}
+.watch-layout {
+  display: grid;
+  grid-template-columns: 450px 300px;
+  gap: 15px;
+  align-items: start;
+  width: 100%;
+  margin: 0 0 24px;
+}
+.watch-left {
+  width: 450px;
+  min-width: 0;
+}
+.watch-mid {
+  width: 300px;
+  min-width: 0;
+}
+.watch-title-left {
+  margin: 5px 0 3px;
+}
+.watch-player-frame {
+  width: 450px;
+  overflow: hidden;
+}
+.video-area {
+  min-width: 0;
+  min-height: 0;
+}
+.video-area video {
+  object-fit: contain;
+}
+.player-container {
+  width: 450px;
+  max-width: 450px;
+}
+#actionsAndStatsDiv {
+  width: 450px;
+  box-sizing: border-box;
+  position: relative;
+  padding: 6px 0 0;
+  margin: 12px 0;
+  background: #f6f6f6;
+  border: 1px solid #ccc;
+}
+.actionsMatrix {
+  display: flex;
+  align-items: flex-start;
+  padding: 0;
+  width: 100% !important;
+}
+#ratingDivWrapper {
+  text-align: center;
+  width: 26%;
+  flex-shrink: 0;
+}
+#ratingMessage {
+  margin-bottom: 2px;
+  height: 13px;
+  font-size: 11px;
+}
+#starControls {
+  display: flex;
+  justify-content: center;
+}
+.starControl {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  width: 19px;
+  height: 20px;
+}
+.starControl img {
+  width: 19px;
+  height: 20px;
+  display: block;
+}
+.ratingCount {
+  font-size: 11px;
+  margin-top: 2px;
+}
+.actionsDiv {
+  text-align: left;
+  width: 28%;
+  margin-top: 4px;
+}
+.actionsDiv.sm {
+  width: 22%;
+  padding-left: 4px;
+}
+.actionRow {
+  line-height: 1.4em;
+}
+.actionRow img {
+  vertical-align: middle;
+}
+.statsDiv {
+  text-align: center;
+  width: 100%;
+  border-top: 1px solid #ccc;
+  margin: 4px 0 0;
+  padding: 4px 0;
+}
+.statDivider {
+  margin: 2px 8px;
+  color: #ccc;
+  vertical-align: middle;
+}
+.smStat {
+  margin: 0 20px;
+}
+#watchNotice {
+  padding: 8px;
+  border-top: 1px solid #ccc;
+  background: #ffc;
+  overflow-wrap: anywhere;
+}
+#watchNotice input {
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 5px;
+}
+#commentsDiv {
+  clear: both;
+  margin-top: 20px;
+}
+.commentsTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  align-items: flex-start;
+}
+.commentsTop h2 {
+  margin: 0;
+}
+.commentFilter {
+  display: block;
+  margin: 5px;
+  font-size: 11px;
+}
+.commentFilter select {
+  font-size: 10px;
+}
+.postLinks {
+  text-align: right;
+  line-height: 1.6;
+}
+.demoNote {
+  font-size: 10px;
+  color: #666;
+  margin: 6px 0 8px;
+}
+.commentPagination {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: bold;
+  text-align: center;
+  padding: 3px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+}
+.commentPagination button {
+  padding: 0 4px;
+  border: none;
+  background: none;
+  color: #03c;
+  text-decoration: underline;
+  font-size: 11px;
+  font-weight: bold;
+}
+.commentPagination button[aria-current] {
+  color: #000;
+  text-decoration: none;
+}
+.commentEntry {
+  clear: both;
+  margin: 6px 0 16px;
+}
+.commentEntryReply {
+  margin: 6px 0 16px 40px;
+}
+.commentHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+  background: #eee;
+  padding: 4px;
+}
+.commentAuthor {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.commentVote {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+  font-size: 11px;
+}
+.commentVote button {
+  border: 0;
+  padding: 0;
+  background: none;
+  width: 19px;
+  height: 19px;
+  opacity: 0.45;
+}
+.commentVote button:hover,
+.commentVote button[aria-pressed="true"] {
+  opacity: 1;
+}
+.commentVote img {
+  display: block;
+  width: 19px;
+  height: 19px;
+}
+.positiveScore {
+  color: #008000;
+}
+.negativeScore {
+  color: #c00;
+}
+.commentBody {
+  margin-top: 4px;
+  margin-left: 8px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  width: 75%;
+}
+.commentAction {
+  float: right;
+  margin: 3px 4px 0 0;
+  font-size: 11px;
+}
+.commentAction button {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-size: 11px;
+  color: #03c;
+  border-bottom: 1px dotted #03c;
+}
+#commentForm {
+  background: #eee;
+  padding: 8px;
+  margin: 8px 0;
+}
+#commentForm label {
+  display: block;
+  margin-bottom: 5px;
+}
+#commentForm textarea {
+  box-sizing: border-box;
+  width: 100%;
+  resize: vertical;
+}
+#commentRemaining {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 10px;
+}
+.side-panel-2007 {
+  border: 1px solid #ccc;
+  background: #eee;
+  padding: 10px;
+  margin-bottom: 12px;
+  overflow-wrap: anywhere;
+}
+.subscribe-wrap {
+  float: right;
+  text-align: center;
+  max-width: 125px;
+  margin-left: 5px;
+}
+.subscribe-2007 {
+  font-size: 12px;
+  font-weight: bold;
+  color: #994800;
+  border: 1px solid #ecc25c;
+  background: #ffcc66;
+  padding: 4px 12px;
+  box-shadow: inset 0 1px #fff3cc;
+}
+.subscribe-note {
+  font-size: 11px;
+  margin-top: 2px;
+}
+.provider {
+  clear: both;
+  display: flex;
+  gap: 12px;
+  align-items: end;
+  padding-top: 4px;
+}
+.desc-2007 {
+  margin: 10px 0 0;
+  line-height: 1.3;
+}
+.desc-2007.collapsed {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.row-2007 {
+  display: flex;
+  gap: 5px;
+  align-items: baseline;
+  margin-top: 8px;
+}
+.row-2007 > .smallLabel {
+  flex: 0 0 43px;
+}
+.row-2007 input {
+  width: 0;
+  min-width: 0;
+  flex: 1;
+  height: 18px;
+  box-sizing: border-box;
+  font-size: 11px;
+  color: #333;
+  background: white;
+  border: 1px solid #aaa;
+  padding: 1px 2px;
+}
+.related-tabs {
+  display: flex;
+  height: 34px;
+  background: url(assets/archive-2007/btn_exploretab_related_300x34.gif)
+    no-repeat;
+}
+.related-tabs button {
+  background: none;
+  border: 0;
+  padding: 0;
+  height: 24px;
+  color: transparent;
+}
+.related-tabs button:nth-child(1) {
+  width: 71px;
+}
+.related-tabs button:nth-child(2) {
+  width: 156px;
+}
+.related-tabs button:nth-child(3) {
+  width: 73px;
+}
+.related-body {
+  padding: 6px;
+  background: #eee;
+  border: 1px solid #ccc;
+  border-top: 0;
+}
+.related-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  margin-bottom: 8px;
+}
+.related-item {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+.related-item > a:first-child {
+  flex: 0 0 94px;
+}
+.related-thumb {
+  display: block;
+  width: 90px;
+  height: 70px;
+  padding: 2px;
+  border: 1px solid #999;
+  object-fit: cover;
+  background: white;
+}
+.related-meta {
+  min-width: 0;
+  font-size: 11px;
+}
+.related-title {
+  display: block;
+  font-size: 12px;
+  font-weight: bold;
+}
+.related-meta .related-stars {
+  display: block;
+  width: 60px;
+  height: 12px;
+  margin-top: 2px;
+}
+#footerDiv {
+  clear: both;
+  border-top: 1px solid #ccc;
+  text-align: center;
+  font-size: 11px;
+  padding: 12px 0;
+  color: #666;
+}
+#footerDiv p {
+  font-size: 10px;
+}
+#siteDialog {
+  padding: 14px;
+  max-width: min(400px, calc(100vw - 50px));
+  border: 1px solid #999;
+  color: black;
+  font: 12px Arial;
+  box-shadow: 3px 3px 0 #999;
+}
+#siteDialog::backdrop {
+  background: #0003;
+}
+.dialogClose {
+  float: right;
+  margin: 0 0 5px 10px;
+}
+/* The original player supports an enlarged mode; keep its watch-page reflow. */
+.watch-layout.theater-mode .watch-left {
+  display: contents;
+}
+.watch-layout.theater-mode .watch-player-frame {
+  grid-column: 1 / -1;
+  width: 100% !important;
+}
+.watch-layout.theater-mode #actionsAndStatsDiv {
+  grid-column: 1;
+  grid-row: 2;
+}
+.watch-layout.theater-mode #commentsDiv {
+  grid-column: 1;
+  grid-row: 3;
+  margin-top: 0;
+}
+.watch-layout.theater-mode .watch-mid {
+  grid-column: 2;
+  grid-row: 2 / 4;
+}
+.row-2007 > .smallLabel {
+  flex-basis: 45px;
+  white-space: nowrap;
+}

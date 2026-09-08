@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YouTube - Numa Numa</title>
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="watch-2007.css" />
+    <link rel="stylesheet" href="desktop-embed.css" />
+  </head>
+  <body>
+    <div id="baseDiv">
+      <header aria-label="YouTube navigation">
+        <a id="logoTagDiv" href="watch.html" title="YouTube home"
+          ><img
+            src="assets/header/pic_youtubelogo_123x63.gif"
+            width="123"
+            height="63"
+            alt="YouTube - Broadcast Yourself"
+        /></a>
+        <div id="utilDiv">
+          <b><a href="#account" data-dialog="account">Sign Up</a></b
+          ><span class="utilDelim">|</span
+          ><a href="#account" data-dialog="account">My Account</a
+          ><span class="utilDelim">|</span
+          ><a href="#history" data-dialog="history">History</a
+          ><span class="utilDelim">|</span
+          ><a href="#help" data-dialog="help">Help</a
+          ><span class="utilDelim">|</span
+          ><a href="#account" data-dialog="account">Log In</a
+          ><span class="utilDelim">|</span
+          ><a href="#site" data-dialog="site"
+            >Site:
+            <img
+              src="assets/archive-2007/en_US.gif"
+              width="17"
+              height="11"
+              alt="Global"
+          /></a>
+        </div>
+        <nav id="gNavDiv" aria-label="Browse YouTube">
+          <div id="upload">
+            <img
+              src="assets/archive-2007/pic_upload_bug_22x23.gif"
+              width="22"
+              height="23"
+              alt=""
+            />
+            &nbsp;<a href="#upload" data-dialog="upload">Upload</a>
+          </div>
+          <div class="tab">
+            <a href="#browse" data-dialog="community" class="tab"
+              ><b
+                ><b
+                  ><b><p class="tab_label">Community</p></b></b
+                ></b
+              ></a
+            >
+          </div>
+          <div class="tab">
+            <a href="#browse" data-dialog="channels" class="tab"
+              ><b
+                ><b
+                  ><b><p class="tab_label">Channels</p></b></b
+                ></b
+              ></a
+            >
+          </div>
+          <div class="tab">
+            <a href="#browse" data-dialog="categories" class="tab"
+              ><b
+                ><b
+                  ><b><p class="tab_label">Categories</p></b></b
+                ></b
+              ></a
+            >
+          </div>
+          <div class="tab">
+            <a href="#browse" data-dialog="videos" class="tab_sel"
+              ><b
+                ><b
+                  ><b><p class="tab_label">Videos</p></b></b
+                ></b
+              ></a
+            >
+          </div>
+        </nav>
+        <div id="gNavBottom">
+          <div id="searchDiv">
+            <form id="ytLoaderForm" autocomplete="off">
+              <input
+                id="ytUrlInput"
+                class="searchField"
+                type="text"
+                spellcheck="false"
+                aria-label="YouTube video URL"
+                maxlength="2048"
+              />
+              &nbsp;<input type="submit" value="Search" />
+            </form>
+          </div>
+        </div>
+        <div id="ytInputError" class="yt-input-error" role="status"></div>
+      </header>
+      <h1 class="watch-title-left" id="vi-title-left">Numa Numa</h1>
+      <main class="watch-layout watch-classic">
+        <div class="watch-left">
+          <div class="watch-player-frame">
+            <div class="player-container">
+              <div class="video-area">
+                <video
+                  id="myVideo"
+                  preload="metadata"
+                  poster="video/numanuma.jpg"
+                  src="video/numanuma.mp4"
+                ></video>
+                <div id="ytContainer" style="display: none"></div>
+                <div id="loadingIndicator"></div>
+                <div class="ended-buttons" id="endedButtons">
+                  <button
+                    class="share-btn"
+                    id="shareBtn"
+                    title="Share"
+                  ></button>
+                  <button
+                    class="watch-again-btn"
+                    id="watchAgainBtn"
+                    title="Watch Again"
+                  ></button>
+                </div>
+              </div>
+
+              <div class="bottom-bar">
+                <div class="bar-left"></div>
+                <div class="bar-center"></div>
+                <div class="bar-right"></div>
+
+                <div class="controls-bar">
+                  <div class="left-controls">
+                    <button
+                      class="control-button pause-btn"
+                      id="playPauseBtn"
+                    ></button>
+                    <button
+                      class="control-button rewind-btn"
+                      id="rewindBtn"
+                    ></button>
+                  </div>
+
+                  <div class="progress-section">
+                    <div class="progress-background"></div>
+                    <div class="progress-loaded" id="progressLoaded"></div>
+                    <div class="progress-red" id="progressRed"></div>
+                    <div class="progress-handle" id="progressHandle"></div>
+                  </div>
+
+                  <div class="right-controls">
+                    <div class="time-section">
+                      <div class="time-box">
+                        <span class="time-current" id="timeCurrent">00:00</span>
+                        <span class="time-sep"> / </span>
+                        <span class="time-total" id="timeTotal">00:00</span>
+                      </div>
+                    </div>
+                    <div class="divider timer-right-divider"></div>
+                    <div class="volume-section">
+                      <div class="volume-track" id="volumeTrack">
+                        <div class="volume-level" id="volumeLevel"></div>
+                        <div class="volume-handle" id="volumeHandle"></div>
+                      </div>
+                      <button
+                        class="control-button volume-btn"
+                        id="volumeBtn"
+                        title="Volume"
+                      ></button>
+                    </div>
+                    <div class="divider theater-left-divider"></div>
+                    <button
+                      class="control-button theater-btn"
+                      id="theaterBtn"
+                      title="Theater"
+                    ></button>
+                    <button
+                      class="control-button fullscreen-btn"
+                      id="fullscreenBtn"
+                      title="Fullscreen"
+                    ></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="actionsAndStatsDiv">
+            <div class="actionsMatrix">
+              <div id="ratingDivWrapper">
+                <div id="ratingDiv">
+                  <div id="ratingMessage" aria-live="polite">
+                    Rate this video
+                  </div>
+                  <div
+                    id="starControls"
+                    role="radiogroup"
+                    aria-label="Rate this video out of five stars"
+                  ></div>
+                  <div class="ratingCount" id="vd-ratings">3026 ratings</div>
+                </div>
+              </div>
+              <div class="actionsDiv">
+                <div class="actionRow">
+                  <a href="#favorite" class="noul" id="favoriteVideo"
+                    ><img
+                      src="assets/video_details/save_to_favorites.gif"
+                      alt=""
+                    />
+                    <span class="eLink">Save to Favorites</span></a
+                  >
+                </div>
+                <div class="actionRow">
+                  <a href="#groups" class="noul" data-dialog="groups"
+                    ><img src="assets/video_details/add_to_groups.gif" alt="" />
+                    <span class="eLink">Add to Groups</span></a
+                  >
+                </div>
+              </div>
+              <div class="actionsDiv sm">
+                <div class="actionRow">
+                  <a href="#share" class="noul" id="shareVideo"
+                    ><img src="assets/video_details/share_video.gif" alt="" />
+                    <span class="eLink">Share Video</span></a
+                  >
+                </div>
+                <div class="actionRow">
+                  <a href="#embed" class="noul" id="postVideo"
+                    ><img src="assets/video_details/post_video.gif" alt="" />
+                    <span class="eLink">Post Video</span></a
+                  >
+                </div>
+              </div>
+              <div class="actionsDiv sm">
+                <div class="actionRow">
+                  <a href="#flag" class="noul" data-dialog="flag"
+                    ><img
+                      src="assets/video_details/flag_as_inappropriate.gif"
+                      alt=""
+                    />
+                    <span class="eLink">Flag as Inappropriate</span></a
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="statsDiv">
+              Views: <b id="vd-views">351,629</b
+              ><span class="statDivider">|</span>Comments:
+              <b id="vd-comments">16</b
+              ><span class="statDivider">|</span>Favorited:
+              <b id="vd-favs">3101</b> times
+            </div>
+            <div class="statsDiv smallText">
+              <span class="smStat"
+                >Honors:
+                <a href="#honors" data-dialog="honors" class="eLink">0</a></span
+              ><span class="smStat"
+                >Links:
+                <a href="#links" data-dialog="links" class="eLink">1</a></span
+              >
+            </div>
+            <div id="watchNotice" role="status" hidden></div>
+          </div>
+          <section id="commentsDiv" aria-labelledby="commentsHeading">
+            <div class="commentsTop">
+              <div>
+                <h2 id="commentsHeading">Comments &amp; Responses</h2>
+                <label class="commentFilter"
+                  ><b>Show:</b>
+                  <select id="commentThreshold">
+                    <option value="-1000">all comments</option>
+                    <option value="10">great (+10 or more)</option>
+                    <option value="5">good (+5 or more)</option>
+                    <option value="0">average (0 or more)</option>
+                    <option value="-5" selected>poor (-5 or more)</option>
+                    <option value="-10">very poor (-10 or more)</option>
+                  </select></label
+                >
+              </div>
+              <div class="postLinks">
+                <a href="#response" data-dialog="response"
+                  ><b>Post a video response</b></a
+                ><br /><a href="#commentForm" id="postTextComment" class="eLink"
+                  ><b>Post a text comment</b></a
+                >
+              </div>
+            </div>
+            <p class="demoNote">
+              Fictional viewers. Just for fun. Your replies and votes stay in
+              this browser.
+            </p>
+            <form id="commentForm" hidden>
+              <label
+                >Screen name:
+                <input
+                  id="commentName"
+                  maxlength="24"
+                  value="You"
+                  required /></label
+              ><label id="commentReplyLabel" for="commentText"
+                >Your comment:</label
+              ><textarea
+                id="commentText"
+                maxlength="500"
+                rows="3"
+                required
+              ></textarea>
+              <div class="commentFormActions">
+                <button type="submit">Post Comment</button>
+                <button type="button" id="cancelComment">Cancel</button
+                ><span id="commentRemaining">500 characters remaining</span>
+              </div>
+            </form>
+            <div class="commentPagination" id="commentPaginationTop"></div>
+            <div id="recent_comments"></div>
+            <div class="commentPagination" id="commentPaginationBottom"></div>
+          </section>
+        </div>
+        <aside class="watch-mid">
+          <div class="side-panel-2007" id="aboutVidDiv">
+            <div class="uploaderInfo">
+              <div class="subscribe-wrap">
+                <button id="subscribeVideo" class="subscribe-2007">
+                  Subscribe
+                </button>
+                <div class="subscribe-note">
+                  to <span id="vi-subscribe-channel">NewNuma</span>
+                </div>
+              </div>
+              <div class="userInfo">
+                <span class="smallLabel">Added:</span>
+                <b id="vi-added">December 11, 2006</b><br /><span
+                  class="smallLabel"
+                  >From:</span
+                >
+                <b
+                  ><a
+                    id="vi-channel"
+                    href="https://www.youtube.com/@NewNuma"
+                    target="_blank"
+                    rel="noreferrer"
+                    >NewNuma</a
+                  ></b
+                >
+              </div>
+              <div class="provider">
+                <img
+                  src="assets/archive-2007/pic_badge_director_90x18.gif"
+                  width="90"
+                  height="18"
+                  alt="Director"
+                /><span class="smallLabel"
+                  >Provided By:<br /><a
+                    id="vi-provider"
+                    href="https://www.youtube.com/@NewNuma"
+                    target="_blank"
+                    rel="noreferrer"
+                    >NewNuma</a
+                  ></span
+                >
+              </div>
+            </div>
+            <div class="desc-2007 collapsed" id="vi-description">
+              Gary Brolsma's original Numa Numa dance, set to Dragostea Din Tei
+              by O-Zone. A webcam, a chair, and absolutely no intention of
+              becoming internet history.
+            </div>
+            <a href="#description" id="descMore" class="eLink smallText"
+              >(more)</a
+            >
+            <div class="row-2007 smallText">
+              <span class="smallLabel">Category</span>
+              <span id="vi-category">Entertainment</span>
+            </div>
+            <div class="row-2007 smallText">
+              <span class="smallLabel">Tags:</span
+              ><span id="vi-tags"
+                ><a href="#numa" data-dialog="tags">numa</a> &nbsp;<a
+                  href="#numa"
+                  data-dialog="tags"
+                  >numanuma</a
+                >
+                &nbsp;<a href="#numa" data-dialog="tags">gary</a> &nbsp;<a
+                  href="#numa"
+                  data-dialog="tags"
+                  >brolsma</a
+                ></span
+              ><a id="tagsMore" hidden href="#tags">(more)</a>
+            </div>
+            <label class="row-2007"
+              ><span class="smallLabel">URL</span
+              ><input
+                id="vi-url"
+                type="text"
+                readonly
+                value="http://www.youtube.com/watch?v=KmtzQCSh6xk"
+            /></label>
+            <label class="row-2007"
+              ><span class="smallLabel">Embed</span
+              ><input
+                id="vi-embed"
+                type="text"
+                readonly
+                value='&lt;object width="425" height="350"&gt;&lt;/object&gt;' /></label
+            ><span id="vi-title" hidden></span>
+          </div>
+          <div class="related-2007">
+            <div
+              class="related-tabs"
+              role="tablist"
+              aria-label="Explore more videos"
+            >
+              <button role="tab" aria-selected="true" data-related="related">
+                Related</button
+              ><button role="tab" aria-selected="false" data-related="user">
+                More from this user</button
+              ><button
+                role="tab"
+                aria-selected="false"
+                data-related="playlists"
+              >
+                Playlists
+              </button>
+            </div>
+            <div class="related-body">
+              <div class="related-head">
+                <span id="relatedCount">Showing 1–4 of 4</span
+                ><a href="#related" id="seeAllVideos">See All Videos</a>
+              </div>
+              <div id="relatedList"></div>
+            </div>
+          </div>
+        </aside>
+      </main>
+      <footer id="footerDiv">
+        <div>
+          <a
+            href="https://github.com/EricKrouss/2007-YouTube-Player-HTML5"
+            target="_blank"
+            rel="noreferrer"
+            >About This Recreation</a
+          >
+          | <a href="#help" data-dialog="help">Help</a> |
+          <a href="mailto:eric@krouss.net">Contact Us</a> |
+          <a href="watch.html">Home</a>
+        </div>
+        <p>
+          YouTube layout: August 2007. Player by Eric. Fictional comments and
+          local votes.
+        </p>
+      </footer>
+    </div>
+    <dialog id="siteDialog">
+      <form method="dialog">
+        <button class="dialogClose" aria-label="Close dialog">Close</button>
+      </form>
+      <h2 id="dialogTitle"></h2>
+      <p id="dialogText"></p>
+    </dialog>
+    <script src="script.js"></script>
+    <script src="watch-metadata.js"></script>
+    <script src="watch-community.js"></script>
+    <script src="desktop-embed.js"></script>
+  </body>
+</html>
