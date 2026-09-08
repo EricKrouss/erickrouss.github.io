@@ -1,50 +1,42 @@
 // The personal bits live here. No database, no CMS, just a text editor.
 export const site = {
   name: "Eric Krouss",
-  version: "2.0.0",
+  version: "2.2.0",
   updated: "2026-09-08",
   email: "eric@krouss.net",
   github: "https://github.com/EricKrouss",
   bluesky: "https://bsky.app/profile/krouss.net",
   os: "CachyOS / Linux",
+  kofi: "https://ko-fi.com/ericwaffles",
 };
 export const projects = [
   {
-    name: "Minecraft workshop",
+    name: "Minecraft Oldschool Edition",
     type: "JAVA",
     icon: "block",
     description:
-      "Client & server tinkering. Old-school feel, new things under the hood.",
+      "A Beta 1.7.3 overhaul with classic worlds, expanded content and modern improvements.",
     target: "minecraft",
-    tag: "ON THE WORKBENCH",
+    tag: "BETA 1.7.3 MOD",
   },
   {
     name: "2007 YouTube player",
     type: "HTML / JS",
-    icon: "play",
+    icon: "youtube",
     description:
       "A little piece of the old internet, rebuilt for today’s browser.",
     href: "https://erickrouss.github.io/2007-YouTube-Player-HTML5/",
     source: "https://github.com/EricKrouss/2007-YouTube-Player-HTML5",
   },
-  {
-    name: "Bluesky Flex",
-    type: "REACT",
-    icon: "network",
-    description:
-      "Explore the most-followed people and most-liked posts on Bluesky.",
-    href: "https://erickrouss.github.io/Bluesky-Flex/",
-    source: "https://github.com/EricKrouss/Bluesky-Flex",
-  },
-  {
-    name: "Bluesky Shield",
-    type: "PYTHON / JS",
-    icon: "shield",
-    description: "Tools for creating and managing Bluesky block lists.",
-    href: "https://github.com/EricKrouss/Bluesky-Shield",
-  },
 ];
 export const links = [
+  {
+    title: "KO-FI",
+    subtitle: "fuel the tinkering",
+    href: site.kofi,
+    style: "kofi",
+    icon: "♥",
+  },
   {
     title: "ARCH WIKI",
     subtitle: "read the manual",
@@ -95,3 +87,19 @@ export const hardware = [
   ["RAM", "60 GiB usable"],
   ["DISK", "9 TB SSD / 3 drives"],
 ];
+
+// Verified against minecraftoldschool.com and the published 1.8 release notes.
+export const minecraft = {
+  name: "Minecraft Oldschool Edition",
+  description:
+    "A large-scale mod built on Minecraft Beta 1.7.3. It preserves early Minecraft’s terrain, pacing and atmosphere while adding new content and modern improvements.",
+  features: [
+    "Indev and Infdev world generators, plus an expanded Sky Dimension",
+    "OpenGL or optional Vulkan rendering with FSR 3.1 upscaling",
+    "Controller support, accessibility options and proximity voice chat",
+  ],
+  distribution:
+    "A Prism Launcher client and a matching UberBukkit-based server.",
+  website: "https://minecraftoldschool.com/",
+  releases: "https://github.com/MinecraftOldschoolEdition/downloads/releases",
+};

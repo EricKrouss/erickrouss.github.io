@@ -1,0 +1,878 @@
+/* Archived Windows graphics and a web conversion of the original MS Sans Serif. */
+@font-face {
+  font-family: "MS W98 UI";
+  src: url("/assets/fonts/MSW98UI-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "MS W98 UI";
+  src: url("/assets/fonts/MSW98UI-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+:root {
+  --chrome: #c0c0c0;
+  --outset: inset 1px 1px #fff, inset -1px -1px #808080;
+  --inset: inset 1px 1px #808080, inset -1px -1px #fff;
+  --shell-font: "MS W98 UI", "MS Sans Serif", sans-serif;
+  --mono: var(--shell-font);
+  font-family: var(--shell-font);
+  font-kerning: none;
+}
+.system-icon {
+  object-fit: contain;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+button {
+  border-color: #404040;
+}
+button:active,
+.pressed {
+  background: #c0c0c0;
+}
+.window {
+  background: #c0c0c0;
+  border: 0;
+  padding: 4px;
+  box-shadow:
+    inset -1px -1px #000,
+    inset 1px 1px #dfdfdf,
+    inset -2px -2px #808080,
+    inset 2px 2px #fff;
+}
+.window-content {
+  background: var(--paper);
+}
+.title-bar {
+  font-family: var(--shell-font);
+  font-size: 11px;
+  letter-spacing: 0;
+  background: #747474;
+  color: #fff;
+  border: 0;
+}
+.title-bar .system-icon {
+  width: 16px;
+  height: 16px;
+}
+.active > .title-bar,
+.retro-dialog .title-bar {
+  background: #000080;
+  color: #fff;
+  border-color: #000080;
+}
+.title-grip {
+  background: none;
+}
+.window-control {
+  color: #000;
+  background: #c0c0c0;
+  border-color: #404040;
+}
+.window-footer {
+  background: #c0c0c0;
+  color: #333;
+  border-color: #b0b0b0;
+}
+.masthead-chrome,
+.file-toolbar {
+  background: #c0c0c0;
+  color: #222;
+  font-family: var(--shell-font);
+}
+.masthead-main > .desktop-computer {
+  width: 144px;
+  height: 144px;
+  margin-left: auto;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+  object-fit: contain;
+}
+.avatar .profile-photo {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+.landscape-wrap {
+  background: #fff;
+  border-color: #808080;
+  box-shadow: var(--inset);
+  overflow: hidden;
+}
+.minecraft-artwork {
+  width: 100%;
+  height: 145px;
+  object-fit: contain;
+  display: block;
+  padding: 5px 0 19px;
+  background: #d4ded0;
+}
+.landscape-caption {
+  background: #000080;
+  color: #fff;
+  font: 10px var(--shell-font);
+  letter-spacing: 0;
+}
+.build-label {
+  background: #fff;
+  color: #000080;
+  font: 9px var(--shell-font);
+  z-index: 1;
+}
+.blinkie-shelf {
+  gap: 16px;
+}
+.blinkie-shelf img {
+  display: block;
+  image-rendering: pixelated;
+}
+.taskbar {
+  background: #c0c0c0;
+  border-top-color: #fff;
+  font-family: var(--shell-font);
+  color: #000;
+}
+.start-button {
+  color: #000;
+  font: 11px var(--shell-font);
+  padding: 2px 6px;
+  min-width: 65px;
+  gap: 4px;
+}
+.start-button .system-icon {
+  width: 16px;
+  height: 14px;
+}
+.start-button strong {
+  font-weight: 700;
+}
+.task-buttons button {
+  color: #000;
+  font: 11px var(--shell-font);
+}
+.task-buttons button.selected {
+  background-color: #ddd;
+  background-image: repeating-conic-gradient(#fff 0% 25%, #ddd 0% 50%);
+  background-size: 2px 2px;
+}
+.task-buttons button.minimized {
+  color: #444;
+}
+.taskbar-divider {
+  border-left-color: #808080;
+  border-right-color: #fff;
+}
+.taskbar-clock {
+  color: #000;
+  border-color: #808080;
+  font: 11px var(--shell-font);
+  min-height: 27px;
+}
+.start-menu {
+  display: flex;
+  padding: 3px;
+  min-width: 0;
+  width: 222px;
+  background: #c0c0c0;
+  border: 1px solid #000;
+  box-shadow:
+    inset 1px 1px #fff,
+    inset -1px -1px #808080,
+    2px 2px #0006;
+  max-height: calc(100dvh - 48px);
+}
+.start-menu-brand {
+  background: #000080 url("/assets/win98/start-menu-side.png") no-repeat left
+    bottom;
+  background-size: 21px 108px;
+  width: 21px;
+  flex-shrink: 0;
+  padding: 0;
+  margin: 0 3px 0 0;
+}
+.start-menu-items {
+  min-width: 0;
+  flex: 1;
+  padding: 0;
+}
+.start-menu-items > button,
+.submenu-row > button,
+.start-submenu > button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  text-align: left;
+  color: #000;
+  font: 11px/1.3 var(--shell-font);
+  width: 100%;
+  padding: 4px 6px;
+  min-height: 38px;
+}
+.start-menu-items > button:hover,
+.start-menu-items > button:focus-visible,
+.submenu-row > button:hover,
+.submenu-row > button:focus-visible,
+.submenu-row > button[aria-expanded="true"],
+.start-submenu > button:hover,
+.start-submenu > button:focus-visible {
+  background: #000080;
+  color: #fff;
+  outline: none;
+}
+.menu-arrow {
+  margin-left: auto;
+  font: 12px var(--shell-font);
+}
+.menu-separator {
+  margin: 4px 2px;
+  border-top: 1px solid #808080;
+  border-bottom: 1px solid #fff;
+}
+.submenu-row {
+  position: relative;
+}
+.start-submenu {
+  position: absolute;
+  left: calc(100% - 2px);
+  bottom: 0;
+  width: 202px;
+  padding: 3px;
+  background: #c0c0c0;
+  border: 1px solid #000;
+  box-shadow:
+    var(--outset),
+    2px 2px #0006;
+  z-index: 1;
+}
+.start-submenu > button {
+  min-height: 30px;
+  padding: 5px 6px;
+}
+.start-submenu small {
+  margin-left: auto;
+  font: 8px var(--mono);
+}
+.dialog-content > .system-icon {
+  flex-shrink: 0;
+}
+.retro-dialog {
+  background: #c0c0c0;
+  color: #000;
+}
+.retro-dialog .title-bar strong {
+  font-family: var(--shell-font);
+}
+@media (max-width: 1049px) {
+  .masthead-main > .desktop-computer {
+    width: 128px;
+    height: 128px;
+  }
+  .task-buttons button {
+    font-size: 10px;
+  }
+}
+@media (max-width: 740px) {
+  .masthead-main > .desktop-computer {
+    width: 112px;
+    height: 112px;
+  }
+  .task-buttons button {
+    min-width: 26px;
+  }
+}
+@media (max-width: 540px) {
+  .masthead-main > .desktop-computer {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+  }
+  .start-menu {
+    width: 242px;
+    max-width: calc(100vw - 8px);
+  }
+  .start-menu-items {
+    overflow-y: auto;
+  }
+  .start-submenu {
+    position: static;
+    width: auto;
+    margin: 0 3px 5px 17px;
+    border-color: #808080;
+    box-shadow: var(--inset);
+  }
+  .start-menu-items > button,
+  .submenu-row > button {
+    min-height: 36px;
+  }
+  .start-menu-items > button .system-icon,
+  .submenu-row > button .system-icon {
+    width: 28px;
+    height: 28px;
+  }
+  .start-submenu > button {
+    min-height: 34px;
+  }
+  .task-buttons button {
+    min-width: 23px;
+  }
+  .taskbar-clock {
+    font-size: 10px;
+  }
+  .start-button {
+    min-width: 55px;
+  }
+  .minecraft-artwork {
+    height: 163px;
+  }
+}
+@media (max-height: 520px) {
+  .start-menu {
+    width: 242px;
+  }
+  .start-menu-items {
+    overflow-y: auto;
+  }
+  .start-submenu {
+    position: static;
+    width: auto;
+    margin: 0 3px 5px 17px;
+  }
+}
+
+.file-toolbar .path {
+  color: #333;
+}
+
+.minecraft-distribution {
+  padding: 9px 0 7px;
+  font-size: 11px;
+}
+/* Preserve the cow's character grid while keeping the same Windows UI font. */
+.ascii-row {
+  display: block;
+  white-space: pre;
+}
+.ascii-row > span {
+  display: inline-block;
+  width: 7px;
+  text-align: center;
+}
+.minecraft-project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  padding-bottom: 12px;
+  font-size: 11px;
+}
+.web-button.kofi {
+  background: #fff5ed;
+  color: #593527;
+  border-color: #a55339;
+}
+.kofi .button-icon {
+  color: #c52f35;
+}
+
+/* 28px Explorer taskbar: 22px buttons, two-pixel bevels, Quick Launch grippers. */
+.taskbar {
+  height: 28px;
+  gap: 4px;
+  padding: 2px 2px 2px 3px;
+  border: 0;
+  box-shadow:
+    inset 0 1px #dfdfdf,
+    inset 0 2px #fff;
+}
+.taskbar .start-button,
+.task-buttons button {
+  border: 0;
+  box-shadow:
+    inset -1px -1px #000,
+    inset 1px 1px #fff,
+    inset -2px -2px #808080,
+    inset 2px 2px #dfdfdf;
+  height: 22px;
+  padding: 2px 4px;
+  color: #000;
+  font: 11px/1 var(--shell-font);
+}
+.taskbar .start-button {
+  width: 54px;
+  min-width: 54px;
+  gap: 3px;
+}
+.start-area {
+  align-self: auto;
+}
+.task-buttons {
+  gap: 3px;
+}
+.task-buttons button {
+  width: 160px;
+  flex: 0 1 160px;
+  gap: 3px;
+}
+.task-buttons button.selected,
+.taskbar .start-button.pressed,
+.taskbar .start-button:active,
+.task-buttons button:active {
+  box-shadow:
+    inset -1px -1px #fff,
+    inset 1px 1px #000,
+    inset -2px -2px #dfdfdf,
+    inset 2px 2px #808080;
+}
+.task-buttons button.selected {
+  background-image: repeating-conic-gradient(#fff 0% 25%, #c0c0c0 0% 50%);
+  font-weight: 700;
+}
+.task-buttons button.selected > * {
+  transform: translate(1px, 1px);
+}
+.task-buttons button.minimized {
+  color: #000;
+}
+.quick-launch {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.toolbar-grip {
+  width: 3px;
+  height: 20px;
+  box-shadow:
+    inset 1px 1px #fff,
+    inset -1px -1px #808080;
+  margin: 0 2px;
+}
+.quick-launch button,
+.sound-button {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+}
+.quick-launch img,
+.sound-button img {
+  image-rendering: pixelated;
+}
+.quick-launch button:hover {
+  box-shadow: var(--outset);
+}
+.quick-launch button:active {
+  box-shadow: var(--inset);
+}
+.taskbar-clock {
+  height: 22px;
+  min-height: 22px;
+  padding: 0 9px 0 3px;
+  gap: 4px;
+  border: 0;
+  box-shadow:
+    inset 1px 1px #808080,
+    inset -1px -1px #fff;
+  font: 11px/1 var(--shell-font);
+}
+.sound-button {
+  width: 20px;
+  height: 18px;
+  position: relative;
+}
+.sound-button.muted::after {
+  content: "";
+  position: absolute;
+  width: 13px;
+  height: 2px;
+  background: #b00000;
+  transform: rotate(-45deg);
+}
+.start-menu {
+  bottom: 24px;
+}
+
+.startup {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  background: #008080;
+  color: #000;
+  padding: 16px;
+}
+.power-dialog {
+  width: min(410px, 100%);
+}
+.power-dialog .title-bar {
+  cursor: default;
+}
+.power-content {
+  display: flex;
+  gap: 16px;
+  padding: 24px 18px 16px;
+}
+.power-content h1 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+.power-content p {
+  font-size: 12px;
+}
+.boot-sound-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 18px;
+  font-size: 11px;
+}
+.boot-sound-option input {
+  accent-color: #000080;
+  margin: 0;
+}
+.power-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 20px 18px 16px;
+}
+.power-actions button,
+.boot-actions button {
+  min-height: 26px;
+  padding: 3px 14px;
+  font-size: 11px;
+  color: #000;
+}
+.power-actions button:first-child {
+  outline: 1px solid #000;
+  outline-offset: 1px;
+}
+.startup-splash {
+  background: #000;
+}
+.boot-splash {
+  width: min(640px, 100vw, calc((100dvh - 80px) * 4 / 3));
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: fill;
+  image-rendering: pixelated;
+}
+.boot-actions {
+  position: fixed;
+  bottom: 42px;
+  right: 12px;
+  left: 12px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  color: #fff;
+  font-size: 11px;
+}
+.startup-shell,
+.startup-icons,
+.startup-windows {
+  background: transparent;
+  pointer-events: none;
+}
+.boot-actions button {
+  pointer-events: auto;
+}
+.boot-off,
+.boot-splash {
+  visibility: hidden;
+}
+.startup .boot-splash {
+  visibility: visible;
+}
+.boot-shell > :not(.taskbar),
+.boot-icons .site-surface,
+.boot-icons .desktop-top {
+  visibility: hidden;
+}
+.boot-windows .window {
+  animation: window-load 1ms step-end both;
+  animation-delay: var(--open-delay, 0ms);
+}
+.boot-windows #status {
+  --open-delay: 160ms;
+}
+.boot-windows #computer {
+  --open-delay: 320ms;
+}
+.boot-windows #projects {
+  --open-delay: 480ms;
+}
+.boot-windows #minecraft {
+  --open-delay: 640ms;
+}
+.boot-windows #terminal {
+  --open-delay: 800ms;
+}
+.boot-windows #links {
+  --open-delay: 960ms;
+}
+@keyframes window-load {
+  from {
+    visibility: hidden;
+  }
+  to {
+    visibility: visible;
+  }
+}
+
+@media (max-width: 740px) {
+  .taskbar {
+    height: 38px;
+    padding: 4px;
+    gap: 3px;
+  }
+  .taskbar .start-button,
+  .task-buttons button {
+    height: 28px;
+  }
+  .task-buttons button {
+    min-width: 24px;
+    justify-content: center;
+    padding: 2px;
+  }
+  .task-buttons button span {
+    display: none;
+  }
+  .quick-launch {
+    gap: 0;
+  }
+  .quick-launch button {
+    width: 26px;
+    height: 28px;
+  }
+  .quick-launch button:nth-of-type(2),
+  .toolbar-grip {
+    display: none;
+  }
+  .taskbar-clock {
+    height: 28px;
+    padding: 0 5px;
+    font-size: 10px;
+    gap: 3px;
+  }
+  .taskbar-clock .sound-button {
+    display: none;
+  }
+  .start-menu {
+    bottom: 31px;
+  }
+  .boot-actions {
+    bottom: 48px;
+  }
+}
+@media (max-width: 540px) {
+  .minecraft-distribution,
+  .minecraft-project-links {
+    font-size: 12px;
+  }
+  .power-dialog .title-bar {
+    height: 22px;
+    min-height: 22px;
+  }
+  .power-content {
+    padding: 20px 12px 14px;
+    gap: 12px;
+  }
+  .boot-sound-option {
+    margin: 0 12px;
+  }
+  .power-actions {
+    padding: 18px 12px 12px;
+  }
+  .power-actions button,
+  .boot-actions button {
+    min-height: 36px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .boot-windows .window {
+    animation: none;
+  }
+}
+
+/* Original Windows 98 desktop teal and three-button window title bars. */
+:root {
+  background: #008080;
+}
+.desktop {
+  background: #008080;
+}
+.desktop-top,
+.dock-note,
+.desktop-hint,
+.site-footer,
+.site-info,
+.site-info > small {
+  color: #fff;
+}
+.desktop-top .top-star,
+.desktop-hint button,
+.site-footer a,
+.my-button-row button {
+  color: #fff;
+}
+.desktop-icons > button {
+  color: #fff;
+}
+.desktop-icons {
+  position: sticky;
+  top: 10px;
+}
+/* Measurements and bitmap crops from an actual Windows 98 Notepad window.
+   Source: GUIdebook. See asset-credits.html for the exact files and crop boxes. */
+.title-bar {
+  background: #b5b5b5 url("/assets/window-controls/title-inactive.png") center /
+    100% 100% no-repeat;
+  image-rendering: pixelated;
+  color: #c0c0c0;
+  height: 18px;
+  min-height: 18px;
+  padding: 0 2px 0 1px;
+  gap: 3px;
+  font: 700 11px/1 var(--shell-font);
+}
+.active > .title-bar,
+.retro-dialog .title-bar {
+  background: #1084d0 url("/assets/window-controls/title-active.png") center /
+    100% 100% no-repeat;
+  color: #fff;
+}
+.title-bar h2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  margin: 0;
+}
+.title-grip {
+  min-width: 0;
+  margin-left: 0;
+}
+.title-bar-controls {
+  display: flex;
+  gap: 0;
+  flex-shrink: 0;
+}
+.title-bar .window-control,
+.title-bar .window-control:active {
+  display: block;
+  padding: 0;
+  min-width: 16px;
+  width: 16px;
+  height: 14px;
+  min-height: 14px;
+  border: 0;
+  border-radius: 0;
+  background: var(--caption-button) center / 100% 100% no-repeat;
+  box-shadow: none;
+  image-rendering: pixelated;
+}
+.title-bar .window-control:active {
+  background-image: var(--caption-button-pressed);
+}
+.window-control.minimize {
+  --caption-button: url("/assets/window-controls/minimize.png");
+  --caption-button-pressed: url("/assets/window-controls/minimize-pressed.png");
+}
+.window-control.maximize {
+  --caption-button: url("/assets/window-controls/maximize.png");
+  --caption-button-pressed: url("/assets/window-controls/maximize-pressed.png");
+}
+.window-control.restore {
+  --caption-button: url("/assets/window-controls/restore.png");
+  --caption-button-pressed: url("/assets/window-controls/restore-pressed.png");
+}
+.window-control.close {
+  margin-left: 2px;
+  --caption-button: url("/assets/window-controls/close.png");
+  --caption-button-pressed: url("/assets/window-controls/close-pressed.png");
+}
+.window.maximized {
+  position: fixed;
+  inset: 34px max(12px, calc((100vw - 1350px) / 2 + 25px)) 48px
+    max(112px, calc((100vw - 1350px) / 2 + 117px));
+  display: flex;
+  flex-direction: column;
+  transform: none !important;
+}
+.window.maximized > .title-bar,
+.window.maximized > .window-footer {
+  flex-shrink: 0;
+}
+.window.maximized > .window-content {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+.window.maximized .terminal-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.window.maximized .terminal-output {
+  flex: 1;
+}
+.window[hidden] {
+  display: none !important;
+}
+@media (max-width: 1049px) {
+  .desktop-icons {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 4px;
+    padding-top: 0;
+  }
+  .desktop-icons > button {
+    font-size: 9px;
+    min-height: 60px;
+    gap: 4px;
+  }
+  .dock-note {
+    display: none;
+  }
+  .window.maximized {
+    inset: 8px 8px 48px;
+  }
+}
+@media (max-width: 540px) {
+  .desktop-icons {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 5px;
+  }
+  .desktop-icons > button {
+    min-height: 58px;
+  }
+  .title-bar {
+    height: 36px;
+    min-height: 36px;
+    padding-right: 4px;
+  }
+  .title-bar .window-control,
+  .title-bar .window-control:active {
+    width: 32px;
+    height: 28px;
+    min-width: 32px;
+  }
+  .window-control.close {
+    margin-left: 4px;
+  }
+}

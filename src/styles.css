@@ -1,5 +1,5 @@
 :root {
-  font-family: Tahoma, Verdana, Arial, sans-serif;
+  font-family: var(--shell-font);
   color: #29312f;
   background: #20344d;
   font-synthesis: none;
@@ -427,7 +427,7 @@ button.text-link:hover {
   line-height: 10px;
   padding: 0 0 5px;
   font-size: 15px;
-  font-family: Arial, sans-serif;
+  font-family: var(--shell-font);
   font-weight: bold;
   background: #c8ccbe;
   border-color: #233e49;

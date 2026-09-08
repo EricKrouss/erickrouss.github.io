@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Asset credits — Eric’s personal computer</title>
+    <link rel="icon" href="/favicon.svg" />
+    <style>
+      @font-face {
+        font-family: "MS W98 UI";
+        src: url("/assets/fonts/MSW98UI-Regular.woff2");
+        font-weight: 400;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "MS W98 UI";
+        src: url("/assets/fonts/MSW98UI-Bold.woff2");
+        font-weight: 700;
+        font-display: swap;
+      }
+      code {
+        font-family: inherit;
+      }
+
+      body {
+        background: #008080;
+        color: #000;
+        font:
+          14px/1.6 "MS W98 UI",
+          sans-serif;
+        margin: 24px;
+      }
+      main {
+        max-width: 720px;
+        margin: auto;
+        background: #c0c0c0;
+        border: 2px outset #fff;
+        padding: 4px;
+      }
+      h1 {
+        font-size: 16px;
+        background: #000080;
+        color: white;
+        padding: 4px 8px;
+        margin: 0;
+      }
+      article {
+        padding: 12px 18px;
+      }
+      h2 {
+        font-size: 16px;
+      }
+      a {
+        color: #000080;
+      }
+      code {
+        overflow-wrap: anywhere;
+      }
+      li {
+        margin: 8px 0;
+      }
+      img {
+        image-rendering: pixelated;
+        vertical-align: middle;
+      }
+      footer {
+        border-top: 1px solid #808080;
+        padding-top: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>credits.txt — Notepad</h1>
+      <article>
+        <p><a href="/">← Back to Eric’s desktop</a></p>
+        <h2>Windows 98 interface graphics</h2>
+        <p>
+          <img
+            src="/assets/win98/computer_explorer-2.png"
+            width="32"
+            height="32"
+            alt="Windows 98 My Computer"
+          />
+          The desktop, program and taskbar icons are archived Windows graphics
+          from
+          <a href="https://win98icons.alexmeub.com/"
+            >Alex Meub’s Windows 98 Icon Viewer</a
+          >. The original filenames are preserved in
+          <code>/assets/win98/</code>.
+        </p>
+        <p>
+          The Windows flag (<code>start.png</code>) and Windows 98 vertical
+          Start-menu bitmap (<code>start-menu-side.png</code>) are sourced from
+          <a href="https://98.js.org/">98.js</a>, Isaiah Odhner’s Windows 98
+          recreation. Windows graphics and trademarks belong to Microsoft. The
+          archive’s availability is not a claim that the graphics are public
+          domain, and this personal site is not affiliated with Microsoft.
+        </p>
+        <h2>Original Windows 98 title bars and controls</h2>
+        <p>
+          The normal minimize, maximize and close buttons are unchanged 16×14
+          bitmap crops from
+          <a
+            href="https://guidebookgallery.org/pics/gui/applications/office/notepad/win98.png"
+            >GUIdebook’s original Windows 98 Notepad screenshot</a
+          >. Its active caption gradient and the inactive gradient from
+          <a
+            href="https://guidebookgallery.org/pics/gui/desktop/full/win98se.png"
+            >the Windows 98 SE desktop capture</a
+          >
+          are included as bitmap strips. Desktop metrics match the capture:
+          18-pixel title bars, four-pixel window frames and two pixels before
+          Close. Phone controls use exact 2× pixel scaling.
+        </p>
+        <p>
+          The Restore glyph is rasterized from Microsoft’s original Marlett
+          1.00, extracted from <code>WIN98_49.CAB</code> in an
+          <a href="https://www.okpb.cz/REG/WIN98/"
+            >archived Windows 98 installation</a
+          >. The same raster settings match all three captured control glyphs
+          pixel-for-pixel.
+          <a
+            href="https://learn.microsoft.com/en-us/typography/font-list/marlett"
+            >Microsoft documents Marlett’s use and the Windows 98 version</a
+          >. Pressed states use those same glyph pixels with the native
+          one-pixel offset. The live titles and behavior are implemented in
+          HTML/CSS and React; the graphics remain Microsoft’s. The Marlett font
+          file and Windows installation archive are not distributed by this
+          site.
+        </p>
+        <h2>Original startup screen and sound</h2>
+        <p>
+          The unchanged Windows 98 startup bitmap is from
+          <a
+            href="https://guidebookgallery.org/pics/gui/startupshutdown/splash/win98-1-1.png"
+            >GUIdebook’s Windows 98 capture</a
+          >. The 640×400 capture is displayed at the original monitor’s 4:3
+          aspect ratio. The original <em>The Microsoft Sound.wav</em>, Quick
+          Launch icons, and speaker icon are preserved by
+          <a href="https://github.com/1j01/98">98.js</a>. This is the
+          7.86-second startup recording, not the first-run welcome music. Sound
+          plays only after choosing Power on. Skip startup remains silent. These
+          original Microsoft assets are credited here; their availability in an
+          archive does not place them in the public domain.
+        </p>
+        <h2>Interface text font</h2>
+        <p>
+          Windows 98’s default UI typeface was <strong>MS Sans Serif</strong>,
+          as
+          <a
+            href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-emf/f5148c7c-30c5-4d95-bf1b-b449c1f8f53d"
+            >documented by Microsoft</a
+          >. The entire app uses regular and bold
+          <a href="https://martyr.shop/fonts/ms-w98-ui/">MS W98 UI</a>, a
+          browser-compatible conversion of that original bitmap typeface by Lev
+          Leontev and martyr, based on Microsoft’s font.
+          <a href="/assets/fonts/MSW98UI-README.md">The publisher’s credits</a>
+          are included locally. The original Windows FON format cannot be loaded
+          directly by browsers; scaling and browser text rendering can differ
+          from Windows 98’s native rasterizer. This is not the later
+          <em>Microsoft Sans Serif</em> outline replacement.
+        </p>
+        <h2>Old YouTube icon</h2>
+        <p>
+          <img
+            src="/assets/period/youtube-2005-2009.png"
+            width="32"
+            height="32"
+            alt="YouTube’s 2005–2009 favicon"
+          />
+          The YouTube player uses the
+          <a
+            href="https://commons.wikimedia.org/wiki/File:YouTube_favicon_(2005-2009).png"
+            >original 2005–2009 YouTube favicon preserved on Wikimedia
+            Commons</a
+          >, which cites a 2005 archive of YouTube.com. The 16×16 bitmap is
+          unchanged and enlarged with nearest-neighbor rendering. YouTube
+          remains a trademark of Google.
+        </p>
+        <h2>Web buttons</h2>
+        <p>
+          The static Arch Linux and Under Construction 88×31 GIFs are from
+          <a href="https://cyber.dabamos.de/88x31/">The 88×31 GIF Collection</a
+          >. That collection includes graphics from the 1990s, 2000s and later;
+          these are archived community graphics, not AI-generated imitations.
+          Original creators retain their rights. Both files are hosted locally,
+          as requested by the archive.
+        </p>
+        <h2>Classic Minecraft launcher icon</h2>
+        <p>
+          <img
+            src="/assets/period/minecraft-launcher.png"
+            width="32"
+            height="32"
+            alt="Classic Minecraft grass-block launcher icon"
+          />
+          The original 32×32 grass-block favicon used by the old Java launcher
+          is preserved in
+          <a
+            href="https://github.com/mclaunch/mclaunch/blob/master/src/main/resources/favicon.png"
+            >mclaunch</a
+          >. The same bitmap is hosted by
+          <a href="https://minecraftoldschool.com/favicon.png"
+            >Minecraft Oldschool Edition</a
+          >; the files are byte-for-byte identical. A
+          <a href="https://gist.github.com/kmpm/1342697"
+            >2011 launcher installation script</a
+          >
+          documents using Minecraft.net’s favicon as the desktop launcher icon.
+          The downloaded bitmap is included unchanged as
+          <code>minecraft-launcher.png</code>. Minecraft graphics belong to
+          Mojang/Microsoft.
+        </p>
+        <h2>Personal and Minecraft images</h2>
+        <p>
+          Eric’s profile photograph was restored from the previous version of
+          this website. The Steve, pig and sheep artwork is from
+          <a href="https://minecraftoldschool.com/"
+            >Minecraft Oldschool Edition</a
+          >. Minecraft characters and artwork belong to Mojang/Microsoft.
+        </p>
+        <p>
+          The small <code>button.svg</code> and favicon were drawn for this
+          personal site. The earlier generated SVG interface icons, smiling
+          computer mascot and block landscape have been removed.
+        </p>
+        <footer>
+          Assets retrieved September 8, 2026. All images and fonts are served
+          locally; nothing is hotlinked.
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
