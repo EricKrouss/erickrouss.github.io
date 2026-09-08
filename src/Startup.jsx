@@ -172,13 +172,19 @@ export default function Startup({
       ) : (
         <>
           {phase === "splash" && (
-            <img
-              className="boot-splash"
-              src="/assets/win98/boot-splash.png"
-              width="640"
-              height="400"
-              alt="Microsoft Windows 98 startup screen"
-            />
+            <picture className="boot-poster">
+              <source
+                media="(min-aspect-ratio: 3/2)"
+                srcSet="/assets/win98/boot-splash-wide.jpg"
+              />
+              <img
+                className="boot-splash"
+                src="/assets/win98/boot-splash.png"
+                width="640"
+                height="400"
+                alt="Microsoft Windows 98 startup screen"
+              />
+            </picture>
           )}
           <div className="boot-actions">
             <span role="status">

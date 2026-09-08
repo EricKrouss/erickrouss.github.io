@@ -1,7 +1,7 @@
 // The personal bits live here. No database, no CMS, just a text editor.
 export const site = {
   name: "Eric Krouss",
-  version: "2.3.0",
+  version: "2.3.1",
   updated: "2026-09-08",
   email: "eric@krouss.net",
   github: "https://github.com/EricKrouss",

@@ -3,164 +3,56 @@
   const $ = (id) => document.getElementById(id);
   const asset = (name) => "assets/archive-2007/" + name;
   const universal = [
+    ["mattman_92", "lol", 24],
+    ["xxSk8erMikeXX", "how do u download this?", 18],
+    ["ashleyxox07", "my brother sent me this haha", 12],
+    ["supermariofan64", "5/5", 8],
     [
-      "xXBufferingXx",
-      "i paused it so it could load. now i am the one buffering.",
-      24,
-    ],
-    [
-      "UnregisteredHyperCam2",
-      "finally a video without my name in the top left corner",
-      18,
-    ],
-    [
-      "dialupWarrior",
-      "mom picked up the phone at the best part. 1 star for the telephone.",
-      12,
-    ],
-    ["CRT_Enjoyer", "looks amazing on my 40 pound monitor", 8],
-    [
-      "sudo_sandwich",
-      "why does internet explorer have a bash prompt. who let the penguin in",
+      "kevinator3000",
+      "wait why does the windows thing have linux commands",
       31,
     ],
-    ["FloppyDiskJockey", "can someone put this on 47 floppy disks for me", 6],
-    [
-      "xXfirstPostXx",
-      "FIRST\nedit: apparently there are two pages of comments",
-      -2,
-    ],
-    [
-      "CodecCollector",
-      "downloaded 8 codec packs for this. my taskbar is now 90% toolbars",
-      15,
-    ],
-    [
-      "WinampLlamaFan",
-      "5 stars. would put this on my myspace profile and crash all my friends browsers",
-      9,
-    ],
-    [
-      "AGP4xPower",
-      "runs great on my graphics card. all 32 megabytes of it.",
-      4,
-    ],
-    [
-      "readme_txt",
-      "the instructions said press any key. still looking for it",
-      13,
-    ],
-    [
-      "NoScopeNotepad",
-      "how do i make this my desktop background. active desktop owes me one",
-      7,
-    ],
-    [
-      "LANpartyLarry",
-      "everyone at the lan party stopped playing to watch this. someone stole my chair.",
-      21,
-    ],
-    [
-      "taskmgr_wont_open",
-      "task manager says this is fine. task manager is not responding.",
-      17,
-    ],
-    [
-      "PenguinInDisguise",
-      "windows on the outside. sudo on the inside. i respect the commitment",
-      22,
-    ],
-    [
-      "dont_delete_system32",
-      "i clicked favorites and my computer did not explode. technology is incredible",
-      3,
-    ],
-    [
-      "NeroBurningROM",
-      "burning this to a cd labeled IMPORTANT SCHOOL PROJECT",
-      11,
-    ],
-    ["AwayOnMSN", "brb setting my msn status to the entire comment section", 5],
-    [
-      "FiveStarGeneral",
-      "i miss when we could be exactly three fifths impressed",
-      16,
-    ],
-    [
-      "CachyOSIncognito",
-      "IE6 on CachyOS. this is either compatibility or a cry for help",
-      26,
-    ],
-    [
-      "DefragAndChill",
-      "waiting for my hard drive to stop sounding like a bag of gravel",
-      10,
-    ],
-    ["USB1Point1", "it only took 38 minutes to load. basically instant.", 14],
-    ["ModemSolo", "my modem made the same noise as my reaction to this", 7],
-    [
-      "FolderNamedNewFolder",
-      "saved this in New Folder (8). never finding it again.",
-      19,
-    ],
-    [
-      "RealPlayerRefugee",
-      "it played without installing realplayer. we are living in the future",
-      23,
-    ],
-    [
-      "CapsLockCasualty",
-      "THIS IS GREAT sorry caps lock is physically stuck",
-      2,
-    ],
-    [
-      "StartButtonScholar",
-      "clicked Start to stop working. this video understands me.",
-      8,
-    ],
-    [
-      "motherboard_manual",
-      "my pc has 512mb of ram and 500mb of emotional attachment to this website",
-      20,
-    ],
+    ["joshua1988", "can you put it on rapidshare?", 6],
+    ["xXfirstPostXx", "first!!!", -2],
+    ["daniel1989", "it keeps stopping halfway through for me", 15],
+    ["katie_1989", "putting this on my myspace", 9],
+    ["abc123whatever", "nice", 4],
+    ["ChRiS_07", "does anyone know how to make it fullscreen", 13],
+    ["xXdarklinkXx", "who keeps rating everything 1 star", 7],
+    ["alex_is_bored", "I sent this to like 6 people already", 21],
+    ["guitardude54", "no sound??\nedit: nvm", 17],
+    ["penguinzrule", "linux ftw", 22],
+    ["ryan234234", "works fine for me", 3],
+    ["sarahh_x", "hahaha", 11],
+    ["james1990", "saved to favorites", 5],
+    ["soccerkid12", "ive watched this like 10 times now", 16],
+    ["linuxdude88", "IE on linux? lol", 26],
+    ["aLiCe_xx", "why are people arguing down there", 10],
+    ["Nick_182", "took ages to load but worth it", 14],
+    ["animegirl93", ":D", 7],
+    ["bballer_24", "anyone got a better quality version?", 19],
+    ["jacksonM", "Nice one. 5 stars.", 23],
+    ["xxpunkrockxx", "THIS IS AWESOME", 2],
+    ["dave12345", "ok back to homework", 8],
+    ["t0mmyboy", "lol the comments", 20],
   ];
   const numa = [
+    ["crazydude123", "LOL his face at the start", 42],
+    ["lauren_x3", "i cant stop doing the arm thing", 35],
+    ["mike8910", "whats the name of the song??", 27],
+    ["dan_the_man06", "Dragostea Din Tei by O-Zone", 22],
+    ["xXLeahXx", "MY DAD DOES THIS", 38],
     [
-      "NumaNumatic",
-      "this man has more stage presence in an office chair than most stadium tours",
-      42,
-    ],
-    [
-      "OZoneLayer",
-      "i do not know a single word and somehow i know every word",
-      35,
-    ],
-    ["OfficeChairFan1998", "the chair deserves a producer credit", 27],
-    [
-      "WebcamWizard",
-      "webcam: $29.99\ninternet connection: $19.99\nabsolute commitment to the bit: priceless",
-      22,
-    ],
-    [
-      "DragosteaDinTeal",
-      "watched numa numa in internet explorer inside a website inside a browser. numa recursion.",
-      38,
-    ],
-    [
-      "chairborne_division",
-      "the arm choreography has been permanently installed in my brain",
+      "sonicfan1992",
+      "this is the original right? theres like 20 copies on here",
       17,
     ],
     [
-      "DefinitelyNotClippy",
-      "It looks like you are doing the Numa Numa dance. Would you like help?",
+      "jennybean_90",
+      "me and my friend tried this and knocked the webcam over lol",
       29,
     ],
-    [
-      "GarysChairSupport",
-      "no green screen. no special effects. just lumbar support and a dream.",
-      31,
-    ],
+    ["rockon333", "haha the eyebrows", 31],
   ];
   const labels = [
     "Poor",
@@ -363,7 +255,7 @@
         c.name,
         c.local
           ? "This comment was written in your browser."
-          : "Fictional viewer. Joined: sometime before their last hard drive failed.",
+          : "This is a fictional viewer for the demo.",
       );
     });
     const bold = el("b");

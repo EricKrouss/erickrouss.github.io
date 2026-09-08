@@ -60,3 +60,10 @@ Extraction coordinates, sources and hashes are recorded in `docs/window-asset-pr
 - MS-DOS Prompt uses the original toolbar crops and converted native bitmap fonts. Both rendered 6×8 and 8×12 text were compared against source bitmap glyph rasters in Chromium at DPR 1: zero pixel differences for the test line. Cowsay retains fixed character cells, commands work, and clear resets the command/caret. Inspected the maximized console. Arbitrary browser zoom/GDI parity is not claimed.
 - The 88×31 badge remains exactly 88×31 at every tested width. Browser screenshots at 1× and 2× compare exactly under nearest-neighbor scaling, with six solid RGB colors and no intermediate antialias colors. Text and borders fit inside the bitmap bounds.
 - Browser exception logs were empty. `git diff --check` passed. No changes were made to Eric's separate YouTube-player repository.
+
+## Full-screen splash and comment copy (v2.3.1)
+
+- Production build passed. The startup image/picture occupies the complete viewport at 1920×1080, 2560×1440, 1280×800, 1024×768 and 390×900; each selects and loads the intended source. Widescreen screenshots show edge-to-edge cloud artwork and the complete logo. The portrait variant preserves the image within a matching full-screen blue surface. No horizontal overflow.
+- Verified Skip at every size, the complete normal boot phase sequence, and reduced-motion entry. Startup audio code and reveal timing are unchanged.
+- Rewrote the 28 general and eight Numa-specific fictional comments and screen names into varied short reactions, questions and casual posts. Verified the revised Numa comments, general comments for another video, and different selections for different IDs. Existing vote/reply storage remains intact.
+- Browser exception log empty. Desktop and portrait startup screenshots visually inspected.

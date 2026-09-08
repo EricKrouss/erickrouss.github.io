@@ -560,14 +560,40 @@ button:active,
   outline-offset: 1px;
 }
 .startup-splash {
-  background: #000;
+  padding: 0;
+  overflow: hidden;
+  background: #a6cce3;
+}
+.boot-poster {
+  position: absolute;
+  inset: 0;
+  display: block;
 }
 .boot-splash {
-  width: min(640px, 100vw, calc((100dvh - 80px) * 4 / 3));
-  height: auto;
-  aspect-ratio: 4 / 3;
+  display: block;
+  width: 100%;
+  height: 100%;
   object-fit: fill;
   image-rendering: pixelated;
+}
+@media (min-aspect-ratio: 3/2) {
+  .startup .boot-splash {
+    object-fit: cover;
+    image-rendering: auto;
+  }
+}
+@media (orientation: portrait) {
+  .startup .boot-splash {
+    object-fit: contain;
+  }
+}
+.startup-splash .boot-actions {
+  bottom: max(14px, env(safe-area-inset-bottom));
+  color: #000;
+}
+.startup-splash .boot-actions > span {
+  padding: 3px 6px;
+  background: #c0c0c0;
 }
 .boot-actions {
   position: fixed;

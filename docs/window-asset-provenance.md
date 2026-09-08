@@ -59,3 +59,9 @@ The web console fonts are converted from the 6×8 and 8×12 bitmap resources in 
 Auto selects 6×8 for compact desktop windows and 8×12 for wider windows or phones. Microsoft describes DOS Auto sizing at https://devblogs.microsoft.com/oldnewthing/20241022-00/?p=110401 . Font conversion does not imply identical GDI rendering at arbitrary browser zoom/device-pixel ratios.
 
 The site's 88×31 SVG button now contains integer-aligned pixel paths, including bitmap-letter paths for `eric.exe` and `PERSONAL PC`, with no browser-dependent SVG text. Its one-pixel border is filled geometry rather than a half-pixel stroke. CSS fixes the image at exactly 88×31 and disables flex shrinking. The desktop's former 1350px content cap has been removed.
+
+## Full-screen startup revision (v2.3.1)
+
+Removed the 640px splash-image cap and the reserved black margins. A viewport-sized `picture` selects `boot-splash-wide.jpg` at aspect ratios of 3:2 or wider; the original capture remains the fallback. The widescreen image covers landscape viewports without stretching. Portrait screens keep the complete original logo visible against matching blue, and startup/skip timing is unchanged.
+
+The new file is MalekMasoud's published **Windows 98 boot screen - 16:9 widescreen** adaptation: https://www.deviantart.com/malekmasoud/art/Windows-98-boot-screen-16-9-widescreen-887340891 . Retrieved from the page's public `og:image` preview on September 8, 2026, unmodified JPEG, 1192×670. This is a credited fan adaptation, not a native Microsoft widescreen asset. SHA-256: `d454f4b1a08c9d017de73fc368959760a104a5ed3214c0885bfaece7eee8b9be`.
