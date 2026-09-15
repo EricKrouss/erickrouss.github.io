@@ -20,6 +20,20 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Publish Standard.site articles when credentials are configured
+        env:
+          ATPROTO_IDENTIFIER: ${{ secrets.ATPROTO_IDENTIFIER }}
+          ATPROTO_APP_PASSWORD: ${{ secrets.ATPROTO_APP_PASSWORD }}
+          ATPROTO_PDS: ${{ vars.ATPROTO_PDS }}
+        run: |
+          if [ -n "$ATPROTO_IDENTIFIER" ] && [ -n "$ATPROTO_APP_PASSWORD" ]; then
+            npm run blog:publish
+          elif [ -n "$ATPROTO_APP_PASSWORD" ]; then
+            echo "ATPROTO_IDENTIFIER must be configured with the app password."
+            exit 1
+          else
+            echo "Standard.site publishing is pending ATPROTO_APP_PASSWORD setup."
+          fi
       - run: npm run build
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

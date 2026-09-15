@@ -23,7 +23,7 @@ export default function StartMenu({
   const showHelp = () => {
     closeMenu();
     showNotice(
-      "Welcome to Eric’s desktop.\n\nPrograms opens any of the eight windows. Drag a title bar to move a window. Use the three buttons to minimize, maximize/restore, or close it. Double-click a title bar to maximize or restore. All eight desktop shortcuts stay available, even when windows are closed.\n\nType help in the terminal for commands, or try cowsay.\n\nThis is a personal homepage running in your browser. The Windows 98 graphics are here for nostalgia.",
+      "Welcome to Eric’s desktop.\n\nPrograms opens any of the nine windows. Drag a title bar to move a window. Use the three buttons to minimize, maximize/restore, or close it. Double-click a title bar to maximize or restore. All nine desktop shortcuts stay available, even when windows are closed.\n\nType help in the terminal for commands, or try cowsay.\n\nThis is a personal homepage running in your browser. The Windows 98 graphics are here for nostalgia.",
     );
   };
   const keyboard = (e) => {
@@ -144,7 +144,7 @@ export default function StartMenu({
                 onClick={() => {
                   closeMenu();
                   showNotice(
-                    "Display properties\n\nDesktop color: Windows 98 teal (#008080).\n\nAll eight programs have permanent desktop shortcuts. Use Tidy desktop to restore every window to its original position.",
+                    "Display properties\n\nDesktop color: Windows 98 teal (#008080).\n\nAll nine programs have permanent desktop shortcuts. Use Tidy desktop to restore every window to its original position.",
                   );
                 }}
               >

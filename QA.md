@@ -89,3 +89,12 @@ Extraction coordinates, sources and hashes are recorded in `docs/window-asset-pr
 - IE's bundled video plays after actual pointer input; animated minimize still pauses it, and refresh reconnects the custom scrollbar. `arch` returns exactly `btw`. Browser exception log empty in the final production-preview session.
 - Message dialogs now use the plain three-pixel native frame and a 75px OK button; modal focus deactivates underlying captions without a modern tinted backdrop. Checked dialog entry, OK dismissal and caption focus restoration.
 - Source citations, extraction details, sound hashes and native animation observations are in `docs/window-asset-provenance.md`. Browser text rasterization, device pixel ratios and the enlarged mobile controls remain documented adaptations.
+
+## Blog Express — September 15, 2026
+
+- Production build passed, including the static `/blog/welcome/` page and Standard.site JSON export. Welcome contains the exact supplied sentence. Production HTTP checks confirmed the title, canonical URL, description, no-JavaScript article content and JSON body.
+- Production Chromium checks: desktop/Start-menu opening, close/reopen, minimize/taskbar restore, search match/empty state, saved-folder filtering and persisted read/saved state. The Outlook Express asset is used by the blog's shared program icon.
+- Dragging the bottom-right grip changed the window from 1060×760 to 740×610; maximize and restore returned to precisely 740×610. Desktop shortcuts remain reachable on a short viewport through the scrolling shortcut column.
+- Visually inspected desktop and 390px/320px mobile layouts. At 320px the blog is 312px wide, stays in the viewport, and introduces no document horizontal overflow. No browser exceptions were recorded during the production checks.
+- Four Node tests passed: exact article export, idempotent publishing/conflict rejection using a simulated PDS, generated verification links and no-JavaScript content, and refusal to publish without credentials.
+- Live AT Protocol publishing was not performed. Repository secrets were empty at verification time. The workflow supports authenticated publication once `ATPROTO_IDENTIFIER` and `ATPROTO_APP_PASSWORD` are configured (with `ATPROTO_PDS` for a custom host). No GitHub Pages deployment was performed for this change.

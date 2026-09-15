@@ -12,3 +12,5 @@ import "./windows98.css";
 import "./ie5.css";
 import "./dos.css";
 import "./scrollbars.css";
+
+import "./blog.css";

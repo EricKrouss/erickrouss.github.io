@@ -3,6 +3,7 @@ import { site, projects, links, hardware, minecraft } from "./content.js";
 import { Icon, DesktopComputer, MinecraftArtwork } from "./Art.jsx";
 import StartMenu from "./StartMenu.jsx";
 import InternetExplorer from "./InternetExplorer.jsx";
+import BlogExpress from "./BlogExpress.jsx";
 import Startup, { hasStarted } from "./Startup.jsx";
 import ClassicScrollbars from "./ClassicScrollbars.jsx";
 import { useWindowActions } from "./windowAnimation.js";
@@ -15,7 +16,8 @@ const programs = [
   ["computer", "gear"],
   ["links", "network"],
   ["status", "disk"],
-  ["terminal", "dos"],
+  ["terminal", "terminal"],
+  ["blog", "outlook"],
   ["iexplore", "ie"],
 ];
 const programNames = programs.map(([name]) => name);
@@ -55,7 +57,21 @@ function Window({
   offset,
   onMove,
   className = "",
+  resizable = false,
+  size,
+  onResize,
 }) {
+  const resizeDrag = useRef(null);
+  const resizeWindow = (element, width, height) => {
+    const rect = element.closest(".window").getBoundingClientRect();
+    const taskbar = document.querySelector(".taskbar").getBoundingClientRect();
+    const maxWidth = Math.max(1, innerWidth - rect.left - 4);
+    const maxHeight = Math.max(1, taskbar.top - rect.top - 4);
+    onResize(id, {
+      width: Math.min(maxWidth, Math.max(Math.min(480, maxWidth), width)),
+      height: Math.min(maxHeight, Math.max(Math.min(320, maxHeight), height)),
+    });
+  };
   const drag = useRef(null);
   const content = useRef(null);
   const startDrag = (e) => {
@@ -109,6 +125,8 @@ function Window({
           ? "none"
           : `translate(${offset.x}px, ${offset.y}px)`,
         zIndex: active ? 60 : maximized ? 40 : 1,
+        width: !maximized ? size?.width : undefined,
+        height: !maximized ? size?.height : undefined,
       }}
       onPointerDown={() => onFocus(id)}
       onFocus={() => onFocus(id)}
@@ -163,6 +181,75 @@ function Window({
           <span className="resize-grip" aria-hidden="true" />
         </div>
       )}
+      {resizable && !maximized && (
+        <button
+          className="window-resize-handle"
+          aria-label={`Resize ${title || id}`}
+          title="Drag to resize; arrow keys adjust width and height"
+          onPointerDown={(event) => {
+            if (event.button !== 0) return;
+            event.preventDefault();
+            event.stopPropagation();
+            onFocus(id);
+            const rect = event.currentTarget
+              .closest(".window")
+              .getBoundingClientRect();
+            resizeDrag.current = {
+              x: event.clientX,
+              y: event.clientY,
+              width: rect.width,
+              height: rect.height,
+            };
+            event.currentTarget.setPointerCapture(event.pointerId);
+          }}
+          onPointerMove={(event) => {
+            const start = resizeDrag.current;
+            if (start)
+              resizeWindow(
+                event.currentTarget,
+                start.width + event.clientX - start.x,
+                start.height + event.clientY - start.y,
+              );
+          }}
+          onPointerUp={() => {
+            resizeDrag.current = null;
+          }}
+          onPointerCancel={() => {
+            resizeDrag.current = null;
+          }}
+          onLostPointerCapture={() => {
+            resizeDrag.current = null;
+          }}
+          onKeyDown={(event) => {
+            if (
+              !["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(
+                event.key,
+              )
+            )
+              return;
+            event.preventDefault();
+            event.stopPropagation();
+            const rect = event.currentTarget
+              .closest(".window")
+              .getBoundingClientRect();
+            resizeWindow(
+              event.currentTarget,
+              rect.width +
+                (event.key === "ArrowLeft"
+                  ? -16
+                  : event.key === "ArrowRight"
+                    ? 16
+                    : 0),
+              rect.height +
+                (event.key === "ArrowUp"
+                  ? -16
+                  : event.key === "ArrowDown"
+                    ? 16
+                    : 0),
+            );
+          }}
+        />
+      )}
     </section>
   );
 }
@@ -213,7 +300,7 @@ function Terminal({
         answer = `Launching ${name}.exe… OK`;
       } else
         answer =
-          "Usage: open [eric|projects|minecraft|computer|links|status|terminal]";
+          "Usage: open [eric|projects|minecraft|computer|links|status|terminal|blog|iexplore]";
     } else if (command === "specs" || command === "neofetch")
       answer = hardware.map(([k, v]) => `${k.padEnd(5)} ${v}`).join("\n");
     else if (command === "date") answer = new Date().toLocaleString();
@@ -433,9 +520,29 @@ export default function App() {
   const shownWindows = useRef(null);
   const [active, setActive] = useState("eric");
   const [minimized, setMinimized] = useState([]);
-  const [closed, setClosed] = useState(["iexplore"]);
+  const [closed, setClosed] = useState(["iexplore", "blog"]);
   const [maximized, setMaximized] = useState([]);
   const [offsets, setOffsets] = useState({});
+  const [sizes, setSizes] = useState({});
+  useEffect(() => {
+    const openBlogLink = () => {
+      if (
+        location.pathname.startsWith("/blog/") ||
+        location.hash.startsWith("#blog/")
+      ) {
+        setClosed((old) => old.filter((id) => id !== "blog"));
+        setMinimized((old) => old.filter((id) => id !== "blog"));
+        setActive("blog");
+      }
+    };
+    openBlogLink();
+    window.addEventListener("hashchange", openBlogLink);
+    window.addEventListener("popstate", openBlogLink);
+    return () => {
+      window.removeEventListener("hashchange", openBlogLink);
+      window.removeEventListener("popstate", openBlogLink);
+    };
+  }, []);
   const [menu, setMenu] = useState(false);
   const [time, setTime] = useState(new Date());
   const [notice, setNotice] = useState(null);
@@ -454,7 +561,10 @@ export default function App() {
   const menuRef = useRef(null);
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 30000);
-    const resize = () => setOffsets({});
+    const resize = () => {
+      setOffsets({});
+      setSizes({});
+    };
     window.addEventListener("resize", resize);
     return () => {
       clearInterval(timer);
@@ -536,8 +646,9 @@ export default function App() {
     windowActions.cancel();
     shownWindows.current = null;
     setOffsets({});
+    setSizes({});
     setMinimized([]);
-    setClosed(["iexplore"]);
+    setClosed(["iexplore", "blog"]);
     setMaximized([]);
     setActive("eric");
     setMenu(false);
@@ -616,6 +727,9 @@ export default function App() {
     onFocus: setActive,
     onMinimize: minimizeProgram,
     offset: offsets[id] || { x: 0, y: 0 },
+    resizable: id === "blog",
+    size: sizes[id],
+    onResize: (name, next) => setSizes((old) => ({ ...old, [name]: next })),
     onMove: (n, pos) => setOffsets((old) => ({ ...old, [n]: pos })),
   });
   const copyButton = async () => {
@@ -1149,6 +1263,16 @@ export default function App() {
             </footer>
           </main>
         </div>
+        <Window {...frame("blog")} title="Blog Express" className="blog-window">
+          <BlogExpress
+            visible={
+              bootPhase === "ready" &&
+              !closed.includes("blog") &&
+              !minimized.includes("blog")
+            }
+            showNotice={showNotice}
+          />
+        </Window>
         {!closed.includes("iexplore") && (
           <Window
             {...frame("iexplore")}

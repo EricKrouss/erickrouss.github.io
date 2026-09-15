@@ -6,6 +6,7 @@ const icons = {
   computer: ["computer_explorer-0", "computer_explorer-2"],
   folder: ["directory_closed-1", "directory_closed-0"],
   terminal: ["console_prompt-1", "console_prompt-0"],
+  outlook: ["outlook-express", "outlook-express"],
   network: ["network_normal_two_pcs-1", "network_normal_two_pcs-0"],
   note: ["notepad-0", "notepad-4"],
   disk: ["hard_disk_drive-1", "hard_disk_drive-0"],
