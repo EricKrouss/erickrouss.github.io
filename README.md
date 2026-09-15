@@ -29,7 +29,7 @@ Create a production build with `npm run build`, then test it with `npm run previ
 - `src/styles.css`: shared window chrome, palette, desktop arrangement and responsive layouts.
 - `public/button.svg`: the original 88×31 site button; `public/favicon.svg`: the matching favicon.
 
-The hardware shown was read from Eric’s computer on September 8, 2026. RAM is usable memory reported by Linux, not an assumed installed capacity. Storage totals the three SSDs (4 TB + 1 TB + 4 TB). No device identifiers, serial numbers or telemetry are collected or included.
+The hardware shown was read from Eric’s computer on September 15, 2026. RAM is usable memory reported by Linux, not an assumed installed capacity. Storage totals the three SSDs (4 TB + 1 TB + 4 TB). No device identifiers, serial numbers or telemetry are collected or included.
 
 The status text is manually edited. The visitor count and build system are explicitly decorative. Terminal commands run only the small built-in command handlers; there is no shell execution, server or data collection. Windows icons, the Start flag and sidebar, and two 88×31 buttons are sourced from archives; Minecraft uses the original grass-block launcher bitmap preserved by mclaunch; Eric’s original photo and Minecraft Oldschool Edition artwork replace the generated illustrations. The desktop uses no icon package. The optional YouTube window loads video thumbnails and, after a video is selected, YouTube’s iframe API; its bundled Numa Numa demo and interface assets are local. See the asset credits page for sources and ownership notices.
 

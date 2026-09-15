@@ -2,7 +2,7 @@
 export const site = {
   name: "Eric Krouss",
   version: "2.4.0",
-  updated: "2026-09-08",
+  updated: "2026-09-15",
   email: "eric@krouss.net",
   github: "https://github.com/EricKrouss",
   bluesky: "https://bsky.app/profile/krouss.net",
