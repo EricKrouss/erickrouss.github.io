@@ -40,8 +40,16 @@
           "level": 2
         },
         {
-          "heading": "It's been just under a month since I lost Matty. I've never lived without a dog in my 29 years alive, so it's been a hard new reality.",
-          "level": 2
+          "paragraphs": [
+            "It's been just under a month since I lost Matty. I've never lived without a dog in my 29 years alive, so it's been a hard new reality."
+          ],
+          "richText": [
+            [
+              {
+                "text": "It's been just under a month since I lost Matty. I've never lived without a dog in my 29 years alive, so it's been a hard new reality."
+              }
+            ]
+          ]
         },
         {
           "paragraphs": [
@@ -80,7 +88,7 @@
           }
         }
       ],
-      "updatedAt": "2026-09-15T19:31:37.334Z"
+      "updatedAt": "2026-09-15T19:33:11.386Z"
     }
   ],
   "deletedPosts": []
