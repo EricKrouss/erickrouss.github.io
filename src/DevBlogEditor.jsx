@@ -379,8 +379,17 @@ export default function DevBlogEditor({ request, onClose, onSaved, onOpen }) {
             </div>
           )}
           <div className="dev-compose-toolbar">
-            <button type="submit" disabled={busy || !revision || conflict}>
-              <Icon name={deleting ? "trash" : "disk"} size={24} />
+            <button
+              type="submit"
+              className={!deleting && !categoryOnly ? "dev-compose-send" : undefined}
+              title={!deleting && !categoryOnly ? "Save article to project" : undefined}
+              disabled={busy || !revision || conflict}
+            >
+              {!deleting && !categoryOnly ? (
+                <i className="dev-compose-send-icon" aria-hidden="true" />
+              ) : (
+                <Icon name={deleting ? "trash" : "folder"} size={24} />
+              )}
               {busy
                 ? "Please wait…"
                 : deleting
@@ -389,7 +398,7 @@ export default function DevBlogEditor({ request, onClose, onSaved, onOpen }) {
                     : "Delete article"
                   : categoryOnly
                     ? "Create folder"
-                    : "Save to project"}
+                    : "Send"}
             </button>
             <button type="button" disabled={busy} onClick={close}>
               Cancel

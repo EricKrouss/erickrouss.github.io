@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { site, projects, links, hardware, minecraft } from "./content.js";
 import { Icon, DesktopComputer, MinecraftArtwork } from "./Art.jsx";
 import StartMenu from "./StartMenu.jsx";
@@ -262,8 +263,53 @@ function Terminal({
   const [historyIndex, setHistoryIndex] = useState(0);
   const [fontSize, setFontSize] = useState("auto");
   const [caret, setCaret] = useState(0);
+  const [caveFlight, setCaveFlight] = useState(null);
+  const caveFlightId = useRef(0);
   const screen = useRef(null);
   const output = useRef(null);
+  const commandInput = useRef(null);
+  const selectionDrag = useRef(null);
+  const [blockSelection, setBlockSelection] = useState(null);
+  const [markMode, setMarkMode] = useState(false);
+  const focusCommand = () => commandInput.current?.focus({ preventScroll: true });
+  const selectionCell = (event) => {
+    const rect = output.current.getBoundingClientRect();
+    const style = getComputedStyle(screen.current);
+    const width = parseFloat(style.getPropertyValue("--cell-width"));
+    const height = parseFloat(style.getPropertyValue("--cell-height"));
+    return {
+      x: Math.max(0, Math.min(Math.floor((event.clientX - rect.left) / width), Math.floor(rect.width / width) - 1)),
+      y: Math.max(0, Math.min(Math.floor((event.clientY - rect.top) / height), Math.ceil(rect.height / height) - 1)),
+      width, height,
+    };
+  };
+  const selectBlock = (start, end) => setBlockSelection({
+    x: Math.min(start.x, end.x), y: Math.min(start.y, end.y),
+    columns: Math.abs(start.x - end.x) + 1,
+    rows: Math.abs(start.y - end.y) + 1,
+    width: start.width, height: start.height,
+  });
+  const blockText = () => {
+    if (!blockSelection) return "";
+    const { x, y, columns, rows, width, height } = blockSelection;
+    const cells = Array.from({ length: rows }, () => Array(columns).fill(" "));
+    const origin = output.current.getBoundingClientRect();
+    const walker = document.createTreeWalker(output.current, NodeFilter.SHOW_TEXT);
+    const range = document.createRange();
+    while (walker.nextNode()) {
+      const node = walker.currentNode;
+      for (let i = 0; i < node.length; i++) {
+        if (node.data[i] === "\n") continue;
+        range.setStart(node, i); range.setEnd(node, i + 1);
+        const rect = range.getBoundingClientRect();
+        const column = Math.round((rect.left - origin.left) / width) - x;
+        const row = Math.round((rect.top - origin.top) / height) - y;
+        if (row >= 0 && row < rows && column >= 0 && column < columns)
+          cells[row][column] = node.data[i];
+      }
+    }
+    return cells.map((row) => row.join("")).join("\n");
+  };
   useEffect(() => {
     screen.current.scrollTop = screen.current.scrollHeight;
   }, [lines]);
@@ -326,7 +372,10 @@ function Terminal({
         "eric is not in the mood to read the sudoers file.\nThis incident will be politely ignored.";
     else if (command === "rm")
       answer = "Nice try. The recycle bin has unionized.";
-    else if (command === "xyzzy") {
+    else if (command === "cavestory") {
+      setCaveFlight(++caveFlightId.current);
+      answer = "End?";
+    } else if (command === "xyzzy") {
       onSecret();
       answer = "A hollow voice says: “You found the good internet.”";
     } else if (command === "cowsay")
@@ -360,19 +409,20 @@ function Terminal({
     setCaret((history[next] || "").length);
   };
   const mark = () => {
-    const range = document.createRange();
-    range.selectNodeContents(output.current);
-    const selection = window.getSelection();
-    selection.removeAllRanges();
-    selection.addRange(range);
+    setBlockSelection(null);
+    setMarkMode(true);
+    focusCommand();
   };
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(
-        window.getSelection()?.toString() || output.current.textContent,
+        blockSelection ? blockText() : window.getSelection()?.toString() || output.current.innerText,
       );
+      setBlockSelection(null);
+      setMarkMode(false);
+      focusCommand();
     } catch {
-      showNotice("Copy\n\nSelect the text and press Ctrl+C to copy it.");
+      showNotice("Copy failed. Select the text again and press Ctrl+C.");
     }
   };
   const paste = async () => {
@@ -389,7 +439,42 @@ function Terminal({
     }
   };
   return (
-    <div className={`terminal-shell dos-font-${fontSize}`}>
+    <div
+      className={`terminal-shell dos-font-${fontSize}${markMode || blockSelection ? " dos-marking" : ""}`}
+      onClick={(event) => {
+        if (!event.target.closest("button, select, input, [role=scrollbar]")) focusCommand();
+      }}
+      onCopy={(event) => {
+        if (!blockSelection) return;
+        event.preventDefault();
+        event.clipboardData.setData("text/plain", blockText());
+        setBlockSelection(null);
+        setMarkMode(false);
+      }}
+      onKeyDownCapture={(event) => {
+        if (!markMode && !blockSelection) return;
+        if (event.key === "Escape") {
+          event.preventDefault(); event.stopPropagation();
+          setBlockSelection(null); setMarkMode(false); focusCommand();
+        } else if (event.key === "Enter" && blockSelection) {
+          event.preventDefault(); event.stopPropagation(); void copy();
+        } else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey) {
+          setBlockSelection(null); setMarkMode(false);
+        }
+      }}
+    >
+      {caveFlight !== null && createPortal(
+        <img
+          key={caveFlight}
+          className="cave-story-flight"
+          src="/assets/period/cave-story.webp"
+          alt=""
+          aria-hidden="true"
+          draggable="false"
+          onAnimationEnd={() => setCaveFlight(null)}
+        />,
+        document.body,
+      )}
       <div
         className="dos-toolbar"
         role="toolbar"
@@ -441,7 +526,31 @@ function Terminal({
         ))}
       </div>
       <div className="dos-scroll-area classic-scroll-area">
-        <div className="dos-screen" ref={screen}>
+        <div className="dos-screen" ref={screen}
+          onPointerDown={(event) => {
+            if (event.button !== 0 || event.target.closest("input")) return;
+            focusCommand();
+            setBlockSelection(null);
+            if (!output.current.contains(event.target)) { setMarkMode(false); return; }
+            event.preventDefault();
+            const cell = selectionCell(event);
+            selectionDrag.current = cell;
+            event.currentTarget.setPointerCapture(event.pointerId);
+            if (markMode) selectBlock(cell, cell);
+          }}
+          onPointerMove={(event) => {
+            const start = selectionDrag.current;
+            if (!start) return;
+            const end = selectionCell(event);
+            if (start.x !== end.x || start.y !== end.y) selectBlock(start, end);
+          }}
+          onPointerUp={(event) => {
+            selectionDrag.current = null;
+            if (event.currentTarget.hasPointerCapture(event.pointerId))
+              event.currentTarget.releasePointerCapture(event.pointerId);
+          }}
+          onPointerCancel={() => { selectionDrag.current = null; }}
+        >
           <div
             className="terminal-output"
             ref={output}
@@ -450,6 +559,12 @@ function Terminal({
             aria-label="Terminal output"
             aria-live="polite"
           >
+            {blockSelection && <div className="dos-selection" aria-hidden="true" style={{
+              left: blockSelection.x * blockSelection.width,
+              top: blockSelection.y * blockSelection.height,
+              width: blockSelection.columns * blockSelection.width,
+              height: blockSelection.rows * blockSelection.height,
+            }} />}
             {lines.map((line, i) => (
               <div key={i} className={line.type || ""}>
                 {line.type === "ascii" ? (
@@ -482,6 +597,7 @@ function Terminal({
               style={{ "--caret-column": caret }}
             >
               <input
+                ref={commandInput}
                 id="command"
                 value={input}
                 onChange={(e) => {

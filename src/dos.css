@@ -193,3 +193,51 @@
     animation: none;
   }
 }
+
+.cave-story-flight {
+  position: fixed;
+  top: 38vh;
+  left: -80px;
+  width: 80px;
+  height: 80px;
+  z-index: 2147483647;
+  pointer-events: none;
+  image-rendering: pixelated;
+  animation:
+    cave-story-fly 9s linear forwards,
+    cave-story-bob 800ms ease-in-out infinite alternate;
+}
+
+@keyframes cave-story-fly {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(100vw + 80px)); }
+}
+
+@keyframes cave-story-bob {
+  from { translate: 0 -4px; }
+  to { translate: 0 4px; }
+}
+
+.terminal-output {
+  position: relative;
+  user-select: none;
+  isolation: isolate;
+}
+.terminal-output > .dos-selection {
+  position: absolute;
+  z-index: 1;
+  background: #fff;
+  mix-blend-mode: difference;
+  pointer-events: none;
+  min-height: 0;
+}
+.dos-marking .dos-caret {
+  display: none;
+}
+.dos-marking .terminal-output {
+  cursor: crosshair;
+}
+.terminal-input input::selection {
+  background: #c0c0c0;
+  color: #000;
+}

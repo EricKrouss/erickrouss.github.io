@@ -310,3 +310,38 @@ body:has(.dev-blog-dialog[open]) .window > .title-bar {
   flex: 1;
   text-align: left;
 }
+
+/* Outlook Express compose toolbar: picture above the Send caption. */
+.dev-compose-toolbar .dev-compose-send:not(.window-control) {
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  min-width: 58px;
+  min-height: 52px;
+  padding: 3px 8px;
+  box-shadow: none;
+}
+.dev-compose-toolbar .dev-compose-send:hover:not(:disabled) {
+  box-shadow: inset 1px 1px #fff, inset -1px -1px #808080;
+}
+.dev-compose-toolbar .dev-compose-send:active:not(:disabled) {
+  box-shadow: inset 1px 1px #808080, inset -1px -1px #fff;
+  background: #c0c0c0;
+}
+.dev-compose-send:disabled .dev-compose-send-icon {
+  filter: grayscale(1);
+  opacity: 0.45;
+}
+
+.dev-compose-send-icon {
+  display: block;
+  width: 22px;
+  height: 20px;
+  flex: 0 0 20px;
+  background: url("/assets/outlook-express/send.png") no-repeat center;
+  image-rendering: pixelated;
+}
+.dev-compose-send:hover:not(:disabled) .dev-compose-send-icon,
+.dev-compose-send:focus-visible:not(:disabled) .dev-compose-send-icon {
+  background-image: url("/assets/outlook-express/send-hot.png");
+}
