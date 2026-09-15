@@ -1,3 +1,6 @@
 {
-  "documents": {}
+  "publication": "at://did:plc:hfsvefvoyjz26xti2rfqvfhl/site.standard.publication/3mvkl76ao2222",
+  "documents": {
+    "blog-welcome": "at://did:plc:hfsvefvoyjz26xti2rfqvfhl/site.standard.document/3mvkl76ao2222"
+  }
 }
