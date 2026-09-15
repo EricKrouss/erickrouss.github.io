@@ -132,3 +132,35 @@ html, body, #root {
   #computer { top: 34%; max-height: 48%; }
   .blinkie-shelf { left: 49%; }
 }
+
+/* Windows chrome is clicked; document text and edit fields can be selected. */
+body {
+  -webkit-user-select: none;
+  user-select: none;
+}
+input,
+textarea,
+[contenteditable="true"],
+[contenteditable="plaintext-only"],
+.blog-reading-pane,
+.blog-article-header strong,
+.blog-article-header time,
+.window-content p,
+.window-content pre,
+.window-content dd {
+  -webkit-user-select: text;
+  user-select: text;
+}
+button,
+select,
+label,
+[role="button"],
+[role="menu"],
+[role="menuitem"],
+[role="toolbar"],
+.title-bar,
+.system-icon,
+.dos-selection {
+  -webkit-user-select: none;
+  user-select: none;
+}
