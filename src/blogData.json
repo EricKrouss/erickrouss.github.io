@@ -26,6 +26,61 @@
         }
       ],
       "updatedAt": "2026-09-15T16:34:39.507Z"
+    },
+    {
+      "slug": "a-month-without-my-dog",
+      "recordKey": "3mvlefyrwmcbx",
+      "title": "A Month Without My Dog",
+      "category": "Memos & Thoughts",
+      "date": "2026-09-15",
+      "author": "Eric Krouss",
+      "body": [
+        {
+          "heading": "A Brave New World",
+          "level": 2
+        },
+        {
+          "heading": "It's been just under a month since I lost Matty. I've never lived without a dog in my 29 years alive, so it's been a hard new reality.",
+          "level": 2
+        },
+        {
+          "paragraphs": [
+            "The first few days were the toughest. That empty silence in the house, that's probably the hardest part.\n\nBut I've found each day gets a little easier. I never thought on Day 1 that Day 28 would feel so normal. Yet here I am.\n\nI don't know why I'm sharing this, but I guess I just needed to share that I'm doing okay, and if you've gone/are going through something similar, you'll be alright too in due time."
+          ],
+          "richText": [
+            [
+              {
+                "text": "The first few days were the toughest. That empty silence in the house, that's probably the hardest part."
+              },
+              {
+                "text": "\n"
+              },
+              {
+                "text": "\n"
+              },
+              {
+                "text": "But I've found each day gets a little easier. I never thought on Day 1 that Day 28 would feel so normal. Yet here I am."
+              },
+              {
+                "text": "\n"
+              },
+              {
+                "text": "\n"
+              },
+              {
+                "text": "I don't know why I'm sharing this, but I guess I just needed to share that I'm doing okay, and if you've gone/are going through something similar, you'll be alright too in due time."
+              }
+            ]
+          ]
+        },
+        {
+          "image": {
+            "src": "/assets/blog/uploads/7cbbba2fc377c3eb3432aee1e7276a2bd732b67590841b297192c836eb7eec35.webp",
+            "alt": ""
+          }
+        }
+      ],
+      "updatedAt": "2026-09-15T19:31:37.334Z"
     }
   ],
   "deletedPosts": []
