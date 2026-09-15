@@ -36,8 +36,23 @@ async function rpc(method, body, token, query) {
       data.error === "RecordNotFound"
     )
       return null;
-    // Do not print responses containing authentication/session data.
-    throw new Error(`${method} failed (HTTP ${response.status}).`);
+    // Include record-validation diagnostics, never authentication response bodies.
+    const details =
+      method === "com.atproto.repo.putRecord"
+        ? [data.error, data.message]
+            .filter((value) => typeof value === "string")
+            .join(": ")
+            .slice(0, 600)
+        : "";
+    const safeDetails = [identifier, password, token]
+      .filter(Boolean)
+      .reduce(
+        (message, secret) => message.replaceAll(secret, "<REDACTED>"),
+        details,
+      );
+    throw new Error(
+      `${method} failed (HTTP ${response.status})${safeDetails ? `: ${safeDetails}` : "."}`,
+    );
   }
   return data;
 }
