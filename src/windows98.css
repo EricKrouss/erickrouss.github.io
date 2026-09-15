@@ -776,12 +776,6 @@ button:active,
 .desktop-icons {
   position: sticky;
   top: 10px;
-  max-height: calc(100dvh - var(--taskbar-height) - 20px);
-  overflow-y: auto;
-  scrollbar-width: thin;
-}
-.desktop-icons > button {
-  flex-shrink: 0;
 }
 /* Measurements and bitmap crops from an actual Windows 98 Notepad window.
    Source: GUIdebook. See asset-credits.html for the exact files and crop boxes. */
@@ -906,8 +900,6 @@ body:has(.retro-dialog[open]) .window > .title-bar {
 @media (max-width: 1049px) {
   .desktop-icons {
     position: static;
-    max-height: none;
-    overflow: visible;
     display: grid;
     grid-template-columns: repeat(8, minmax(0, 1fr));
     gap: 4px;
