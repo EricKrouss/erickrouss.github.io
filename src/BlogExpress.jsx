@@ -308,9 +308,11 @@ export default function BlogExpress({ visible, showNotice }) {
       {import.meta.env.DEV && composer && (
         <Suspense fallback={<span role="status">Opening composer…</span>}>
           <DevBlogEditor
+            key={`${composer.mode}-${composer.draft?.id || composer.slug || "new"}`}
             request={composer}
             onClose={() => setComposer(null)}
             onSaved={savedToProject}
+            onOpen={(request) => setComposer(request)}
           />
         </Suspense>
       )}
@@ -420,9 +422,26 @@ export default function BlogExpress({ visible, showNotice }) {
       </form>
       <div className="blog-workspace">
         <aside className="blog-sidebar">
-          <div className="blog-pane-caption">Folders
-            {import.meta.env.DEV && <button className="blog-new-folder" onClick={() => setComposer({ mode: "category" })} title="Create a new category folder"><Icon name="folder" /> New folder…</button>}
+          <div className="blog-pane-caption">
+            Folders
+            {import.meta.env.DEV && (
+              <button
+                className="blog-new-folder"
+                onClick={() => setComposer({ mode: "category" })}
+                title="Create a new category folder"
+              >
+                <Icon name="folder" /> New folder…
+              </button>
+            )}
           </div>
+          {import.meta.env.DEV && (
+            <button
+              className="blog-drafts-folder"
+              onClick={() => setComposer({ mode: "drafts" })}
+            >
+              <Icon name="folder" /> Drafts
+            </button>
+          )}
           <div className="blog-folder-root">
             <Icon name="computer" /> Blog Express
           </div>

@@ -1,4 +1,5 @@
-export const isBlogImage = (src) => /^\/assets\/blog\/uploads\/[a-f0-9]{64}\.(png|jpg|gif|webp)$/.test(src);
+export const isBlogImage = (src) =>
+  /^\/assets\/blog\/uploads\/[a-f0-9]{64}\.(png|jpg|gif|webp)$/.test(src);
 const escaped = (value) =>
   String(value).replace(
     /[&<>"']/g,
@@ -50,7 +51,8 @@ export function bodyHtml(body) {
         const tag = block.ordered ? "ol" : "ul";
         html += `<${tag}>${block.list.map((runs) => `<li>${runsHtml(runs)}</li>`).join("")}</${tag}>`;
       }
-      if (block.image && isBlogImage(block.image.src)) html += `<img src="${escaped(block.image.src)}" alt="${escaped(block.image.alt || "")}">`;
+      if (block.image && isBlogImage(block.image.src))
+        html += `<img src="${escaped(block.image.src)}" alt="${escaped(block.image.alt || "")}">`;
       return html;
     })
     .join("");
@@ -93,7 +95,13 @@ export function blocksFromDom(root) {
       if (node.nodeType === 1 && node.tagName === "IMG") {
         flush();
         const src = node.getAttribute("src");
-        if (isBlogImage(src)) blocks.push({ image: { src, alt: (node.getAttribute("alt") || "").slice(0, 1000) } });
+        if (isBlogImage(src))
+          blocks.push({
+            image: {
+              src,
+              alt: (node.getAttribute("alt") || "").slice(0, 1000),
+            },
+          });
       } else if (node.nodeType === 1 && ["UL", "OL"].includes(node.tagName)) {
         flush();
         const list = [...node.children]

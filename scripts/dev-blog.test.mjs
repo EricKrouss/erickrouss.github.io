@@ -4,7 +4,12 @@ import { mkdtemp, writeFile, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createServer, preview } from "vite";
-import { createBlogStore, blogEditorPlugin } from "./dev-blog-server.mjs";
+import {
+  createBlogStore,
+  blogEditorPlugin,
+  saveBlogImage,
+  blogDrafts,
+} from "./dev-blog-server.mjs";
 
 async function fixture(fn) {
   const root = await mkdtemp(join(tmpdir(), "blog-author-test-"));
@@ -255,4 +260,45 @@ test("deployment deletion is repeatable and cannot remove another article", asyn
     /another article/,
   );
   assert.equal(deletes, 1);
+});
+
+test("image upload stays in project and survives article and draft round trips", async () => {
+  await fixture(async ({ root, store }) => {
+    const png =
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=";
+    const image = await saveBlogImage(root, png);
+    assert.match(image.src, /^\/assets\/blog\/uploads\/[a-f0-9]{64}\.png$/);
+    assert.ok((await readFile(join(root, "public", image.src))).length);
+    assert.deepEqual(await saveBlogImage(root, png), image);
+    await assert.rejects(
+      saveBlogImage(root, "data:image/png;base64,PHNjcmlwdD4="),
+    );
+    const { bodyHtml } = await import("../src/blogFormatting.js");
+    const content = `<p>Before</p><img src="${image.src}" alt="Test picture"><p>After</p>`;
+    const data = await store.change({
+      ...article,
+      bodyHtml: content,
+      revision: (await store.read()).revision,
+    });
+    assert.equal(data.post.body[1].image.src, image.src);
+    assert.match(bodyHtml(data.post.body), /alt="Test picture"/);
+    const { draft } = await blogDrafts(root, {
+      action: "draft-save",
+      title: "Unfinished",
+      bodyHtml: content,
+    });
+    assert.equal(
+      (await blogDrafts(root, { action: "draft-list" })).drafts[0].bodyHtml,
+      bodyHtml(data.post.body),
+    );
+    assert.equal((await store.read()).posts.length, 1);
+    await blogDrafts(root, { action: "draft-delete", id: draft.id });
+    assert.equal(
+      (await blogDrafts(root, { action: "draft-list" })).drafts.length,
+      0,
+    );
+    await assert.rejects(
+      blogDrafts(root, { action: "draft-save", id: "../escape" }),
+    );
+  });
 });

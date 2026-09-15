@@ -1,8 +1,15 @@
-import { readFile, writeFile, rename, rm, mkdir } from "node:fs/promises";
+import {
+  readFile,
+  writeFile,
+  rename,
+  rm,
+  mkdir,
+  readdir,
+} from "node:fs/promises";
 import { createHash, randomInt, randomUUID } from "node:crypto";
 import { resolve } from "node:path";
 import { parseHTML } from "linkedom";
-import { blocksFromDom, postText } from "../src/blogFormatting.js";
+import { blocksFromDom, postText, bodyHtml } from "../src/blogFormatting.js";
 
 const endpoint = "/__dev/blog";
 const reserved = ["All articles", "Unread articles", "Saved articles"];
@@ -30,21 +37,75 @@ function tid() {
 }
 const version = (source) => createHash("sha256").update(source).digest("hex");
 export async function saveBlogImage(root, dataUrl) {
-  const match = typeof dataUrl === "string" && /^data:image\/(png|jpeg|gif|webp);base64,([A-Za-z0-9+/]+={0,2})$/.exec(dataUrl);
+  const match =
+    typeof dataUrl === "string" &&
+    /^data:image\/(png|jpeg|gif|webp);base64,([A-Za-z0-9+/]+={0,2})$/.exec(
+      dataUrl,
+    );
   if (!match) throw fail("Choose a PNG, JPEG, GIF, or WebP image.");
   const bytes = Buffer.from(match[2], "base64");
-  if (!bytes.length || bytes.length > 8 * 1024 * 1024) throw fail("Images must be smaller than 8 MB.");
+  if (!bytes.length || bytes.length > 8 * 1024 * 1024)
+    throw fail("Images must be smaller than 8 MB.");
   const type = match[1];
-  const valid = type === "png" ? bytes.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10]))
-    : type === "jpeg" ? bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255
-    : type === "gif" ? /^GIF8[79]a$/.test(bytes.toString("ascii", 0, 6))
-    : bytes.toString("ascii", 0, 4) === "RIFF" && bytes.toString("ascii", 8, 12) === "WEBP";
+  const valid =
+    type === "png"
+      ? bytes
+          .subarray(0, 8)
+          .equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))
+      : type === "jpeg"
+        ? bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255
+        : type === "gif"
+          ? /^GIF8[79]a$/.test(bytes.toString("ascii", 0, 6))
+          : bytes.toString("ascii", 0, 4) === "RIFF" &&
+            bytes.toString("ascii", 8, 12) === "WEBP";
   if (!valid) throw fail("The file is not a supported image.");
-  const filename = createHash("sha256").update(bytes).digest("hex") + "." + (type === "jpeg" ? "jpg" : type);
+  const filename =
+    createHash("sha256").update(bytes).digest("hex") +
+    "." +
+    (type === "jpeg" ? "jpg" : type);
   const directory = resolve(root, "public/assets/blog/uploads");
   await mkdir(directory, { recursive: true });
   await writeFile(resolve(directory, filename), bytes);
   return { src: `/assets/blog/uploads/${filename}` };
+}
+export async function blogDrafts(root, input) {
+  const directory = resolve(root, ".blog-drafts");
+  await mkdir(directory, { recursive: true });
+  if (input.action === "draft-list") {
+    const files = (await readdir(directory)).filter((name) =>
+      /^[a-f0-9-]+\.json$/.test(name),
+    );
+    return {
+      drafts: await Promise.all(
+        files.map(async (name) =>
+          JSON.parse(await readFile(resolve(directory, name), "utf8")),
+        ),
+      ),
+    };
+  }
+  const id = input.id || randomUUID();
+  if (!/^[a-f0-9-]{36}$/.test(id)) throw fail("Invalid draft ID.");
+  const file = resolve(directory, `${id}.json`);
+  if (input.action === "draft-delete") {
+    await rm(file, { force: true });
+    return { id };
+  }
+  const draft = {
+    id,
+    slug: input.slug,
+    title: String(input.title || "").slice(0, 500),
+    date: String(input.date || "").slice(0, 10),
+    category: String(input.category || "").slice(0, 100),
+    bodyHtml: String(input.bodyHtml || "").slice(0, 500000),
+    savedAt: new Date().toISOString(),
+  };
+  // Only the allowlisted article model returns to the contenteditable surface.
+  const { document } = parseHTML(`<html><body>${draft.bodyHtml}</body></html>`);
+  draft.bodyHtml = bodyHtml(blocksFromDom(document.body));
+  const temp = `${file}.${randomUUID()}.tmp`;
+  await writeFile(temp, JSON.stringify(draft, null, 2) + "\n");
+  await rename(temp, file);
+  return { draft };
 }
 export function createBlogStore(file) {
   let queue = Promise.resolve();
@@ -111,7 +172,8 @@ export function createBlogStore(file) {
             `<html><body>${input.bodyHtml}</body></html>`,
           );
           richBody = blocksFromDom(document.body);
-          if (!richBody.some(block => block.image)) text(postText({ body: richBody }), "Article text", 200000);
+          if (!richBody.some((block) => block.image))
+            text(postText({ body: richBody }), "Article text", 200000);
         } else text(input.body, "Article text", 200000);
         const index = input.slug
           ? data.posts.findIndex((item) => item.slug === input.slug)
@@ -254,7 +316,8 @@ export function blogEditorPlugin() {
           let size = 0;
           for await (const chunk of req) {
             size += chunk.length;
-            if (size > 12 * 1024 * 1024) throw fail("Article is too large.", 413);
+            if (size > 12 * 1024 * 1024)
+              throw fail("Article is too large.", 413);
             chunks.push(chunk);
           }
           let input;
@@ -265,7 +328,16 @@ export function blogEditorPlugin() {
           }
           if (!input || typeof input !== "object")
             throw fail("Invalid editor request.");
-          send(200, input.action === "image" ? await saveBlogImage(server.config.root, input.dataUrl) : await store.change(input));
+          send(
+            200,
+            input.action === "image"
+              ? await saveBlogImage(server.config.root, input.dataUrl)
+              : ["draft-list", "draft-save", "draft-delete"].includes(
+                    input.action,
+                  )
+                ? await blogDrafts(server.config.root, input)
+                : await store.change(input),
+          );
         } catch (error) {
           send(error.status || 500, {
             error: error.status

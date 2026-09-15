@@ -61,7 +61,11 @@ Open **Blog** from the desktop, Start → Programs, or `open blog` in the termin
 
 ### Write articles locally
 
-Run `npm run dev` and open the localhost URL. In **Blog → Articles → Compose new mail…**, enter a title, date, category, and article text. The classic formatting toolbar supports headings, bold, italic, underline, bullet points, and numbered lists. Type a new category to create a folder, or choose **New category…** from Articles.
+Run `npm run dev` and open the localhost URL. In **Blog → Articles → Compose new mail…**, enter a title, date, category, and article text. The classic formatting toolbar supports headings, bold, italic, underline, bullet points, and numbered lists. Type a new category to create a folder, click **New folder…** beside Folders, or choose **New category…** from Articles.
+
+Use **Insert image…** to add PNG, JPEG, GIF, or WebP files (up to 8 MB each) at the cursor. Enter an image description before inserting it for accessible alt text. Uploaded images are stored in `public/assets/blog/uploads/`; include that folder when committing article changes. Images display in both the reader and generated article pages.
+
+**Save draft** stores unfinished work in `.blog-drafts/`, which is excluded by `.gitignore` and never used by the site build or publisher. Closing a changed composer offers **Save draft**, **Discard**, or **Keep editing**. Open **Drafts** in the folder pane to resume. Saving a draft to the project removes its draft copy. Browser-tab close/reload uses the browser's unsaved-changes warning; save a draft in the composer before leaving the page.
 
 **Save to project** writes `src/blogData.json` on disk. Commit and push that file with your site changes to deploy it through the existing GitHub Pages and Standard.site workflow. Saving does not automatically publish. The composer and filesystem API exist only in the local Vite development server; production and preview are read-only.
 

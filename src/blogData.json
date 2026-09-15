@@ -1,5 +1,8 @@
 {
-  "categories": ["Site notes"],
+  "categories": [
+    "Site notes",
+    "Memos & Thoughts"
+  ],
   "posts": [
     {
       "slug": "welcome",
@@ -10,9 +13,20 @@
       "author": "Eric Krouss",
       "body": [
         {
-          "paragraphs": ["This is where my blogs will be"]
+          "paragraphs": [
+            "This is where my blog posts will live in the future!\nGet comfortable, sit back, and read!"
+          ],
+          "richText": [
+            [
+              {
+                "text": "This is where my blog posts will live in the future!\nGet comfortable, sit back, and read!"
+              }
+            ]
+          ]
         }
-      ]
+      ],
+      "updatedAt": "2026-09-15T16:34:39.507Z"
     }
-  ]
+  ],
+  "deletedPosts": []
 }

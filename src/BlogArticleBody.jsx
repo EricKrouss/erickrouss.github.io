@@ -15,7 +15,14 @@ export default function BlogArticleBody({ body }) {
     const List = block.ordered ? "ol" : "ul";
     return (
       <section key={index}>
-        {block.image && isBlogImage(block.image.src) && <img className="blog-article-image" src={block.image.src} alt={block.image.alt || ""} loading="lazy" />}
+        {block.image && isBlogImage(block.image.src) && (
+          <img
+            className="blog-article-image"
+            src={block.image.src}
+            alt={block.image.alt || ""}
+            loading="lazy"
+          />
+        )}
         {block.heading && <Heading>{block.heading}</Heading>}
         {(block.paragraphs || []).map((text, i) => (
           <p key={i}>

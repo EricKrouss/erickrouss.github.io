@@ -542,3 +542,26 @@
 .blog-toolbar button[aria-pressed="true"] {
   box-shadow: var(--inset);
 }
+.blog-article-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 12px 0;
+}
+.blog-pane-caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.blog-express .blog-new-folder,
+.blog-express .blog-drafts-folder {
+  border: 1px solid #404040;
+  background: var(--chrome);
+  box-shadow: var(--outset);
+  padding: 3px 5px;
+}
+.blog-drafts-folder {
+  margin: 6px;
+}

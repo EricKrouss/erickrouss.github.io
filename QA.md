@@ -107,3 +107,10 @@ Extraction coordinates, sources and hashes are recorded in `docs/window-asset-pr
 - The temporary rich article generated static HTML with headings and bold list items, plus a Standard.site text export. Production build passed; compiled assets contain no composer, development endpoint, or editor CSS.
 - Composer uses the existing title-bar bitmap and close-button assets. Verified the close button is two pixels from the caption's right edge at desktop size; mobile uses the site's shared enlarged controls. At 390px, the composer has no horizontal overflow.
 - Remote publication/deletion was not performed for these authoring checks. Saved project changes still need commit/push to enter the deployment workflow.
+
+### Images, folders, and local drafts
+
+- Verified image upload to hashed project assets, image retention through save/edit and draft round trips, and immediate PNG serving. Reader and static article rendering support the same image blocks.
+- Browser fixture: inserted a cover image, saved on composer close as a draft, reopened through Drafts, saved to project, and confirmed the draft file was removed. Created an empty category using the visible New folder button.
+- `.blog-drafts/` is ignored by Git and excluded from publication/build input. Browser-tab exit retains the native unsaved-changes warning; the composer itself offers Save draft / Discard / Keep editing.
+- Twelve focused tests and the production build pass. Standard.site tests now use isolated article fixtures so editing real articles does not break fixed-content expectations. Production JavaScript contains none of the new editing actions.

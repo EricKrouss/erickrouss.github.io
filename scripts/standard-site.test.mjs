@@ -1,11 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, readFile, writeFile, rm } from "node:fs/promises";
+import { mkdtemp, mkdir, readFile, writeFile, rm, cp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
-import { records } from "./standard-site.mjs";
 
 const publisher = fileURLToPath(new URL("./publish-blog.mjs", import.meta.url));
 const builder = fileURLToPath(new URL("./build-blog.mjs", import.meta.url));
@@ -41,29 +40,67 @@ globalThis.fetch = async (url, options) => {
 async function sandbox(fn) {
   const dir = await mkdtemp(join(tmpdir(), "blog-standard-test-"));
   try {
+    await cp(new URL("./", import.meta.url), join(dir, "scripts"), {
+      recursive: true,
+    });
+    await mkdir(join(dir, "src"));
+    for (const name of ["blogPosts.js", "blogFormatting.js"])
+      await cp(
+        new URL(`../src/${name}`, import.meta.url),
+        join(dir, "src", name),
+      );
+    await writeFile(join(dir, "package.json"), '{"type":"module"}');
+    await writeFile(
+      join(dir, "src/blogData.json"),
+      JSON.stringify({
+        categories: ["Site notes"],
+        posts: [
+          {
+            slug: "welcome",
+            recordKey: "3mvkl76ao2222",
+            title: "Welcome",
+            category: "Site notes",
+            date: "2026-09-15",
+            author: "Eric Krouss",
+            body: [{ paragraphs: ["This is where my blogs will be"] }],
+          },
+        ],
+      }),
+    );
+    await cp(
+      new URL("../public/assets/blog", import.meta.url),
+      join(dir, "public/assets/blog"),
+      { recursive: true },
+    );
     await fn(dir);
   } finally {
     await rm(dir, { recursive: true, force: true });
   }
 }
 function run(script, cwd, args = []) {
-  return spawnSync(process.execPath, [...args, script], {
-    cwd,
-    encoding: "utf8",
-    env: {
-      ...process.env,
-      ATPROTO_IDENTIFIER: "test.invalid",
-      ATPROTO_APP_PASSWORD: "test-only",
-      ATPROTO_PDS: "https://test.invalid",
+  return spawnSync(
+    process.execPath,
+    [...args, join(cwd, "scripts", script.split("/").pop())],
+    {
+      cwd,
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        ATPROTO_IDENTIFIER: "test.invalid",
+        ATPROTO_APP_PASSWORD: "test-only",
+        ATPROTO_PDS: "https://test.invalid",
+      },
     },
-  });
+  );
 }
-test("welcome exports the exact requested text at a permanent page URL", () => {
-  const [document] = records();
-  assert.equal(document.record.textContent, "This is where my blogs will be");
-  assert.equal(document.record.path, "/blog/welcome/");
-  assert.equal(document.record.$type, "site.standard.document");
-});
+test("article fixture exports exact text at a permanent page URL", () =>
+  sandbox(async (dir) => {
+    const { records } = await import(join(dir, "scripts/standard-site.mjs"));
+    const [document] = records();
+    assert.equal(document.record.textContent, "This is where my blogs will be");
+    assert.equal(document.record.path, "/blog/welcome/");
+    assert.equal(document.record.$type, "site.standard.document");
+  }));
 test("publishing is idempotent and keeps verification URIs; collisions are rejected", () =>
   sandbox(async (dir) => {
     const mockPath = join(dir, "mock.mjs");

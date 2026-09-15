@@ -277,3 +277,36 @@ body:has(.dev-blog-dialog[open]) .window > .title-bar {
 .dev-blog-dialog > .title-bar h2 {
   flex: 1;
 }
+.dev-image-toolbar {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 4px 0;
+}
+.dev-image-toolbar input:not([hidden]) {
+  flex: 1;
+  min-width: 0;
+}
+.dev-rich-editor img,
+.blog-article-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 12px 0;
+}
+.dev-draft-prompt {
+  padding: 10px;
+  border: 2px groove white;
+}
+.dev-draft-list {
+  padding: 12px;
+}
+.dev-draft-list > div {
+  display: flex;
+  gap: 6px;
+  margin: 6px 0;
+}
+.dev-draft-list > div > button:first-child {
+  flex: 1;
+  text-align: left;
+}
