@@ -23,6 +23,7 @@ globalThis.fetch = async (url, options) => {
     return store.records[key] ? response(store.records[key]) : response({ error: 'RecordNotFound' }, 400);
   }
   if (method === 'com.atproto.repo.putRecord') {
+    if (!/^[234567abcdefghij][234567abcdefghijklmnopqrstuvwxyz]{12}$/.test(body.rkey)) return response({ error: 'InvalidRecord', message: 'Record key must be a TID' }, 400);
     const key = body.collection + '/' + body.rkey;
     if (body.swapRecord !== (store.records[key]?.cid ?? null)) return response({ error: 'InvalidSwap' }, 400);
     const result = { uri: 'at://did:plc:test/' + key, cid: 'test-cid-' + (++store.writes), value: body.record };
@@ -70,7 +71,7 @@ test("publishing is idempotent and keeps verification URIs; collisions are rejec
     );
     assert.equal(
       state.documents["blog-welcome"],
-      "at://did:plc:test/site.standard.document/blog-welcome",
+      "at://did:plc:test/site.standard.document/3mvkl76ao2222",
     );
     const second = run(publisher, dir, ["--import", mockPath]);
     assert.equal(second.status, 0, second.stderr);
@@ -82,7 +83,7 @@ test("publishing is idempotent and keeps verification URIs; collisions are rejec
       2,
       "a second publish must not create duplicates or rewrite unchanged content",
     );
-    database.records["site.standard.publication/eric-blog-express"].value.url =
+    database.records["site.standard.publication/3mvkl76ao2222"].value.url =
       "https://someone-else.invalid";
     await writeFile(join(dir, "fake-pds.json"), JSON.stringify(database));
     const conflict = run(publisher, dir, ["--import", mockPath]);
@@ -97,8 +98,8 @@ test("static pages include verified AT URIs and readable content without JavaScr
       '<html><head><title>Desktop</title><meta name="description" content="Homepage" /></head><body><div id="root"></div></body></html>',
     );
     const publication =
-      "at://did:plc:test/site.standard.publication/eric-blog-express";
-    const document = "at://did:plc:test/site.standard.document/blog-welcome";
+      "at://did:plc:test/site.standard.publication/3mvkl76ao2222";
+    const document = "at://did:plc:test/site.standard.document/3mvkl76ao2222";
     await writeFile(
       join(dir, "standard-site-records.json"),
       JSON.stringify({ publication, documents: { "blog-welcome": document } }),

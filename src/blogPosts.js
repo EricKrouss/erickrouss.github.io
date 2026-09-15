@@ -2,6 +2,7 @@
 export const blogPosts = [
   {
     slug: "welcome",
+    recordKey: "3mvkl76ao2222",
     title: "Welcome",
     category: "Site notes",
     date: "2026-09-15",

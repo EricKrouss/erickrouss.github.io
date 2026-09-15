@@ -23,9 +23,9 @@ await writeFile(
   "dist/standard-site/publication.json",
   JSON.stringify(publication, null, 2) + "\n",
 );
-for (const [index, { rkey, record }] of documents.entries()) {
+for (const [index, { key, record }] of documents.entries()) {
   const post = blogPosts[index];
-  const uri = published.documents[rkey];
+  const uri = published.documents[key];
   const canonical = `${publication.url}${record.path}`;
   const description = post.excerpt || record.textContent.slice(0, 200);
   const head =

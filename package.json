@@ -8,7 +8,8 @@
     "build": "vite build && node scripts/build-blog.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "blog:publish": "node scripts/publish-blog.mjs",
-    "blog:preview-records": "node scripts/publish-blog.mjs --dry-run"
+    "blog:preview-records": "node scripts/publish-blog.mjs --dry-run",
+    "blog:new-key": "node scripts/new-blog-key.mjs"
   },
   "dependencies": {
     "react": "^19.1.1",

@@ -59,7 +59,7 @@ Pushing to `main` publishes the website through this workflow. The optional priv
 
 Open **Blog** from the desktop, Start → Programs, or `open blog` in the terminal. The Outlook Express-inspired reader has searchable/sortable articles, category folders, saved articles, local read history, and permanent article URLs. Drag its bottom-right grip to resize it; a focused grip also accepts arrow keys. Maximize/restore preserves the chosen dimensions. Tidy desktop resets its size and closes the blog.
 
-Edit `src/blogPosts.js` to add posts. Use a unique, stable lowercase slug; the build creates `/blog/<slug>/index.html` so direct links work on GitHub Pages. Body blocks contain an optional `heading` and plain-text `paragraphs`. Set `publishedAt` to an ISO timestamp if more precision than the date is needed, and `updatedAt` when editing a published article. The initial Welcome article contains exactly: “This is where my blogs will be”.
+Edit `src/blogPosts.js` to add posts. Use a unique, stable lowercase slug and a permanent `recordKey` from `npm run blog:new-key`; the build creates `/blog/<slug>/index.html` so direct links work on GitHub Pages. Body blocks contain an optional `heading` and plain-text `paragraphs`. Set `publishedAt` to an ISO timestamp if more precision than the date is needed, and `updatedAt` when editing a published article. The initial Welcome article contains exactly: “This is where my blogs will be”.
 
 ### Standard.site publishing
 

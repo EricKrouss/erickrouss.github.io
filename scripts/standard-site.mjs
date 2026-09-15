@@ -6,7 +6,10 @@ export const publication = {
   name: "Eric’s Blog Express",
   description: "Eric Krouss’s personal blog.",
 };
-export const publicationKey = "eric-blog-express";
+// Stable AT Protocol TIDs. Never change these after publication.
+export const publicationKey = "3mvkl76ao2222";
+const isTid = (value) =>
+  /^[234567abcdefghij][234567abcdefghijklmnopqrstuvwxyz]{12}$/.test(value);
 export function documentRecord(post, publicationUri = publication.url) {
   return {
     $type: "site.standard.document",
@@ -24,10 +27,16 @@ export function documentRecord(post, publicationUri = publication.url) {
 }
 export function records(publicationUri) {
   const seen = new Set();
+  const recordKeys = new Set();
   return blogPosts.map((post) => {
     if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(post.slug) || seen.has(post.slug))
       throw new Error(`Invalid or duplicate blog slug: ${post.slug}`);
     seen.add(post.slug);
+    if (!isTid(post.recordKey) || recordKeys.has(post.recordKey))
+      throw new Error(
+        `Invalid or duplicate AT Protocol recordKey for ${post.slug}. Generate one with npm run blog:new-key.`,
+      );
+    recordKeys.add(post.recordKey);
     const record = documentRecord(post, publicationUri);
     if (
       !record.title ||
@@ -35,6 +44,6 @@ export function records(publicationUri) {
       !Number.isFinite(Date.parse(record.publishedAt))
     )
       throw new Error(`Incomplete article: ${post.slug}`);
-    return { rkey: `blog-${post.slug}`, record };
+    return { key: `blog-${post.slug}`, rkey: post.recordKey, record };
   });
 }

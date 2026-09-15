@@ -94,8 +94,8 @@ const state = {
   publication: await put(publicationKey, publication),
   documents: {},
 };
-for (const { rkey, record } of documents) {
-  state.documents[rkey] = await put(rkey, record);
+for (const { key, rkey, record } of documents) {
+  state.documents[key] = await put(rkey, record);
   // Save after each successful write, so partial runs retain their verification links.
   await writeFile(
     "standard-site-records.json",
