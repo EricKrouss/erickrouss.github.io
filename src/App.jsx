@@ -4,10 +4,15 @@ import { Icon, DesktopComputer, MinecraftArtwork } from "./Art.jsx";
 import StartMenu from "./StartMenu.jsx";
 import InternetExplorer from "./InternetExplorer.jsx";
 import BlogExpress from "./BlogExpress.jsx";
+import VolumePopup from "./VolumePopup.jsx";
 import Startup, { hasStarted } from "./Startup.jsx";
 import ClassicScrollbars from "./ClassicScrollbars.jsx";
 import { useWindowActions } from "./windowAnimation.js";
-import { readSoundPreference, useSystemSounds } from "./systemSounds.js";
+import {
+  readSoundPreference,
+  readVolumePreference,
+  useSystemSounds,
+} from "./systemSounds.js";
 
 const programs = [
   ["eric", "computer"],
@@ -76,19 +81,16 @@ function Window({
   const drag = useRef(null);
   const content = useRef(null);
   const startDrag = (e) => {
-    if (
-      maximized ||
-      e.target.closest("button") ||
-      e.button !== 0
-    )
-      return;
+    if (maximized || e.target.closest("button") || e.button !== 0) return;
     const rect = e.currentTarget.closest("section").getBoundingClientRect();
     drag.current = {
       x: e.clientX,
       y: e.clientY,
       origin: offset,
       rect,
-      maxY: document.querySelector(".taskbar").getBoundingClientRect().top - rect.bottom,
+      maxY:
+        document.querySelector(".taskbar").getBoundingClientRect().top -
+        rect.bottom,
     };
     e.currentTarget.setPointerCapture(e.pointerId);
   };
@@ -102,10 +104,7 @@ function Window({
         e.clientX - d.x,
       ),
     );
-    const dy = Math.max(
-      -d.rect.top + 8,
-      Math.min(d.maxY - 4, e.clientY - d.y),
-    );
+    const dy = Math.max(-d.rect.top + 8, Math.min(d.maxY - 4, e.clientY - d.y));
     onMove(id, { x: d.origin.x + dx, y: d.origin.y + dy });
   };
   return (
@@ -511,7 +510,8 @@ export default function App() {
     hasStarted() ? "ready" : "off",
   );
   const [soundEnabled, setSoundEnabled] = useState(readSoundPreference);
-  const playSound = useSystemSounds(soundEnabled);
+  const [soundVolume, setSoundVolume] = useState(readVolumePreference);
+  const playSound = useSystemSounds(soundEnabled, soundVolume);
   const shownWindows = useRef(null);
   const [active, setActive] = useState("computer");
   const [minimized, setMinimized] = useState([]);
@@ -631,7 +631,6 @@ export default function App() {
     requestAnimationFrame(() => {
       const el = document.getElementById(id);
       el?.focus({ preventScroll: true });
-
     });
   };
   const resetDesktop = () => {
@@ -740,6 +739,7 @@ export default function App() {
         phase={bootPhase}
         onPhase={setBootPhase}
         soundEnabled={soundEnabled}
+        soundVolume={soundVolume}
         onSoundChange={setSoundEnabled}
       />
       <div
@@ -1272,6 +1272,8 @@ export default function App() {
             className="ie-window"
           >
             <InternetExplorer
+              soundEnabled={soundEnabled}
+              soundVolume={soundVolume}
               visible={!minimized.includes("iexplore")}
               onFocus={() => setActive("iexplore")}
               onClose={() => frame("iexplore").onClose("iexplore")}
@@ -1370,24 +1372,12 @@ export default function App() {
               ))}
           </div>
           <div className="taskbar-clock">
-            <button
-              className={`sound-button ${soundEnabled ? "" : "muted"}`}
-              onClick={() => setSoundEnabled((enabled) => !enabled)}
-              aria-label={
-                soundEnabled ? "Mute system sounds" : "Enable system sounds"
-              }
-              aria-pressed={!soundEnabled}
-              title={
-                soundEnabled ? "Volume — system sounds on" : "Volume — muted"
-              }
-            >
-              <img
-                src="/assets/win98/speaker.png"
-                width="16"
-                height="16"
-                alt=""
-              />
-            </button>
+            <VolumePopup
+              enabled={soundEnabled}
+              volume={soundVolume}
+              onEnabled={setSoundEnabled}
+              onVolume={setSoundVolume}
+            />
             <span title="Your local time">
               {time.toLocaleTimeString([], {
                 hour: "numeric",

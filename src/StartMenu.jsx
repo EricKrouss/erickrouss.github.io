@@ -138,7 +138,7 @@ export default function StartMenu({
                   height="16"
                   alt=""
                 />
-                <span>System sounds: {soundEnabled ? "On" : "Off"}</span>
+                <span>Page audio: {soundEnabled ? "On" : "Off"}</span>
               </button>
               <button
                 onClick={() => {

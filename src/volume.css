@@ -1,0 +1,110 @@
+.volume-control {
+  position: relative;
+}
+.volume-popup {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  right: -3px;
+  width: 82px;
+  padding: 10px 12px 9px;
+  color: #000;
+  background: #c0c0c0;
+  box-shadow:
+    inset -1px -1px #000,
+    inset 1px 1px #dfdfdf,
+    inset -2px -2px #808080,
+    inset 2px 2px #fff;
+  font: 11px/1.3 var(--shell-font);
+  text-align: center;
+  z-index: 200;
+}
+.volume-slider-area {
+  position: relative;
+  height: 112px;
+  margin: 8px auto;
+  width: 40px;
+}
+.volume-ticks {
+  position: absolute;
+  inset: 7px 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    #808080 0 1px,
+    transparent 1px 12px
+  );
+}
+.volume-slider-area input {
+  position: relative;
+  writing-mode: vertical-lr;
+  direction: rtl;
+  appearance: none;
+  width: 24px;
+  height: 112px;
+  margin: 0;
+  background: #c0c0c0;
+  cursor: default;
+}
+.volume-slider-area input::-webkit-slider-runnable-track {
+  width: 4px;
+  background: #808080;
+  border-right: 1px solid white;
+  border-left: 1px solid #000;
+}
+.volume-slider-area input::-webkit-slider-thumb {
+  appearance: none;
+  width: 22px;
+  height: 11px;
+  margin-left: -9px;
+  background: #c0c0c0;
+  box-shadow:
+    inset 1px 1px #fff,
+    inset -1px -1px #000,
+    inset 2px 2px #dfdfdf,
+    inset -2px -2px #808080;
+}
+.volume-slider-area input::-moz-range-track {
+  width: 4px;
+  background: #808080;
+  border-right: 1px solid white;
+  border-left: 1px solid #000;
+}
+.volume-slider-area input::-moz-range-thumb {
+  width: 22px;
+  height: 11px;
+  border: 0;
+  border-radius: 0;
+  background: #c0c0c0;
+  box-shadow:
+    inset 1px 1px #fff,
+    inset -1px -1px #000,
+    inset 2px 2px #dfdfdf,
+    inset -2px -2px #808080;
+}
+.volume-popup label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: center;
+  white-space: nowrap;
+}
+.volume-popup input[type="checkbox"] {
+  appearance: none;
+  width: 13px;
+  height: 13px;
+  margin: 0;
+  background: white;
+  box-shadow:
+    inset 1px 1px #808080,
+    inset -1px -1px #fff,
+    inset 2px 2px #000;
+}
+.volume-popup input[type="checkbox"]:checked::after {
+  content: "✓";
+  display: block;
+  color: black;
+  font: bold 13px/13px Arial;
+}
+.volume-popup input:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: 2px;
+}

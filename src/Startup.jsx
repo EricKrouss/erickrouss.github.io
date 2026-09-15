@@ -15,6 +15,7 @@ export default function Startup({
   phase,
   onPhase,
   soundEnabled,
+  soundVolume = 1,
   onSoundChange,
 }) {
   const timers = useRef([]);
@@ -36,8 +37,9 @@ export default function Startup({
 
   useEffect(() => () => stop(), []);
   useEffect(() => {
-    if (audio.current) audio.current.gain.gain.value = soundEnabled ? 0.6 : 0;
-  }, [soundEnabled]);
+    if (audio.current)
+      audio.current.gain.gain.value = soundEnabled ? 0.6 * soundVolume : 0;
+  }, [soundEnabled, soundVolume]);
   useEffect(() => {
     if (phase === "ready") return;
     const previous = document.body.style.overflow;
@@ -84,7 +86,7 @@ export default function Startup({
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         const context = new AudioContext();
         const gain = context.createGain();
-        gain.gain.value = 0.6;
+        gain.gain.value = 0.6 * soundVolume;
         gain.connect(context.destination);
         audio.current = { context, gain };
         const resumed = context.resume();

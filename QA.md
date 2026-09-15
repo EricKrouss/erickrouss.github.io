@@ -114,3 +114,16 @@ Extraction coordinates, sources and hashes are recorded in `docs/window-asset-pr
 - Browser fixture: inserted a cover image, saved on composer close as a draft, reopened through Drafts, saved to project, and confirmed the draft file was removed. Created an empty category using the visible New folder button.
 - `.blog-drafts/` is ignored by Git and excluded from publication/build input. Browser-tab exit retains the native unsaved-changes warning; the composer itself offers Save draft / Discard / Keep editing.
 - Twelve focused tests and the production build pass. Standard.site tests now use isolated article fixtures so editing real articles does not break fixed-content expectations. Production JavaScript contains none of the new editing actions.
+
+### Whole-page mute
+
+- Reproduced the taskbar mute bug in Chromium: the embedded HTML video remained unmuted when system sounds were off.
+- The taskbar sound state now reaches Internet Explorer on changes and iframe loads. Embedded player startup also reads the persisted master preference. Startup audio and system effects already use the same state.
+- Browser checks passed for an active video, opening a player while muted, persisted mute after reload, adjusting volume while muted, and restoring the chosen volume after unmuting. The YouTube API path passed using a simulated player, including retaining a player volume of zero.
+- Player syntax check and production build passed. Live YouTube playback was not used for the simulated API check.
+
+### Win98 volume popup
+
+- Speaker icon opens a compact vertical slider and Mute checkbox. Keyboard Home/End/arrows adjust page volume; Escape, outside pointer input, and focus leaving the popup dismiss it.
+- Master volume persists separately from mute and scales system sounds, startup audio, and embedded native/YouTube video without replacing the player's own volume setting.
+- Chromium checks passed for slider changes while muted, unmute, native player/master volume multiplication, Escape dismissal, and persisted volume after reload. Simulated YouTube API checks passed for scaling, master mute, unmute, and preserving player volume zero. Production build and player syntax check passed.

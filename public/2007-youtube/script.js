@@ -16,6 +16,31 @@ let ytPlayer = null;
 let ytPollInterval = null;
 
 const myVideo = document.getElementById('myVideo');
+// Desktop mute is a master switch; keep the player's chosen volume intact.
+let desktopMuted = false;
+let desktopVolume = 1;
+let playerVolume = myVideo.volume * 100;
+try { desktopMuted = parent !== window && localStorage.getItem('eric-system-sound-v1') === 'off'; } catch {}
+try { const saved = localStorage.getItem('eric-page-volume-v1'); if (parent !== window && saved !== null && Number.isFinite(Number(saved))) desktopVolume = Math.max(0, Math.min(1, Number(saved))); } catch {}
+function setDesktopMuted(muted, volume = desktopVolume) {
+  if (Number.isFinite(volume)) desktopVolume = Math.max(0, Math.min(1, volume));
+  desktopMuted = Boolean(muted);
+  myVideo.muted = desktopMuted;
+  myVideo.volume = playerVolume / 100 * desktopVolume;
+  if (ytPlayer && typeof ytPlayer.mute === 'function') {
+    ytPlayer.setVolume(playerVolume * desktopVolume);
+    if (desktopMuted || playerVolume === 0) ytPlayer.mute();
+    else ytPlayer.unMute();
+  }
+}
+myVideo.muted = desktopMuted;
+myVideo.addEventListener('volumechange', () => {
+  if (desktopMuted && !myVideo.muted) myVideo.muted = true;
+});
+window.addEventListener('message', event => {
+  if (parent !== window && event.source === parent && event.origin === location.origin && event.data?.type === 'eric-desktop-mute')
+    setDesktopMuted(event.data.muted, event.data.volume);
+});
 const ytContainer = document.getElementById('ytContainer');
 const loadingIndicator = document.getElementById('loadingIndicator');
 const playPauseBtn = document.getElementById('playPauseBtn');
@@ -445,7 +470,7 @@ if (!isYouTubeMode) {
     videoDuration = myVideo.duration;
     updateProgress();
     updateBuffered();
-    let initialVolPercent = myVideo.volume * 100;
+    let initialVolPercent = playerVolume;
     setVolume(initialVolPercent);
 
     endedButtons.style.display = 'none';
@@ -832,13 +857,14 @@ function updateVolumeIcon(volPercent) {
 
 function setVolume(volPercent) {
   volPercent = Math.max(0, Math.min(100, volPercent));
+  playerVolume = volPercent;
   if (isYouTubeMode) {
     if (ytPlayer) {
-      ytPlayer.setVolume(volPercent);
-      if (volPercent === 0) ytPlayer.mute(); else ytPlayer.unMute();
+      ytPlayer.setVolume(volPercent * desktopVolume);
+      if (desktopMuted || volPercent === 0) ytPlayer.mute(); else ytPlayer.unMute();
     }
   } else {
-    myVideo.volume = volPercent / 100;
+    myVideo.volume = volPercent / 100 * desktopVolume;
   }
   volumeLevel.style.width = volPercent + '%';
 
@@ -850,7 +876,7 @@ function setVolume(volPercent) {
 }
 
 volumeBtn.addEventListener('click', () => {
-  let currentVolPercent = isYouTubeMode ? (ytPlayer ? ytPlayer.getVolume() : 100) : (myVideo.volume * 100);
+  let currentVolPercent = playerVolume;
   if (currentVolPercent > 0) {
     previousVolume = currentVolPercent;
     setVolume(0);

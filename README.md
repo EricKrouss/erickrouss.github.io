@@ -75,6 +75,8 @@ You can also edit `src/blogData.json` directly. Each post has a stable slug and 
 
 ### Standard.site publishing
 
+After saving your articles to the project, run `./publish.sh` to build, commit all non-ignored changes, and push `main`. Optionally supply a commit message: `./publish.sh "Add a new blog post"`. The script stops on build or Git errors and refuses to overwrite newer remote work. Drafts remain ignored. GitHub Actions handles deployment and Standard.site publishing after the push.
+
 Every build emits a `site.standard.document` JSON export per article in `/standard-site/`, plus publication metadata. These exports alone do **not** publish records to AT Protocol. The integration follows [Standard.site’s quick start](https://standard.site/docs/quick-start/) and [verification requirements](https://standard.site/docs/verification/).
 
 - `npm run blog:preview-records` previews publication and article records without authentication or writes.

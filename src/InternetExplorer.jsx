@@ -36,6 +36,8 @@ export default function InternetExplorer({
   onClose,
   showNotice,
   playSound,
+  soundEnabled,
+  soundVolume,
 }) {
   const [address, setAddress] = useState(homeAddress);
   const [loading, setLoading] = useState(true);
@@ -52,6 +54,14 @@ export default function InternetExplorer({
     setRevision((value) => value + 1);
     setMenu(null);
   };
+  const syncSound = () =>
+    frame.current?.contentWindow?.postMessage(
+      { type: "eric-desktop-mute", muted: !soundEnabled, volume: soundVolume },
+      location.origin,
+    );
+  useEffect(() => {
+    syncSound();
+  }, [soundEnabled, soundVolume]);
   const pause = () =>
     frame.current?.contentWindow?.postMessage(
       { type: "eric-desktop-pause" },
@@ -372,6 +382,7 @@ export default function InternetExplorer({
           allow="fullscreen; clipboard-write"
           onLoad={() => {
             setLoading(false);
+            syncSound();
             if (!visible) pause();
           }}
         />

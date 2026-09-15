@@ -15,7 +15,18 @@ export function readSoundPreference() {
   }
 }
 
-export function useSystemSounds(enabled) {
+export function readVolumePreference() {
+  try {
+    const raw = localStorage.getItem("eric-page-volume-v1");
+    const value = Number(raw);
+    return raw !== null && Number.isFinite(value)
+      ? Math.max(0, Math.min(1, value))
+      : 1;
+  } catch {
+    return 1;
+  }
+}
+export function useSystemSounds(enabled, volume = 1) {
   const clips = useRef(new Map());
   useEffect(() => {
     try {
@@ -23,8 +34,12 @@ export function useSystemSounds(enabled) {
     } catch {
       /* Sound still works when storage is unavailable. */
     }
+    try {
+      localStorage.setItem("eric-page-volume-v1", String(volume));
+    } catch {}
+    for (const clip of clips.current.values()) clip.volume = 0.5 * volume;
     if (!enabled) for (const clip of clips.current.values()) clip.pause();
-  }, [enabled]);
+  }, [enabled, volume]);
   useEffect(
     () => () => {
       for (const clip of clips.current.values()) clip.pause();
@@ -38,7 +53,7 @@ export function useSystemSounds(enabled) {
       let clip = clips.current.get(name);
       if (!clip) {
         clip = new Audio(`/assets/win98/sounds/${name}.wav`);
-        clip.volume = 0.5;
+        clip.volume = 0.5 * volume;
         clips.current.set(name, clip);
       }
       // Called by a click/key action. Never replay blocked audio on a later gesture.
@@ -47,6 +62,6 @@ export function useSystemSounds(enabled) {
       clip.currentTime = 0;
       void clip.play().catch(() => {});
     },
-    [enabled],
+    [enabled, volume],
   );
 }
