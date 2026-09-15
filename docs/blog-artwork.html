@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Blog Express cover artwork</title>
+    <style>
+      @font-face {
+        font-family: Win98;
+        src: url("/public/assets/fonts/MSW98UI-Regular.woff2");
+      }
+      @font-face {
+        font-family: Win98;
+        src: url("/public/assets/fonts/MSW98UI-Bold.woff2");
+        font-weight: bold;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        width: 1200px;
+        height: 630px;
+        background: #008080;
+        color: #000;
+        font-family: Win98, Arial, sans-serif;
+        overflow: hidden;
+      }
+      .window {
+        position: absolute;
+        inset: 52px 48px;
+        background: #c0c0c0;
+        padding: 6px;
+        box-shadow:
+          inset 2px 2px #fff,
+          inset -2px -2px #000,
+          inset 4px 4px #dfdfdf,
+          inset -4px -4px #808080;
+      }
+      .title {
+        height: 42px;
+        background: linear-gradient(90deg, #000080, #1084d0);
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 4px 8px;
+        font-size: 24px;
+        font-weight: bold;
+      }
+      img {
+        image-rendering: pixelated;
+      }
+      .title img {
+        width: 32px;
+        height: 32px;
+      }
+      .controls {
+        margin-left: auto;
+        display: flex;
+        gap: 5px;
+      }
+      .controls b {
+        background: #c0c0c0;
+        color: #000;
+        width: 30px;
+        height: 28px;
+        box-shadow:
+          inset 2px 2px #fff,
+          inset -2px -2px #000;
+        text-align: center;
+        font: 25px/24px Arial;
+      }
+      .menu {
+        height: 46px;
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        padding-left: 18px;
+        font-size: 20px;
+        border-bottom: 2px solid #808080;
+      }
+      .paper {
+        height: 352px;
+        background: #fff;
+        margin: 4px 3px;
+        box-shadow:
+          inset 2px 2px #808080,
+          inset -2px -2px #fff;
+        display: flex;
+        align-items: center;
+        gap: 42px;
+        padding: 35px 58px;
+      }
+      .paper img {
+        width: 192px;
+        height: 192px;
+        flex-shrink: 0;
+      }
+      .eyebrow {
+        font-size: 22px;
+        color: #555;
+        margin-bottom: 16px;
+      }
+      .headline {
+        font-size: 66px;
+        line-height: 1.1;
+        font-weight: bold;
+        margin: 0 0 20px;
+        letter-spacing: -2px;
+      }
+      .subtitle {
+        font-size: 24px;
+        color: #343434;
+        line-height: 1.5;
+        margin: 0;
+      }
+      .status {
+        height: 54px;
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        padding: 2px 3px;
+      }
+      .status span {
+        box-shadow:
+          inset 1px 1px #808080,
+          inset -1px -1px #fff;
+        padding: 9px 12px;
+        font-size: 18px;
+      }
+      .status span:first-child {
+        flex: 1;
+      }
+      body.icon {
+        width: 256px;
+        height: 256px;
+        display: grid;
+        place-items: center;
+        background: #008080;
+        box-shadow:
+          inset 4px 4px #fff,
+          inset -4px -4px #004646;
+      }
+      .icon .window {
+        display: none;
+      }
+      .brand-icon {
+        display: none;
+      }
+      .icon .brand-icon {
+        display: block;
+        width: 192px;
+        height: 192px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="window">
+      <div class="title">
+        <img src="/public/assets/win98/outlook-express.png" alt="" />Blog
+        Express
+        <div class="controls"><b>_</b><b>□</b><b>×</b></div>
+      </div>
+      <div class="menu">
+        <span>Articles</span><span>View</span><span>Help</span>
+      </div>
+      <div class="paper">
+        <img src="/public/assets/win98/outlook-express.png" alt="" />
+        <div>
+          <div class="eyebrow">A little correspondence from the desktop.</div>
+          <h1 class="headline">Eric’s Blog Express</h1>
+          <p class="subtitle">
+            Notes, projects &amp; things worth writing down.
+          </p>
+        </div>
+      </div>
+      <div class="status">
+        <span>From Eric’s desktop</span><span>krouss.net</span>
+      </div>
+    </div>
+    <img
+      class="brand-icon"
+      src="/public/assets/win98/outlook-express.png"
+      alt="Outlook Express"
+    />
+    <script>
+      if (location.search === "?icon") document.body.className = "icon";
+    </script>
+  </body>
+</html>

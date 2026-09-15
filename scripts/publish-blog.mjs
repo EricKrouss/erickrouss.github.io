@@ -1,5 +1,10 @@
-import { writeFile } from "node:fs/promises";
-import { publication, publicationKey, records } from "./standard-site.mjs";
+import { readFile, writeFile } from "node:fs/promises";
+import {
+  artwork,
+  publication,
+  publicationKey,
+  records,
+} from "./standard-site.mjs";
 
 // Credentials belong in shell/CI secrets, never VITE_* variables or source files.
 const identifier = process.env.ATPROTO_IDENTIFIER;
@@ -17,16 +22,27 @@ if (!identifier || !password) {
   );
   process.exit(1);
 }
-async function rpc(method, body, token, query) {
+async function rpc(
+  method,
+  body,
+  token,
+  query,
+  contentType = "application/json",
+) {
   const url = new URL(`/xrpc/${method}`, pds);
   if (query) url.search = new URLSearchParams(query).toString();
   const response = await fetch(url, {
     method: body ? "POST" : "GET",
     headers: {
-      ...(body ? { "Content-Type": "application/json" } : {}),
+      ...(body ? { "Content-Type": contentType } : {}),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
-    ...(body ? { body: JSON.stringify(body) } : {}),
+    ...(body
+      ? {
+          body:
+            contentType === "application/json" ? JSON.stringify(body) : body,
+        }
+      : {}),
     signal: AbortSignal.timeout(30000),
   });
   const data = await response.json();
@@ -90,12 +106,39 @@ async function put(rkey, record) {
   );
   return result.uri;
 }
+async function uploadArtwork(path) {
+  const bytes = await readFile(new URL(`../public${path}`, import.meta.url));
+  if (bytes.length >= 1000000)
+    throw new Error(`Artwork exceeds Standard.site's 1 MB limit: ${path}`);
+  const result = await rpc(
+    "com.atproto.repo.uploadBlob",
+    bytes,
+    session.accessJwt,
+    undefined,
+    "image/png",
+  );
+  if (
+    result.blob?.$type !== "blob" ||
+    result.blob.mimeType !== "image/png" ||
+    !result.blob.ref?.$link
+  )
+    throw new Error("PDS did not return a valid PNG blob reference.");
+  return result.blob;
+}
+const media = {
+  icon: await uploadArtwork(artwork.icon),
+  coverImage: await uploadArtwork(artwork.cover),
+};
 const state = {
-  publication: await put(publicationKey, publication),
+  publication: await put(publicationKey, { ...publication, icon: media.icon }),
   documents: {},
+  media,
 };
 for (const { key, rkey, record } of documents) {
-  state.documents[key] = await put(rkey, record);
+  state.documents[key] = await put(rkey, {
+    ...record,
+    coverImage: media.coverImage,
+  });
   // Save after each successful write, so partial runs retain their verification links.
   await writeFile(
     "standard-site-records.json",

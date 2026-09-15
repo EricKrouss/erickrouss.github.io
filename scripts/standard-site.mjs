@@ -6,6 +6,11 @@ export const publication = {
   name: "Eric’s Blog Express",
   description: "Eric Krouss’s personal blog.",
 };
+export const artwork = {
+  cover: "/assets/blog/blog-express-cover.png",
+  icon: "/assets/blog/blog-express-icon.png",
+  alt: "Eric’s Blog Express in a Windows 98 window, with the Outlook Express icon on a teal desktop.",
+};
 // Stable AT Protocol TIDs. Never change these after publication.
 export const publicationKey = "3mvkl76ao2222";
 const isTid = (value) =>

@@ -14,10 +14,14 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 const store = existsSync('fake-pds.json') ? JSON.parse(readFileSync('fake-pds.json', 'utf8')) : { records: {}, writes: 0 };
 globalThis.fetch = async (url, options) => {
   const method = url.pathname.split('/').pop();
-  const body = options.body ? JSON.parse(options.body) : null;
+  const body = options.body && options.headers["Content-Type"] === "application/json" ? JSON.parse(options.body) : options.body;
   const response = (data, status = 200) => new Response(JSON.stringify(data), { status });
   if (method === 'com.atproto.server.createSession') return response({ did: 'did:plc:test', accessJwt: 'test-token' });
   if (options.headers.Authorization !== 'Bearer test-token') throw Error('Missing authentication');
+  if (method === 'com.atproto.repo.uploadBlob') {
+    if (options.headers['Content-Type'] !== 'image/png' || body.length >= 1000000 || body[0] !== 137) throw Error('Invalid artwork upload');
+    return response({ blob: { $type: 'blob', ref: { $link: 'test-png-' + body.length }, mimeType: 'image/png', size: body.length } });
+  }
   if (method === 'com.atproto.repo.getRecord') {
     const key = url.searchParams.get('collection') + '/' + url.searchParams.get('rkey');
     return store.records[key] ? response(store.records[key]) : response({ error: 'RecordNotFound' }, 400);
@@ -73,10 +77,20 @@ test("publishing is idempotent and keeps verification URIs; collisions are rejec
       state.documents["blog-welcome"],
       "at://did:plc:test/site.standard.document/3mvkl76ao2222",
     );
+    assert.equal(state.media.coverImage.mimeType, "image/png");
+    assert.equal(state.media.icon.mimeType, "image/png");
     const second = run(publisher, dir, ["--import", mockPath]);
     assert.equal(second.status, 0, second.stderr);
     const database = JSON.parse(
       await readFile(join(dir, "fake-pds.json"), "utf8"),
+    );
+    assert.deepEqual(
+      database.records["site.standard.publication/3mvkl76ao2222"].value.icon,
+      state.media.icon,
+    );
+    assert.deepEqual(
+      database.records["site.standard.document/3mvkl76ao2222"].value.coverImage,
+      state.media.coverImage,
     );
     assert.equal(
       database.writes,
@@ -112,6 +126,14 @@ test("static pages include verified AT URIs and readable content without JavaScr
     );
     assert.ok(
       html.includes(`<link rel="site.standard.document" href="${document}"`),
+    );
+    assert.ok(
+      html.includes(
+        'property="og:image" content="https://erickrouss.github.io/assets/blog/blog-express-cover.png"',
+      ),
+    );
+    assert.ok(
+      html.includes('name="twitter:card" content="summary_large_image"'),
     );
     assert.ok(
       html.includes('href="https://erickrouss.github.io/blog/welcome/"'),

@@ -73,3 +73,5 @@ Every build emits a `site.standard.document` JSON export per article in `/standa
 - The publisher does not create Bluesky feed posts or delete records for removed articles.
 
 Validation: `node --test scripts/standard-site.test.mjs` covers exact article content, repeat publication, record conflicts, verification pages and missing credentials. Tests use a simulated PDS; live publishing requires the account secrets above.
+
+Blog sharing artwork lives in `public/assets/blog/`: a 1200×630 Win98 cover and a 256×256 Outlook Express publication icon. Their editable HTML layout is `docs/blog-artwork.html` (serve the repository root; render at 1200×630, or 256×256 with `?icon`). The publisher uploads both PNGs to the account’s PDS and attaches blob references as the publication’s `icon` and each document’s `coverImage`. The build also emits Open Graph and Twitter large-image metadata. Shared cards may retain earlier previews until the consuming service’s cache expires.
