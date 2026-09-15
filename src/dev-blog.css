@@ -1,0 +1,279 @@
+.dev-blog-dialog {
+  width: min(720px, calc(100vw - 16px));
+  max-height: calc(100dvh - 24px);
+  padding: 4px;
+  color: #000;
+  background: #c0c0c0;
+  border: 0;
+  box-shadow:
+    inset 1px 1px #fff,
+    inset -1px -1px #000,
+    inset 2px 2px #dfdfdf,
+    inset -2px -2px #808080;
+  font: 11px/1.4 var(--shell-font);
+}
+.dev-blog-dialog::backdrop {
+  background: transparent;
+}
+.dev-blog-dialog button:not(.window-control) {
+  font: inherit;
+  color: #000;
+  border: 0;
+  border-radius: 0;
+  background: #c0c0c0;
+  box-shadow:
+    inset 1px 1px #fff,
+    inset -1px -1px #000;
+  padding: 5px 10px;
+}
+.dev-blog-dialog button:not(.window-control):disabled {
+  color: #777;
+}
+.dev-compose-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 4px;
+  border-bottom: 1px solid #808080;
+}
+.dev-compose-toolbar button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dev-compose-toolbar span {
+  margin-left: auto;
+  color: #444;
+}
+.dev-blog-dialog fieldset {
+  border: 0;
+  padding: 10px;
+  margin: 0;
+  min-width: 0;
+}
+.dev-blog-dialog label {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 0 0 8px;
+}
+.dev-blog-dialog input,
+.dev-blog-dialog textarea {
+  min-width: 0;
+  flex: 1;
+  font:
+    14px/1.5 Arial,
+    sans-serif;
+  padding: 5px;
+  border: 2px inset #eee;
+  border-radius: 0;
+  background: white;
+  color: #000;
+}
+.dev-blog-dialog .dev-compose-body {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  margin-top: 14px;
+}
+.dev-blog-dialog textarea {
+  min-height: 160px;
+  height: min(38dvh, 380px);
+  resize: vertical;
+}
+.dev-blog-dialog footer {
+  padding: 6px;
+  box-shadow:
+    inset 1px 1px #808080,
+    inset -1px -1px #fff;
+}
+.dev-compose-error {
+  padding: 8px 10px;
+  color: #800000;
+  background: #fff8d4;
+}
+.dev-compose-error button {
+  display: block;
+  margin-top: 6px;
+}
+@media (max-width: 480px) {
+  .dev-compose-toolbar span {
+    display: none;
+  }
+}
+
+.dev-format-toolbar {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 4px;
+  border-top: 1px solid white;
+  border-bottom: 1px solid #808080;
+}
+.dev-format-toolbar select {
+  font: inherit;
+  color: #000;
+  background: white;
+  padding: 3px;
+}
+.dev-format-toolbar button {
+  min-width: 28px;
+  padding: 3px 6px;
+  font-family: Arial, sans-serif;
+}
+.dev-format-toolbar button[aria-label="Bold"] {
+  font-weight: bold;
+}
+.dev-format-toolbar button[aria-label="Italic"] {
+  font-style: italic;
+}
+.dev-format-toolbar button[aria-label="Underline"] {
+  text-decoration: underline;
+}
+.dev-rich-editor {
+  height: min(38dvh, 380px);
+  min-height: 160px;
+  overflow: auto;
+  padding: 10px;
+  background: #fff;
+  color: #000;
+  border: 2px inset #eee;
+  font:
+    15px/1.5 Arial,
+    sans-serif;
+  white-space: pre-wrap;
+  outline-offset: -3px;
+}
+.dev-rich-editor p {
+  margin: 0 0 12px;
+}
+.dev-rich-editor h2 {
+  font-size: 24px;
+}
+.dev-rich-editor h3 {
+  font-size: 19px;
+}
+.dev-blog-context {
+  position: fixed;
+  z-index: 10000;
+  width: 210px;
+  padding: 3px;
+  background: #c0c0c0;
+  color: #000;
+  box-shadow:
+    inset 1px 1px #fff,
+    inset -1px -1px #000,
+    2px 2px #555;
+  font: 11px/1.4 var(--shell-font);
+}
+.dev-blog-context button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  padding: 6px 10px;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+}
+.dev-blog-context button:hover,
+.dev-blog-context button:focus-visible {
+  background: #000080;
+  color: white;
+}
+.dev-delete-message {
+  padding: 8px 16px;
+}
+
+/* Classic two-pixel Windows control edges and dotted keyboard focus. */
+.dev-blog-dialog button:not(.window-control) {
+  box-shadow:
+    inset 1px 1px #dfdfdf,
+    inset -1px -1px #000,
+    inset 2px 2px #fff,
+    inset -2px -2px #808080;
+  min-height: 23px;
+}
+.dev-blog-dialog button:not(.window-control):active:not(:disabled),
+.dev-format-toolbar button[aria-pressed="true"] {
+  box-shadow:
+    inset 1px 1px #000,
+    inset -1px -1px #fff,
+    inset 2px 2px #808080,
+    inset -2px -2px #dfdfdf;
+  background: #d4d0c8;
+}
+.dev-blog-dialog button:not(.window-control):focus-visible,
+.dev-blog-context button:focus-visible {
+  outline: 1px dotted currentColor;
+  outline-offset: -4px;
+}
+.dev-blog-dialog button:not(.window-control):disabled {
+  color: #808080;
+  text-shadow: 1px 1px #fff;
+}
+.dev-blog-dialog label {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 6px;
+}
+.dev-blog-dialog input,
+.dev-format-toolbar select,
+.dev-rich-editor {
+  border: 0;
+  border-radius: 0;
+  box-shadow:
+    inset 1px 1px #808080,
+    inset -1px -1px #fff,
+    inset 2px 2px #000,
+    inset -2px -2px #dfdfdf;
+}
+.dev-blog-dialog input {
+  font: 12px/1.5 var(--shell-font);
+  padding: 4px 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.dev-format-toolbar select {
+  border: 1px solid #808080;
+  height: 23px;
+}
+.dev-rich-editor:focus {
+  outline: none;
+}
+.dev-rich-editor::selection,
+.dev-rich-editor *::selection {
+  background: #000080;
+  color: white;
+}
+.dev-blog-context {
+  box-shadow:
+    inset 1px 1px #dfdfdf,
+    inset -1px -1px #000,
+    inset 2px 2px #fff,
+    inset -2px -2px #808080,
+    2px 2px #555;
+}
+.dev-blog-context button {
+  min-height: 24px;
+  padding: 3px 10px;
+}
+
+.dev-blog-dialog > .title-bar {
+  flex-shrink: 0;
+}
+.dev-blog-dialog > .title-bar h2 {
+  font: inherit;
+}
+body:has(.dev-blog-dialog[open]) .window > .title-bar {
+  background-image: url("/assets/window-controls/title-inactive.png");
+  color: #c0c0c0;
+}
+.dev-blog-dialog > .title-bar h2 {
+  flex: 1;
+}

@@ -14,3 +14,5 @@ import "./dos.css";
 import "./scrollbars.css";
 
 import "./blog.css";
+
+import "./desktop.css";

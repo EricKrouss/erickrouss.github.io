@@ -1,3 +1,5 @@
+import { deletedBlogPosts } from "../src/blogPosts.js";
+import { deleteBlogRecords } from "./delete-blog-records.mjs";
 import { readFile, writeFile } from "node:fs/promises";
 import {
   artwork,
@@ -145,6 +147,17 @@ for (const { key, rkey, record } of documents) {
     JSON.stringify(state, null, 2) + "\n",
   );
 }
+await deleteBlogRecords(
+  deletedBlogPosts,
+  documents,
+  publicationUri,
+  session.did,
+  (method, body, query) => rpc(method, body, session.accessJwt, query),
+);
+await writeFile(
+  "standard-site-records.json",
+  JSON.stringify(state, null, 2) + "\n",
+);
 console.log(
   `Published ${documents.length} Standard.site document(s). Run npm run build and deploy dist to serve their verification links.`,
 );

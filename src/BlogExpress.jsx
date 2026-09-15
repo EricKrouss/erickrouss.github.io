@@ -1,12 +1,23 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Icon } from "./Art.jsx";
-import { blogPosts } from "./blogPosts.js";
+import { blogPosts as initialPosts, blogCategories } from "./blogPosts.js";
+import BlogArticleBody from "./BlogArticleBody.jsx";
+import { postText } from "./blogFormatting.js";
 import publishedRecords from "../standard-site-records.json";
 
 const storageKey = "eric-blog-reader-v1";
-const categories = [...new Set(blogPosts.map((post) => post.category))];
-const linkedPost = () =>
-  blogPosts.find(
+const DevBlogEditor = import.meta.env.DEV
+  ? lazy(() => import("./DevBlogEditor.jsx"))
+  : null;
+const DevBlogContextMenu = import.meta.env.DEV
+  ? lazy(() =>
+      import("./DevBlogEditor.jsx").then((module) => ({
+        default: module.DevBlogContextMenu,
+      })),
+    )
+  : null;
+const linkedPost = (posts = initialPosts) =>
+  posts.find(
     (post) =>
       location.hash === `#blog/${post.slug}` ||
       (!location.hash.startsWith("#blog/") &&
@@ -23,10 +34,14 @@ function loadReader() {
     const value = JSON.parse(localStorage.getItem(storageKey));
     return {
       read: Array.isArray(value?.read)
-        ? value.read.filter((id) => blogPosts.some((post) => post.slug === id))
+        ? value.read.filter((id) =>
+            initialPosts.some((post) => post.slug === id),
+          )
         : [],
       saved: Array.isArray(value?.saved)
-        ? value.saved.filter((id) => blogPosts.some((post) => post.slug === id))
+        ? value.saved.filter((id) =>
+            initialPosts.some((post) => post.slug === id),
+          )
         : [],
     };
   } catch {
@@ -35,6 +50,49 @@ function loadReader() {
 }
 
 export default function BlogExpress({ visible, showNotice }) {
+  const [devData, setDevData] = useState(null);
+  const blogPosts =
+    import.meta.env.DEV && devData ? devData.posts : initialPosts;
+  const categories =
+    import.meta.env.DEV && devData ? devData.categories : blogCategories;
+  const [contextMenu, setContextMenu] = useState(null);
+  const [composer, setComposer] = useState(null);
+  const [dropTarget, setDropTarget] = useState(null);
+  useEffect(() => {
+    if (import.meta.env.DEV && import.meta.hot) {
+      const update = (data) => setDevData(data);
+      import.meta.hot.on("blog:data", update);
+      return () => import.meta.hot.off("blog:data", update);
+    }
+  }, []);
+  function savedToProject(data) {
+    setDevData(data);
+    setComposer(null);
+    if (data.post) {
+      setSelected(data.post.slug);
+      setFolder(data.post.category);
+      setQuery("");
+    }
+    if (data.deletedSlug === selected) setSelected(data.posts[0]?.slug);
+    if (data.action?.startsWith("delete")) {
+      setFolder("All articles");
+      setMessage("Deleted from project. Ready for your next deployment.");
+    } else setMessage("Saved to project. Ready for your next deployment.");
+  }
+  async function moveToCategory(slug, category) {
+    setDropTarget(null);
+    if (!slug) return;
+    try {
+      const { moveArticle } = await import("./devBlogApi.js");
+      const data = await moveArticle(slug, category);
+      setDevData(data);
+      setFolder(category);
+      setSelected(slug);
+      setMessage(`Moved article to ${category} and saved to project.`);
+    } catch (error) {
+      setMessage(error.message);
+    }
+  }
   const [reader, setReader] = useState(loadReader);
   const [folder, setFolder] = useState("All articles");
   const [query, setQuery] = useState("");
@@ -60,15 +118,7 @@ export default function BlogExpress({ visible, showNotice }) {
     .filter(
       (item) =>
         matchesFolder(item, folder) &&
-        [
-          item.title,
-          item.category,
-          item.excerpt,
-          ...item.body.flatMap((block) => [
-            block.heading || "",
-            ...block.paragraphs,
-          ]),
-        ]
+        [item.title, item.category, item.excerpt, postText(item)]
           .join(" ")
           .toLowerCase()
           .includes(query.trim().toLowerCase()),
@@ -96,7 +146,7 @@ export default function BlogExpress({ visible, showNotice }) {
   }, [visible, selected]);
   useEffect(() => {
     const followLink = () => {
-      const next = linkedPost();
+      const next = linkedPost(blogPosts);
       if (next) {
         setSelected(next.slug);
         setFolder("All articles");
@@ -109,7 +159,7 @@ export default function BlogExpress({ visible, showNotice }) {
       window.removeEventListener("hashchange", followLink);
       window.removeEventListener("popstate", followLink);
     };
-  }, []);
+  }, [blogPosts]);
   useEffect(() => {
     readingPane.current?.scrollTo(0, 0);
   }, [selected]);
@@ -144,7 +194,9 @@ export default function BlogExpress({ visible, showNotice }) {
     return () => document.removeEventListener("pointerdown", dismiss);
   }, []);
 
+  const suppressArticleClick = useRef(false);
   function openArticle(item) {
+    if (suppressArticleClick.current) return;
     setSelected(item.slug);
     setReader((old) =>
       old.read.includes(item.slug)
@@ -194,6 +246,26 @@ export default function BlogExpress({ visible, showNotice }) {
   }
   const menuItems = {
     Articles: [
+      ...(import.meta.env.DEV
+        ? [
+            [
+              "Compose new mail…",
+              () =>
+                setComposer({
+                  mode: "new",
+                  category: categories.includes(folder)
+                    ? folder
+                    : categories[0],
+                }),
+            ],
+            [
+              "Edit article…",
+              () => setComposer({ mode: "edit", slug: selected }),
+              !post,
+            ],
+            ["New category…", () => setComposer({ mode: "category" })],
+          ]
+        : []),
       ["All articles", () => chooseFolder("All articles")],
       [saved ? "Unsave article" : "Save article", toggleSaved, !post],
       ["Copy article link", copyLink, !post],
@@ -233,6 +305,27 @@ export default function BlogExpress({ visible, showNotice }) {
         }
       }}
     >
+      {import.meta.env.DEV && composer && (
+        <Suspense fallback={<span role="status">Opening composer…</span>}>
+          <DevBlogEditor
+            request={composer}
+            onClose={() => setComposer(null)}
+            onSaved={savedToProject}
+          />
+        </Suspense>
+      )}
+      {import.meta.env.DEV && contextMenu && (
+        <Suspense fallback={null}>
+          <DevBlogContextMenu
+            request={contextMenu}
+            onClose={() => setContextMenu(null)}
+            onChoose={(request) => {
+              setContextMenu(null);
+              setComposer(request);
+            }}
+          />
+        </Suspense>
+      )}
       <div className="blog-menubar" aria-label="Blog menus">
         {Object.entries(menuItems).map(([name, items]) => (
           <div className="blog-menu" key={name}>
@@ -327,7 +420,9 @@ export default function BlogExpress({ visible, showNotice }) {
       </form>
       <div className="blog-workspace">
         <aside className="blog-sidebar">
-          <div className="blog-pane-caption">Folders</div>
+          <div className="blog-pane-caption">Folders
+            {import.meta.env.DEV && <button className="blog-new-folder" onClick={() => setComposer({ mode: "category" })} title="Create a new category folder"><Icon name="folder" /> New folder…</button>}
+          </div>
           <div className="blog-folder-root">
             <Icon name="computer" /> Blog Express
           </div>
@@ -341,6 +436,22 @@ export default function BlogExpress({ visible, showNotice }) {
               <button
                 key={name}
                 className={`${folder === name ? "selected" : ""} ${index > 2 ? "blog-category" : ""}`}
+                onContextMenu={
+                  import.meta.env.DEV && index > 2
+                    ? (event) => {
+                        event.preventDefault();
+                        setContextMenu({
+                          x: event.clientX,
+                          y: event.clientY,
+                          category: name,
+                        });
+                      }
+                    : undefined
+                }
+                data-drop-target={dropTarget === name || undefined}
+                data-blog-category={
+                  import.meta.env.DEV && index > 2 ? name : undefined
+                }
                 aria-pressed={folder === name}
                 onClick={() => chooseFolder(name)}
               >
@@ -416,11 +527,71 @@ export default function BlogExpress({ visible, showNotice }) {
                 {filtered.map((item) => (
                   <tr
                     key={item.slug}
+                    onContextMenu={
+                      import.meta.env.DEV
+                        ? (event) => {
+                            event.preventDefault();
+                            setContextMenu({
+                              x: event.clientX,
+                              y: event.clientY,
+                              slug: item.slug,
+                            });
+                          }
+                        : undefined
+                    }
+                    onPointerDown={
+                      import.meta.env.DEV
+                        ? (event) => {
+                            if (event.button !== 0) return;
+                            const source = event.currentTarget;
+                            source.setPointerCapture(event.pointerId);
+                            const x = event.clientX,
+                              y = event.clientY;
+                            let dragging = false;
+                            const targetAt = (e) =>
+                              document
+                                .elementFromPoint(e.clientX, e.clientY)
+                                ?.closest("[data-blog-category]")?.dataset
+                                .blogCategory;
+                            const move = (e) => {
+                              if (
+                                !dragging &&
+                                Math.hypot(e.clientX - x, e.clientY - y) < 6
+                              )
+                                return;
+                              dragging = true;
+                              source.setPointerCapture(event.pointerId);
+                              setDropTarget(targetAt(e) || null);
+                            };
+                            const finish = (e) => {
+                              source.removeEventListener("pointermove", move);
+                              source.removeEventListener("pointerup", finish);
+                              source.removeEventListener(
+                                "pointercancel",
+                                finish,
+                              );
+                              setDropTarget(null);
+                              if (!dragging) return;
+                              suppressArticleClick.current = true;
+                              setTimeout(() => {
+                                suppressArticleClick.current = false;
+                              }, 0);
+                              const category = targetAt(e);
+                              if (e.type === "pointerup" && category)
+                                moveToCategory(item.slug, category);
+                            };
+                            source.addEventListener("pointermove", move);
+                            source.addEventListener("pointerup", finish);
+                            source.addEventListener("pointercancel", finish);
+                          }
+                        : undefined
+                    }
                     className={`${selected === item.slug ? "selected" : ""} ${reader.read.includes(item.slug) ? "" : "unread"}`}
                     onClick={() => openArticle(item)}
                   >
                     <td>
                       <button
+                        draggable={false}
                         aria-current={
                           selected === item.slug ? "true" : undefined
                         }
@@ -487,14 +658,7 @@ export default function BlogExpress({ visible, showNotice }) {
               >
                 <h1>{post.title}</h1>
                 {post.excerpt && <p className="blog-deck">{post.excerpt}</p>}
-                {post.body.map((block, index) => (
-                  <section key={index}>
-                    {block.heading && <h2>{block.heading}</h2>}
-                    {block.paragraphs.map((paragraph, i) => (
-                      <p key={i}>{paragraph}</p>
-                    ))}
-                  </section>
-                ))}
+                <BlogArticleBody body={post.body} />
                 <footer>
                   Filed under {post.category} · {post.author}
                 </footer>

@@ -21,6 +21,7 @@ const programs = [
   ["iexplore", "ie"],
 ];
 const programNames = programs.map(([name]) => name);
+const defaultClosed = ["projects", "minecraft", "terminal", "iexplore", "blog"];
 const initialLines = [
   { text: "Microsoft(R) Windows 98" },
   { text: "   (C)Copyright Microsoft Corp 1981-1998." },
@@ -78,9 +79,7 @@ function Window({
     if (
       maximized ||
       e.target.closest("button") ||
-      e.button !== 0 ||
-      e.pointerType === "touch" ||
-      !matchMedia("(min-width: 1050px)").matches
+      e.button !== 0
     )
       return;
     const rect = e.currentTarget.closest("section").getBoundingClientRect();
@@ -89,11 +88,7 @@ function Window({
       y: e.clientY,
       origin: offset,
       rect,
-      maxY:
-        (getComputedStyle(e.currentTarget.closest("section")).position ===
-        "fixed"
-          ? innerHeight
-          : document.documentElement.scrollHeight) - rect.bottom,
+      maxY: document.querySelector(".taskbar").getBoundingClientRect().top - rect.bottom,
     };
     e.currentTarget.setPointerCapture(e.pointerId);
   };
@@ -109,7 +104,7 @@ function Window({
     );
     const dy = Math.max(
       -d.rect.top + 8,
-      Math.min(d.maxY - 48, e.clientY - d.y),
+      Math.min(d.maxY - 4, e.clientY - d.y),
     );
     onMove(id, { x: d.origin.x + dx, y: d.origin.y + dy });
   };
@@ -518,9 +513,9 @@ export default function App() {
   const [soundEnabled, setSoundEnabled] = useState(readSoundPreference);
   const playSound = useSystemSounds(soundEnabled);
   const shownWindows = useRef(null);
-  const [active, setActive] = useState("eric");
+  const [active, setActive] = useState("computer");
   const [minimized, setMinimized] = useState([]);
-  const [closed, setClosed] = useState(["iexplore", "blog"]);
+  const [closed, setClosed] = useState(defaultClosed);
   const [maximized, setMaximized] = useState([]);
   const [offsets, setOffsets] = useState({});
   const [sizes, setSizes] = useState({});
@@ -636,10 +631,7 @@ export default function App() {
     requestAnimationFrame(() => {
       const el = document.getElementById(id);
       el?.focus({ preventScroll: true });
-      el?.scrollIntoView({
-        behavior: "instant",
-        block: "nearest",
-      });
+
     });
   };
   const resetDesktop = () => {
@@ -648,9 +640,9 @@ export default function App() {
     setOffsets({});
     setSizes({});
     setMinimized([]);
-    setClosed(["iexplore", "blog"]);
+    setClosed(defaultClosed);
     setMaximized([]);
-    setActive("eric");
+    setActive("computer");
     setMenu(false);
   };
   const finishMinimize = (id) => {
@@ -982,6 +974,38 @@ export default function App() {
                   </div>
                 </Window>
               </div>
+              <Window
+                {...frame("links")}
+                footer={
+                  <>
+                    Small buttons. Big internet.{" "}
+                    <span className="footer-right">
+                      88 × 31, as nature intended
+                    </span>
+                  </>
+                }
+              >
+                <div className="links-intro">
+                  <h3>Some good exits.</h3>
+                  <p>The web is better when it links to other places.</p>
+                </div>
+                <div className="web-buttons">
+                  {links.map((link) => (
+                    <OutsideLink
+                      href={link.href}
+                      key={link.title}
+                      className={`web-button ${link.style}`}
+                      title={`${link.title} — ${link.subtitle}`}
+                    >
+                      <b className="button-icon">{link.icon}</b>
+                      <span>
+                        <b>{link.title}</b>
+                        <small>{link.subtitle}</small>
+                      </span>
+                    </OutsideLink>
+                  ))}
+                </div>
+              </Window>
               <div className="window-column middle-column">
                 <Window
                   {...frame("minecraft")}
@@ -1190,38 +1214,6 @@ export default function App() {
               </aside>
             </div>
             <div className="bottom-grid">
-              <Window
-                {...frame("links")}
-                footer={
-                  <>
-                    Small buttons. Big internet.{" "}
-                    <span className="footer-right">
-                      88 × 31, as nature intended
-                    </span>
-                  </>
-                }
-              >
-                <div className="links-intro">
-                  <h3>Some good exits.</h3>
-                  <p>The web is better when it links to other places.</p>
-                </div>
-                <div className="web-buttons">
-                  {links.map((link) => (
-                    <OutsideLink
-                      href={link.href}
-                      key={link.title}
-                      className={`web-button ${link.style}`}
-                      title={`${link.title} — ${link.subtitle}`}
-                    >
-                      <b className="button-icon">{link.icon}</b>
-                      <span>
-                        <b>{link.title}</b>
-                        <small>{link.subtitle}</small>
-                      </span>
-                    </OutsideLink>
-                  ))}
-                </div>
-              </Window>
               <div className="site-info">
                 <div className="visitor-label">YOU ARE VISITOR NUMBER</div>
                 <div

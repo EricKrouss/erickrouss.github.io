@@ -1,4 +1,5 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { bodyHtml } from "../src/blogFormatting.js";
 import { blogPosts } from "../src/blogPosts.js";
 import { artwork, publication, records } from "./standard-site.mjs";
 
@@ -55,7 +56,7 @@ for (const [index, { key, record }] of documents.entries()) {
     (published.publication
       ? `<link rel="site.standard.publication" href="${escape(published.publication)}" />\n`
       : "");
-  const noScript = `<noscript><article><h1>${escape(post.title)}</h1>${post.body.map((block) => `${block.heading ? `<h2>${escape(block.heading)}</h2>` : ""}${block.paragraphs.map((p) => `<p>${escape(p)}</p>`).join("")}`).join("")}<a href="/">Back to the desktop</a></article></noscript>`;
+  const noScript = `<noscript><article><h1>${escape(post.title)}</h1>${bodyHtml(post.body)}<a href="/">Back to the desktop</a></article></noscript>`;
   const html = template
     .replace(
       /<title>.*?<\/title>/s,

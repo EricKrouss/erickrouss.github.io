@@ -1,0 +1,134 @@
+/* A desktop work area stays within the screen; only window contents scroll. */
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.desktop {
+  height: 100dvh;
+  min-height: 0;
+  padding-bottom: var(--taskbar-height);
+  display: flex;
+  flex-direction: column;
+  overflow: clip;
+}
+.desktop-top { width: 100%; flex: none; }
+.desktop-workspace {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  grid-template-columns: 150px minmax(0, 1fr);
+  padding: 6px 20px 12px 10px;
+  gap: 14px;
+  align-items: stretch;
+}
+.desktop-icons {
+  position: static;
+  display: flex;
+  flex-flow: column wrap;
+  align-content: flex-start;
+  gap: 8px 4px;
+  min-height: 0;
+  padding: 0;
+}
+.desktop-icons > button { width: 72px; min-height: 68px; flex: 0 0 68px; }
+.desktop-icons > button:hover,
+.desktop-icons > button:active { background: transparent; border-color: transparent; }
+.desktop-icons > button:focus > span,
+.desktop-icons > button:active > span {
+  background: #000080;
+  color: #fff;
+  outline: 1px dotted #fff;
+  text-shadow: none;
+}
+.dock-note { display: none; }
+.site-surface {
+  position: relative;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.masthead { flex: none; }
+.masthead-main { min-height: 0; padding: 16px 22px; }
+.masthead-main > .desktop-computer { width: 112px; height: 112px; }
+.desktop-hint { flex: none; margin: 10px 0; }
+.window-grid { position: relative; display: block; flex: 1; min-height: 0; }
+.window-column, .bottom-grid { display: contents; }
+.window-grid .window, .bottom-grid .window {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  min-height: 0;
+}
+.window > .title-bar, .window > .window-footer { flex: none; }
+.window > .window-body { flex: 1; min-height: 0; }
+.window .title-bar { touch-action: none; }
+#eric { left: 0; top: 0; width: 55%; max-height: 62%; }
+#status { right: 0; top: 0; width: 36%; max-height: 36%; }
+#computer { right: 0; top: 39%; width: 36%; max-height: 61%; }
+/* Keep the lower window in the same bounded work area. */
+#links { left: 0; top: 66%; width: 55%; max-height: 34%; }
+#projects, #minecraft, #terminal {
+  left: 8%; top: 4%; width: 60%; max-height: 92%;
+}
+#terminal { left: 15%; top: 8%; }
+.blinkie-shelf { position: absolute; left: 0; bottom: 0; margin: 0; }
+.warning-note, .site-info { display: none; }
+.site-footer { flex: none; margin: 8px 0 0; padding: 0; }
+.window.maximized { position: fixed; width: auto; max-height: none; }
+@media (min-width: 1700px) and (min-height: 950px) {
+  .desktop-workspace { grid-template-columns: 76px minmax(0, 1fr); }
+  .desktop-icons { gap: 12px; }
+  .masthead-main { padding: 22px; }
+  .masthead-main > .desktop-computer { width: 144px; height: 144px; }
+  #eric, #links { width: 46%; }
+  #status, #computer { width: 32%; right: 5%; }
+  #computer { top: 34%; max-height: 48%; }
+  #links { top: 38%; }
+  .warning-note { display: block; position: absolute; right: 0; bottom: 0; width: 32%; margin: 0; }
+  .site-info { display: block; position: absolute; left: 49%; bottom: 18px; padding: 0; }
+}
+@media (max-width: 1049px) {
+  .desktop-top { padding: 8px 12px; }
+  .desktop-workspace { grid-template-columns: 72px minmax(0, 1fr); padding: 4px 10px 8px; gap: 8px; }
+  .desktop-icons { gap: 2px; }
+  .desktop-icons > button { min-height: 54px; flex-basis: 54px; gap: 2px; }
+  .masthead-main { padding: 10px; }
+  .masthead-main h1 { font-size: 26px; }
+  .masthead-stickers, .masthead-main > .desktop-computer, .motd, .site-footer { display: none; }
+  #eric { width: 60%; max-height: 58%; }
+  #status, #computer { width: 38%; }
+  #links { width: 60%; top: 62%; max-height: 38%; }
+}
+@media (max-width: 640px), (max-height: 560px) {
+  .desktop-workspace { grid-template-columns: 72px minmax(0, 1fr); }
+  .desktop-icons { flex-wrap: nowrap; justify-content: space-between; gap: 0; }
+  .desktop-icons > button { flex: 0 1 auto; min-height: 0; padding: 1px; font-size: 9px; gap: 0; }
+  .desktop-icons > button .system-icon { width: 24px; height: 24px; }
+  .desktop-top > span:last-child, .masthead, .blinkie-shelf, .site-footer { display: none; }
+  .desktop-hint { font-size: 9px; margin: 0 0 8px; }
+  #eric { width: 94%; top: 0; max-height: 74%; }
+  #status { width: 94%; top: 40px; max-height: 66%; }
+  #computer { width: 94%; top: 80px; max-height: calc(100% - 80px); }
+  #links { width: 94%; left: 0; top: auto; bottom: 8px; max-height: 45%; }
+  #projects, #minecraft, #terminal { left: 0; top: 0; width: 100%; max-height: 100%; }
+}
+#desktop .window.maximized {
+  position: fixed;
+  inset: -4px -4px calc(var(--taskbar-height) - 4px);
+  width: auto;
+  max-height: none;
+}
+@media (min-width: 1050px) {
+  #status { max-height: 38%; }
+  #computer { top: 41%; max-height: 59%; }
+  .blinkie-shelf { left: 56%; top: 0; bottom: auto; flex-direction: column; gap: 8px; }
+}
+@media (min-height: 850px) and (min-width: 1050px) {
+  .desktop-workspace { grid-template-columns: 76px minmax(0, 1fr); }
+}
+@media (min-width: 1700px) and (min-height: 950px) {
+  #computer { top: 34%; max-height: 48%; }
+  .blinkie-shelf { left: 49%; }
+}

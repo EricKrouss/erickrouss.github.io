@@ -88,8 +88,8 @@ button.text-link:hover {
   color: #a25424;
 }
 ::selection {
-  background: #ebc475;
-  color: #162d3b;
+  background: #000080;
+  color: #fff;
 }
 .desktop {
   min-height: 100vh;

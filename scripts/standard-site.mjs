@@ -1,3 +1,4 @@
+import { postText } from "../src/blogFormatting.js";
 import { blogPosts } from "../src/blogPosts.js";
 
 export const publication = {
@@ -25,9 +26,7 @@ export function documentRecord(post, publicationUri = publication.url) {
     ...(post.updatedAt ? { updatedAt: post.updatedAt } : {}),
     ...(post.excerpt ? { description: post.excerpt } : {}),
     tags: [post.category],
-    textContent: post.body
-      .flatMap((block) => [block.heading, ...block.paragraphs].filter(Boolean))
-      .join("\n\n"),
+    textContent: postText(post),
   };
 }
 export function records(publicationUri) {

@@ -98,3 +98,12 @@ Extraction coordinates, sources and hashes are recorded in `docs/window-asset-pr
 - Visually inspected desktop and 390px/320px mobile layouts. At 320px the blog is 312px wide, stays in the viewport, and introduces no document horizontal overflow. No browser exceptions were recorded during the production checks.
 - Four Node tests passed: exact article export, idempotent publishing/conflict rejection using a simulated PDS, generated verification links and no-JavaScript content, and refusal to publish without credentials.
 - Live AT Protocol publishing was not performed. Repository secrets were empty at verification time. The workflow supports authenticated publication once `ATPROTO_IDENTIFIER` and `ATPROTO_APP_PASSWORD` are configured (with `ATPROTO_PDS` for a custom host). No GitHub Pages deployment was performed for this change.
+
+## Local Blog Express composer — September 15, 2026
+
+- Added dev-only compose/edit, title/date/category fields, rich headings and inline formatting, bullets/numbered lists, category creation, article dragging, and right-click Edit/Delete. Save writes the shared JSON source; deletion queues the stable Standard.site identity for the next deployment.
+- All 11 focused Node tests pass, covering disk persistence, stable article identities, concurrent-save conflicts, rich-text sanitization, categories, delete ownership/idempotence, local HTTP access, production-preview isolation, and existing Standard.site behavior.
+- Chromium checks used a temporary project copy: created a post and folder, edited and reopened rich formatting, moved the post with real pointer dragging, and deleted it through the right-click confirmation. Its local deletion queue was verified. The actual project still contains only Welcome.
+- The temporary rich article generated static HTML with headings and bold list items, plus a Standard.site text export. Production build passed; compiled assets contain no composer, development endpoint, or editor CSS.
+- Composer uses the existing title-bar bitmap and close-button assets. Verified the close button is two pixels from the caption's right edge at desktop size; mobile uses the site's shared enlarged controls. At 390px, the composer has no horizontal overflow.
+- Remote publication/deletion was not performed for these authoring checks. Saved project changes still need commit/push to enter the deployment workflow.

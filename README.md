@@ -59,7 +59,15 @@ Pushing to `main` publishes the website through this workflow. The optional priv
 
 Open **Blog** from the desktop, Start → Programs, or `open blog` in the terminal. The Outlook Express-inspired reader has searchable/sortable articles, category folders, saved articles, local read history, and permanent article URLs. Drag its bottom-right grip to resize it; a focused grip also accepts arrow keys. Maximize/restore preserves the chosen dimensions. Tidy desktop resets its size and closes the blog.
 
-Edit `src/blogPosts.js` to add posts. Use a unique, stable lowercase slug and a permanent `recordKey` from `npm run blog:new-key`; the build creates `/blog/<slug>/index.html` so direct links work on GitHub Pages. Body blocks contain an optional `heading` and plain-text `paragraphs`. Set `publishedAt` to an ISO timestamp if more precision than the date is needed, and `updatedAt` when editing a published article. The initial Welcome article contains exactly: “This is where my blogs will be”.
+### Write articles locally
+
+Run `npm run dev` and open the localhost URL. In **Blog → Articles → Compose new mail…**, enter a title, date, category, and article text. The classic formatting toolbar supports headings, bold, italic, underline, bullet points, and numbered lists. Type a new category to create a folder, or choose **New category…** from Articles.
+
+**Save to project** writes `src/blogData.json` on disk. Commit and push that file with your site changes to deploy it through the existing GitHub Pages and Standard.site workflow. Saving does not automatically publish. The composer and filesystem API exist only in the local Vite development server; production and preview are read-only.
+
+Right-click an article for **Edit article…** or **Delete article…**. Editing preserves its permanent URL and Standard.site record key. Drag an article onto a category folder to move and save it, or change its category in the editor. Right-click an empty category to delete it. Article deletion is confirmed before saving and queues its Standard.site record for removal on the next deployment.
+
+You can also edit `src/blogData.json` directly. Each post has a stable slug and `recordKey` (generated automatically by the composer, or manually with `npm run blog:new-key`). The build creates `/blog/<slug>/index.html`. Body blocks support headings, paragraphs, inline formatting runs, and ordered/unordered lists. `src/blogPosts.js` exports the shared data to the reader and publishing scripts. The Welcome article contains exactly: “This is where my blogs will be”.
 
 ### Standard.site publishing
 
@@ -70,7 +78,7 @@ Every build emits a `site.standard.document` JSON export per article in `/standa
 - The Pages workflow then publishes/updates the publication and each article before building. Stable record keys prevent duplicate articles. A conflicting record from another site stops the run.
 - To publish locally, set those same environment variables and run `npm run blog:publish`, then `npm run build`. The publisher writes only public AT-URIs to `standard-site-records.json`; retain that file for builds outside CI.
 - After authenticated publishing, the build emits `/.well-known/site.standard.publication` and the article’s `rel="site.standard.document"` link in its static HTML. Deploy `dist/` to complete website verification. Failed publication/build/deployment may leave records unverified until the next successful deployment.
-- The publisher does not create Bluesky feed posts or delete records for removed articles.
+- The publisher does not create Bluesky feed posts. It deletes only article records explicitly queued in `deletedPosts` by the editor; removing a post manually without a deletion entry leaves its remote record intact.
 
 Validation: `node --test scripts/standard-site.test.mjs` covers exact article content, repeat publication, record conflicts, verification pages and missing credentials. Tests use a simulated PDS; live publishing requires the account secrets above.
 
