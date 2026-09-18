@@ -15,7 +15,7 @@ Unmodified RGB crop boxes (left, top, right exclusive, bottom exclusive):
 | title-active   | Notepad | 4, 4, 476, 5     |
 | title-inactive | Desktop | 253, 12, 630, 13 |
 
-The archive documents these as captures of actual Windows 98 and Windows 98 SE. The desktop caption is 18 pixels tall, with 16×14 controls. A four-pixel window frame places the title at x=4, y=4. Close has a two-pixel gap. On phones, the button artwork scales to 32×28 with nearest-neighbor rendering.
+The archive documents these as captures of actual Windows 98 and Windows 98 SE. The desktop caption is 18 pixels tall, with 16×14 controls. A four-pixel window frame places the title at x=4, y=4. Close has a two-pixel gap. On phones, each caption button has a 32×32 touch target containing a 28×24 face with classic one-pixel bevel edges. CSS crops the native glyph from the unchanged 16×14 bitmap, excluding its two-pixel frame, and displays it without scaling. Pressing the button insets the face and shifts the glyph one pixel down and right. Desktop controls still display the complete original 16×14 bitmap.
 
 Restore comes from the original Microsoft Marlett 1.00 font extracted with `cabextract -F marlett.ttf` from the archived `WIN98_49.CAB` at https://www.okpb.cz/REG/WIN98/. Microsoft identifies version 1.00 as the Windows 98 font at https://learn.microsoft.com/en-us/typography/font-list/marlett. Neither the cabinet nor font is bundled in the site.
 

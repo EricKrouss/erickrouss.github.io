@@ -27,6 +27,9 @@ const programs = [
   ["iexplore", "ie"],
 ];
 const programNames = programs.map(([name]) => name);
+// Keep in sync with the touch layout in mobile.css.
+const mobileDesktop = () =>
+  matchMedia("(max-width: 820px), (max-width: 1049px) and (pointer: coarse)").matches;
 const defaultClosed = ["projects", "minecraft", "terminal", "iexplore", "blog"];
 const initialLines = [
   { text: "Microsoft(R) Windows 98" },
@@ -82,7 +85,9 @@ function Window({
   const drag = useRef(null);
   const content = useRef(null);
   const startDrag = (e) => {
-    if (maximized || e.target.closest("button") || e.button !== 0) return;
+    if (
+      mobileDesktop() || maximized || e.target.closest("button") || e.button !== 0
+    ) return;
     const rect = e.currentTarget.closest("section").getBoundingClientRect();
     drag.current = {
       x: e.clientX,
@@ -629,7 +634,9 @@ export default function App() {
   const [soundVolume, setSoundVolume] = useState(readVolumePreference);
   const playSound = useSystemSounds(soundEnabled, soundVolume);
   const shownWindows = useRef(null);
-  const [active, setActive] = useState("computer");
+  const [active, setActive] = useState(() =>
+    mobileDesktop() ? "eric" : "computer",
+  );
   const [minimized, setMinimized] = useState([]);
   const [closed, setClosed] = useState(defaultClosed);
   const [maximized, setMaximized] = useState([]);
@@ -747,6 +754,11 @@ export default function App() {
     requestAnimationFrame(() => {
       const el = document.getElementById(id);
       el?.focus({ preventScroll: true });
+      if (mobileDesktop() && el && getComputedStyle(el).position !== "fixed")
+        el.scrollIntoView({ block: "start", behavior: "instant" });
+      document.querySelector(`[data-program="${id}"]`)?.scrollIntoView({
+        block: "nearest", inline: "nearest", behavior: "instant",
+      });
     });
   };
   const resetDesktop = () => {
@@ -757,8 +769,9 @@ export default function App() {
     setMinimized([]);
     setClosed(defaultClosed);
     setMaximized([]);
-    setActive("computer");
+    setActive(mobileDesktop() ? "eric" : "computer");
     setMenu(false);
+    if (mobileDesktop()) document.querySelector(".desktop")?.scrollTo(0, 0);
   };
   const finishMinimize = (id) => {
     shownWindows.current = null;
@@ -782,6 +795,7 @@ export default function App() {
       setMinimized(programNames.filter((name) => !closed.includes(name)));
       setActive(null);
       window.scrollTo({ top: 0, behavior: "instant" });
+      document.querySelector(".desktop")?.scrollTo(0, 0);
     }
   };
   const restart = () => {

@@ -89,6 +89,132 @@
         }
       ],
       "updatedAt": "2026-09-15T19:33:11.386Z"
+    },
+    {
+      "slug": "my-thoughts-on-ai-ai-coding",
+      "recordKey": "3mvsfxk6oc232",
+      "title": "My Thoughts On AI & AI Coding",
+      "category": "Memos & Thoughts",
+      "date": "2026-09-18",
+      "author": "Eric Krouss",
+      "body": [
+        {
+          "heading": "I grew up with a severe learning disability/processing disorder. While I know how to code alright, the uphill battle that came with that education was grueling.",
+          "level": 2
+        },
+        {
+          "paragraphs": [
+            "When people ask me to describe my learning disability I tell them "
+          ],
+          "richText": [
+            [
+              {
+                "text": "When people ask me to describe my learning disability I tell them "
+              }
+            ]
+          ]
+        },
+        {
+          "paragraphs": [
+            "\"Where most peoples' brains work like an eight lane highway, my brain functions like it has only one lane.\" "
+          ],
+          "richText": [
+            [
+              {
+                "text": "\"Where most peoples' brains work like an eight lane highway, my brain functions like it has only one lane.\" ",
+                "italic": true
+              }
+            ]
+          ]
+        },
+        {
+          "paragraphs": [
+            "This makes things like instruction following, keeping track of things, etc. very difficult.\nWhile I learned to work around it as an adult, it's still something that makes life more work for me than most."
+          ],
+          "richText": [
+            [
+              {
+                "text": "This makes things like instruction following, keeping track of things, etc. very difficult.\nWhile I learned to work around it as an adult, it's still something that makes life more work for me than most."
+              }
+            ]
+          ]
+        },
+        {
+          "heading": "The Intelligence Explosion",
+          "level": 2
+        },
+        {
+          "paragraphs": [
+            "I was one of the first 100,000 people to try ChatGPT, and right away I knew it would change the world. I didn't know if it would be for better or for worse but I knew it would be something monumental.\n\nFast forward to 2026, and it's a part of my work and personal life in a way I never thought possible. Tasks that used to be more grueling for me than most, I can now condense into bite sized digestible information that's easy for me to comprehend.\n\n"
+          ],
+          "richText": [
+            [
+              {
+                "text": "I was one of the first 100,000 people to try ChatGPT, and right away I knew it would change the world. I didn't know if it would be for better or for worse but I knew it would be something monumental.\n\nFast forward to 2026, and it's a part of my work and personal life in a way I never thought possible. Tasks that used to be more grueling for me than most, I can now condense into bite sized digestible information that's easy for me to comprehend.\n\n"
+              }
+            ]
+          ]
+        },
+        {
+          "heading": "The Art Machine",
+          "level": 2
+        },
+        {
+          "paragraphs": [
+            "\nCreating software, big and small became far more feasible, and with AI I discovered a passion for creating human-instructed & fine-tuned software. I've always had the eye of an artist, even at a young age. My great-uncle was Jimmy Carter's photographer, and his father was FDR's, Truman's and Kennedy's. I believe because of those people, illustrating, writing and photography have always come naturally to me.\n\nAnd despite being right-brained the same time I've always loved computers. In 2004, at a young age, I used to get up at 5:00 AM before school, sneak over to the family computer and log on to RuneScape which is where I learned to type.\n\nBeing able to describe exactly what I want, in plain English to a computer, and have it spit it out almost exactly how I want it with the ability to fine tune it to my preferences, has been one of the most liberating technological moments of my life. "
+          ],
+          "richText": [
+            [
+              {
+                "text": "\nCreating software, big and small became far more feasible, and with AI I discovered a passion for creating human-instructed "
+              },
+              {
+                "text": "&"
+              },
+              {
+                "text": " fine-tuned software. I've always had the eye of an artist, even at a young age. My great-uncle was Jimmy Carter's photographer, and his father was FDR's, Truman's and Kennedy's. I believe because of those people, illustrating, writing and photography have always come naturally to me.\n\nAnd despite being right-brained the same time I've always loved computers. In 2004, at a young age, I used to get up at 5:00 AM before school, sneak over to the family computer and log on to RuneScape which is where I learned to type.\n\nBeing able to describe exactly what I want, in plain English to a computer, and have it spit it out almost exactly how I want it with the ability to fine tune it to my preferences, has been one of the most liberating technological moments of my life. "
+              }
+            ]
+          ]
+        },
+        {
+          "paragraphs": [
+            "Let me be clear, I don't believe AI generated imagery and videos should be considered art. "
+          ],
+          "richText": [
+            [
+              {
+                "text": "Let me be clear, I don't believe AI generated imagery and videos should be considered art. "
+              }
+            ]
+          ]
+        },
+        {
+          "paragraphs": [
+            "I still create pixel art, draw, and photograph my work by hand, but when it comes to code, I find it miraculous being naturally able to converse with a machine, and it being able to understand exactly what I want in the only ways my broken brain knows how to convey it.\n\nI know this stance may be considered controversial, as AI is a controversial tool. But for someone like me, it's a super power, that's helped me overcome a lifelong handicap. "
+          ],
+          "richText": [
+            [
+              {
+                "text": "I still create pixel art, draw, and photograph my work by hand, but when it comes to code, I find it miraculous being naturally able to converse with a machine, and it being able to understand exactly what I want in the only ways my broken brain knows how to convey it.\n\nI know this stance may be considered controversial, as AI is a controversial tool. But for someone like me, it's a super power, that's helped me overcome a lifelong handicap. "
+              }
+            ]
+          ]
+        },
+        {
+          "paragraphs": [
+            "I'm not sure if it'll come across as an excuse or me attempting to justify the use of controversial technologies, but I just wanted to share how it's helped someone like me do more of the things I've loved for almost 30 years, far more effectively."
+          ],
+          "richText": [
+            [
+              {
+                "text": "I'm not sure if it'll come across as an excuse or me attempting to justify the use of controversial technologies, but I just wanted to share how it's helped someone like me do more of the things I've loved for almost 30 years, far more effectively."
+              }
+            ]
+          ]
+        }
+      ],
+      "updatedAt": "2026-09-18T14:47:38.733Z"
     }
   ],
   "deletedPosts": []

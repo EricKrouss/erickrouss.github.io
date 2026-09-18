@@ -412,70 +412,6 @@
     height: calc(100dvh - var(--taskbar-height) - 20px);
   }
 }
-@container blog-window (max-width: 700px) {
-  .blog-workspace {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr);
-  }
-  .blog-sidebar {
-    max-height: 100px;
-  }
-  .blog-sidebar nav {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 2px;
-  }
-  .blog-sidebar nav button,
-  .blog-sidebar nav .blog-category {
-    width: auto;
-    padding: 5px 7px;
-  }
-  .blog-folder-root,
-  .blog-sidebar-note,
-  .blog-pane-caption,
-  .blog-wordmark,
-  .blog-menubar-note,
-  .blog-toolbar-divider,
-  .blog-search > span,
-  .blog-header-category {
-    display: none;
-  }
-  .blog-toolbar {
-    justify-content: space-between;
-    gap: 0;
-    padding: 3px;
-  }
-  .blog-toolbar button {
-    min-width: 0;
-    padding: 3px;
-    font-size: 10px;
-  }
-  .blog-toolbar button img {
-    width: 24px;
-    height: 24px;
-  }
-  .blog-arrow {
-    height: 24px;
-    line-height: 24px;
-    font-size: 23px;
-  }
-  .blog-article-list {
-    height: 112px;
-  }
-  .blog-reading-pane {
-    padding: 18px;
-    font-size: 14px;
-  }
-  .blog-reading-pane h1 {
-    font-size: 24px;
-  }
-  .blog-status > span:last-child {
-    display: none;
-  }
-  .blog-article-header {
-    padding: 5px 8px;
-  }
-}
 @media (max-height: 550px) {
   .blog-article-list {
     height: 72px;
@@ -564,4 +500,129 @@
 }
 .blog-drafts-folder {
   margin: 6px;
+}
+
+/* A compact Outlook view switches panes instead of shrinking the message. */
+.blog-pane-navigation,
+.blog-folder-picker,
+.blog-article-summary {
+  display: none;
+}
+@container blog-window (max-width: 900px) {
+  .blog-express { font-size: 12px; }
+  .blog-sidebar,
+  .blog-wordmark,
+  .blog-menubar-note,
+  .blog-toolbar-divider,
+  .blog-search > span,
+  .blog-header-category { display: none; }
+  .blog-menubar { min-height: 30px; }
+  .blog-menu > button { min-height: 28px; padding: 4px 10px; }
+  .blog-dropdown button { min-height: 34px; }
+  .blog-toolbar { gap: 2px; padding: 4px; }
+  .blog-toolbar button {
+    flex: 1;
+    min-width: 0;
+    padding: 4px 2px;
+    font-size: 10px;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+  .blog-toolbar button img { width: 24px; height: 24px; }
+  .blog-arrow { height: 24px; line-height: 24px; font-size: 23px; }
+  .blog-pane-navigation {
+    display: flex;
+    gap: 3px;
+    padding: 5px 4px 0;
+    flex: none;
+    border-bottom: 1px solid #808080;
+  }
+  .blog-pane-navigation button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex: 1;
+    min-height: 36px;
+    padding: 5px;
+    box-shadow: inset 1px 1px #fff, inset -1px 0 #808080;
+  }
+  .blog-pane-navigation button[aria-pressed="true"] {
+    background: #dfdfdf;
+    font-weight: bold;
+    box-shadow: inset 1px 1px #fff, inset -1px 0 #808080, inset 0 -2px #000080;
+  }
+  .blog-folder-picker {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px 7px;
+    flex: none;
+  }
+  .blog-folder-picker select {
+    flex: 1;
+    min-width: 0;
+    height: 34px;
+    padding: 3px;
+    border: 2px inset #eee;
+    border-radius: 0;
+    background: #fff;
+    color: #000;
+    font: 16px var(--shell-font);
+  }
+  .blog-search { padding: 7px 8px 4px; gap: 6px; }
+  .blog-search input { min-height: 34px; font-size: 16px; }
+  .blog-search button { min-height: 34px; }
+  .blog-workspace { display: flex; padding: 4px 4px 0; }
+  .blog-main { flex: 1; }
+  .blog-folder-heading { padding: 7px; gap: 5px; }
+  .blog-folder-heading strong { min-width: 0; overflow-wrap: anywhere; }
+  .blog-folder-heading span { flex-shrink: 0; font-size: 11px; }
+  .blog-article-list { flex: 1; height: auto; min-height: 0; }
+  .blog-article-list table { table-layout: fixed; }
+  .blog-article-list th:not(:first-child),
+  .blog-article-list td:not(:first-child) { display: none; }
+  .blog-article-list th button { min-height: 30px; }
+  .blog-article-list td button {
+    display: grid;
+    grid-template-columns: 16px minmax(0, 1fr) auto;
+    gap: 5px 8px;
+    padding: 12px 9px;
+    border-bottom: 1px solid #dfdfdf;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    font-size: 14px;
+  }
+  .blog-article-summary {
+    display: block;
+    grid-column: 2;
+    grid-row: 2;
+    font-size: 11px;
+    font-weight: normal;
+  }
+  .blog-article-list [aria-label="Saved"] { grid-column: 3; grid-row: 1; }
+  .blog-article-header { margin-top: 0; padding: 7px 9px; font-size: 11px; }
+  .blog-article-header strong { min-width: 0; overflow-wrap: anywhere; }
+  .blog-article-header > div > span:first-child { width: 58px; }
+  .blog-reading-pane { padding: 20px 18px; font-size: 16px; line-height: 1.65; }
+  .blog-reading-pane h1 { font-size: 27px; }
+  .blog-reading-pane h2 { font-size: 21px; }
+  .blog-status { font-size: 10px; padding-right: 3px; }
+  .blog-status > span { min-width: 0; overflow-wrap: anywhere; }
+  .blog-status > span:last-child { display: none; }
+  [data-pane="read"] .blog-search,
+  [data-pane="read"] .blog-folder-picker,
+  [data-pane="read"] .blog-folder-heading,
+  [data-pane="read"] .blog-article-list,
+  [data-pane="articles"] .blog-article-header,
+  [data-pane="articles"] .blog-reading-pane { display: none; }
+}
+@media (max-height: 500px) {
+  .blog-article-header { display: flex; flex-wrap: wrap; gap: 4px 18px; padding: 4px 9px; }
+  .blog-article-header > div > span:first-child { width: auto; }
+  .blog-article-header > div:last-child { display: none; }
+  .blog-reading-pane { padding: 14px 18px; }
+  .blog-reading-pane h1 { font-size: 24px; margin-bottom: 12px; }
+  .blog-reading-pane h2 { font-size: 19px; margin-top: 16px; }
 }

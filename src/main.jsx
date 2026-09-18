@@ -16,3 +16,4 @@ import "./scrollbars.css";
 import "./blog.css";
 
 import "./desktop.css";
+import "./mobile.css";

@@ -102,7 +102,11 @@ export default function BlogExpress({ visible, showNotice }) {
   const [sort, setSort] = useState({ key: "date", ascending: false });
   const [menu, setMenu] = useState(null);
   const [message, setMessage] = useState("");
+  const [pane, setPane] = useState(() =>
+    linkedPost() ? "read" : "articles",
+  );
   const root = useRef(null);
+  const paneNavigation = useRef(null);
   const search = useRef(null);
   const readingPane = useRef(null);
   const post = blogPosts.find((item) => item.slug === selected);
@@ -137,13 +141,16 @@ export default function BlogExpress({ visible, showNotice }) {
     }
   }, [reader]);
   useEffect(() => {
-    if (visible && selected)
+    if (
+      visible && selected &&
+      (pane === "read" || !paneNavigation.current?.offsetParent)
+    )
       setReader((old) =>
         old.read.includes(selected)
           ? old
           : { ...old, read: [...old.read, selected] },
       );
-  }, [visible, selected]);
+  }, [visible, selected, pane]);
   useEffect(() => {
     const followLink = () => {
       const next = linkedPost(blogPosts);
@@ -151,6 +158,7 @@ export default function BlogExpress({ visible, showNotice }) {
         setSelected(next.slug);
         setFolder("All articles");
         setQuery("");
+        setPane("read");
       }
     };
     window.addEventListener("hashchange", followLink);
@@ -195,6 +203,17 @@ export default function BlogExpress({ visible, showNotice }) {
   }, []);
 
   const suppressArticleClick = useRef(false);
+  function showReadingPane() {
+    setPane("read");
+    requestAnimationFrame(() => {
+      if (paneNavigation.current?.offsetParent)
+        readingPane.current?.focus({ preventScroll: true });
+    });
+  }
+  function findArticles() {
+    setPane("articles");
+    requestAnimationFrame(() => search.current?.focus());
+  }
   function openArticle(item) {
     if (suppressArticleClick.current) return;
     setSelected(item.slug);
@@ -205,11 +224,13 @@ export default function BlogExpress({ visible, showNotice }) {
     );
     history.pushState(null, "", `/blog/${item.slug}/`);
     setMessage("");
+    showReadingPane();
   }
   function chooseFolder(name) {
     setFolder(name);
     setQuery("");
     setMenu(null);
+    setPane("articles");
   }
   function toggleSaved() {
     if (!post) return;
@@ -264,6 +285,7 @@ export default function BlogExpress({ visible, showNotice }) {
               !post,
             ],
             ["New category…", () => setComposer({ mode: "category" })],
+            ["Open drafts…", () => setComposer({ mode: "drafts" })],
           ]
         : []),
       ["All articles", () => chooseFolder("All articles")],
@@ -297,6 +319,7 @@ export default function BlogExpress({ visible, showNotice }) {
   return (
     <div
       className="blog-express"
+      data-pane={pane}
       ref={root}
       onKeyDown={(event) => {
         if (event.key === "Escape") {
@@ -387,7 +410,7 @@ export default function BlogExpress({ visible, showNotice }) {
           <Icon name="network" size={32} />
           <span>Copy link</span>
         </button>
-        <button onClick={() => search.current?.focus()}>
+        <button onClick={findArticles}>
           <Icon name="search" size={32} />
           <span>Find</span>
         </button>
@@ -400,6 +423,14 @@ export default function BlogExpress({ visible, showNotice }) {
           </span>
         </div>
       </div>
+      <nav className="blog-pane-navigation" aria-label="Blog view" ref={paneNavigation}>
+        <button aria-pressed={pane === "articles"} aria-controls="blog-article-list" onClick={() => setPane("articles")}>
+          <Icon name="folder" /> Articles <span>({filtered.length})</span>
+        </button>
+        <button aria-pressed={pane === "read"} aria-controls="blog-reading-pane" disabled={!post} onClick={showReadingPane}>
+          <Icon name="note" /> Read article
+        </button>
+      </nav>
       <form
         className="blog-search"
         onSubmit={(event) => event.preventDefault()}
@@ -420,6 +451,17 @@ export default function BlogExpress({ visible, showNotice }) {
           </button>
         )}
       </form>
+      <div className="blog-folder-picker">
+        <Icon name="folder" />
+        <label htmlFor="blog-folder">Folder:</label>
+        <select id="blog-folder" value={folder} onChange={(event) => chooseFolder(event.target.value)}>
+          {["All articles", "Unread articles", "Saved articles", ...categories].map((name) => (
+            <option key={name} value={name}>
+              {name} ({blogPosts.filter((item) => matchesFolder(item, name)).length})
+            </option>
+          ))}
+        </select>
+      </div>
       <div className="blog-workspace">
         <aside className="blog-sidebar">
           <div className="blog-pane-caption">
@@ -507,6 +549,7 @@ export default function BlogExpress({ visible, showNotice }) {
           </div>
           <div
             className="blog-article-list"
+            id="blog-article-list"
             tabIndex={0}
             aria-label="Scrollable article list"
           >
@@ -621,6 +664,7 @@ export default function BlogExpress({ visible, showNotice }) {
                       >
                         <Icon name="note" />
                         <span>{item.title}</span>
+                        <small className="blog-article-summary">{item.category} · {formatDate(item.date)}</small>
                         {reader.saved.includes(item.slug) && (
                           <span aria-label="Saved">★</span>
                         )}
@@ -671,6 +715,7 @@ export default function BlogExpress({ visible, showNotice }) {
               </header>
               <article
                 className="blog-reading-pane"
+                id="blog-reading-pane"
                 ref={readingPane}
                 tabIndex={0}
                 aria-label={`Read ${post.title}`}

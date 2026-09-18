@@ -832,6 +832,11 @@ body:has(.retro-dialog[open]) .window > .title-bar {
 .title-bar .window-control:active {
   background-image: var(--caption-button-pressed);
 }
+.title-bar .window-control { cursor: default; }
+.title-bar .window-control:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -4px;
+}
 .window-control.minimize {
   --caption-button: url("/assets/window-controls/minimize.png");
   --caption-button-pressed: url("/assets/window-controls/minimize-pressed.png");

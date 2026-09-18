@@ -127,3 +127,12 @@ Extraction coordinates, sources and hashes are recorded in `docs/window-asset-pr
 - Speaker icon opens a compact vertical slider and Mute checkbox. Keyboard Home/End/arrows adjust page volume; Escape, outside pointer input, and focus leaving the popup dismiss it.
 - Master volume persists separately from mute and scales system sounds, startup audio, and embedded native/YouTube video without replacing the player's own volume setting.
 - Chromium checks passed for slider changes while muted, unmute, native player/master volume multiplication, Escape dismissal, and persisted volume after reload. Simulated YouTube API checks passed for scaling, master mute, unmute, and preserving player volume zero. Production build and player syntax check passed.
+
+## Mobile layout and caption controls — September 16, 2026
+
+- Production build and all 12 existing blog/editor/publishing tests pass. Checked the built site through `npm run preview`; these changes are local, with no deployment performed.
+- Chromium checks passed at 320×568, 390×844, 430×932, 768×1024, 820×1180, 844×390 (touch emulation), and 1440×1000. Homepage windows stack at the full available width on small screens, without overlap or horizontal page overflow. All nine shortcuts remain available.
+- Blog folder filtering, text search (including no results), opening an article, reading-pane scrolling, saving, reload persistence, direct article URLs, and focus after switching panes passed. Narrow views use 16px article text. Wide desktop views retain the simultaneous folder/list/message arrangement. No browser exceptions or broken visible images were found in these checks.
+- Maximize, minimize, taskbar restoration, restore-down, and close passed for all seven homepage windows at phone and desktop widths; representative controls also passed at the other sizes. Desktop title bars remain 18px with the unchanged 16×14 bitmap controls. Mobile controls use unscaled glyph pixels, thin bevels, and 32×32 touch targets.
+- Screenshots were inspected for the homepage, article list, reading view, desktop, and short landscape layout. This verifies browser emulation, not physical iOS/Android devices.
+- Additional shell checks passed: all nine programs accessible through Start, taskbar overflow with all programs open, Blog/IE maximize/minimize/restore/close, keyboard minimize, disabled touch dragging, preserved desktop mouse dragging, and switching a selected article between phone and desktop widths without losing it.

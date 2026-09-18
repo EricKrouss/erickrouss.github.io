@@ -1,0 +1,144 @@
+/* Keep the desktop furniture, but let small screens read like a homepage.
+   App.jsx uses this same breakpoint to disable dragging and reveal shortcuts. */
+@media (max-width: 820px), (max-width: 1049px) and (pointer: coarse) {
+  :root { --taskbar-height: calc(46px + env(safe-area-inset-bottom, 0px)); }
+  .desktop {
+    display: block;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-bottom: calc(var(--taskbar-height) + 12px);
+    scroll-padding-top: 8px;
+  }
+  .desktop-top { padding: 12px 12px 8px; font-size: 10px; }
+  .desktop-top > span:last-child { display: none; }
+  .desktop-workspace {
+    display: block;
+    padding: 0 max(10px, env(safe-area-inset-right)) 0 max(10px, env(safe-area-inset-left));
+  }
+  .desktop-icons {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px 4px;
+    padding: 6px 0 12px;
+  }
+  .desktop-icons > button {
+    width: 100%;
+    min-height: 66px;
+    padding: 3px 0;
+    gap: 4px;
+    font-size: 10px;
+    line-height: 1.25;
+  }
+  .desktop-icons > button .system-icon { width: 32px; height: 32px; }
+  .site-surface { display: block; }
+  .masthead, .dock-note, .warning-note, .site-info { display: none; }
+  .desktop-hint { margin: 0 0 8px; gap: 8px; font-size: 10px; }
+  .desktop-hint button { min-height: 32px; flex-shrink: 0; }
+  .window-grid { display: flex; flex-direction: column; gap: 14px; }
+  .window-column, .bottom-grid { display: contents; }
+  #desktop .window-grid .window:not(.maximized) {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+    max-height: none;
+    margin: 0;
+    transform: none !important;
+    scroll-margin-top: 8px;
+  }
+  .window-grid .window:not(.maximized) > .window-body { flex: auto; }
+  .window .title-bar { touch-action: pan-y; cursor: default; }
+  .title-bar { height: 36px; min-height: 36px; font-size: 12px; padding: 0 2px 0 4px; }
+  .title-bar h2 { flex: 1; }
+  .title-grip { display: none; }
+  .window-content { padding: 16px; }
+  .window-content > p { font-size: 14px; line-height: 1.65; }
+  .profile-top { gap: 12px; }
+  .profile-top > div:last-child { min-width: 0; }
+  .profile-top h3 { font-size: clamp(22px, 6vw, 28px); }
+  .avatar { width: 72px; flex-shrink: 0; }
+  .profile-links { flex-wrap: wrap; gap: 8px 18px; }
+  .profile-links a { min-height: 32px; display: inline-flex; align-items: center; }
+  .project-name { flex-wrap: wrap; gap: 4px; }
+  .spec-list dd, .status-list dd { min-width: 0; overflow-wrap: anywhere; }
+  .file-toolbar { flex-wrap: wrap; gap: 5px 12px; }
+  .window-footer { flex-wrap: wrap; gap: 3px 6px; }
+  .blinkie-shelf {
+    position: static;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    margin: 0;
+    order: 1;
+  }
+  .site-footer { display: flex; margin: 16px 0 4px; font-size: 10px; }
+  .desktop > .blog-window,
+  .desktop > .ie-window {
+    position: fixed;
+    inset: max(6px, env(safe-area-inset-top)) 6px calc(var(--taskbar-height) + 6px);
+    width: auto !important;
+    height: auto !important;
+    max-height: none;
+    transform: none !important;
+  }
+  .desktop .window.maximized,
+  #desktop .window.maximized {
+    position: fixed;
+    inset: 0 0 var(--taskbar-height);
+    width: auto !important;
+    height: auto !important;
+    max-height: none;
+    transform: none !important;
+  }
+  .window-resize-handle { display: none; }
+  .taskbar {
+    height: var(--taskbar-height);
+    padding: 4px max(4px, env(safe-area-inset-right)) calc(4px + env(safe-area-inset-bottom)) max(4px, env(safe-area-inset-left));
+    gap: 4px;
+  }
+  .taskbar .start-button { height: 36px; width: 58px; min-width: 58px; }
+  .taskbar .quick-launch, .taskbar-divider { display: none; }
+  .task-buttons { overflow-x: auto; scrollbar-width: none; padding: 1px; }
+  .task-buttons button { height: 36px; min-width: 36px; flex: 1 0 36px; justify-content: center; }
+  .task-buttons button span { display: none; }
+  .taskbar-clock { height: 36px; flex-shrink: 0; padding: 0 6px; font-size: 10px; }
+  .taskbar-clock .sound-button { display: none; }
+  .start-menu { bottom: 40px; max-height: calc(100dvh - var(--taskbar-height) - 12px); }
+  .start-menu-items { overflow-y: auto; }
+  .start-submenu { position: static; width: auto; margin: 0 3px 5px 17px; }
+  .retro-dialog { max-width: calc(100vw - 20px); max-height: calc(100dvh - 20px); }
+  .retro-dialog .title-bar strong { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* Native-size glyph pixels and one-pixel bevels, with a 32px touch target.
+     Crop only the existing bitmap's two-pixel frame; never stretch its glyph. */
+  .title-bar .window-control,
+  .title-bar .window-control:active {
+    position: relative;
+    width: 32px;
+    min-width: 32px;
+    height: 32px;
+    background: none;
+    cursor: default;
+  }
+  .title-bar .window-control::before {
+    content: "";
+    position: absolute;
+    inset: 4px 2px;
+    background: #c0c0c0;
+    box-shadow: inset -1px -1px #000, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf;
+  }
+  .title-bar .window-control::after {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 10px;
+    left: 10px;
+    top: 11px;
+    background: var(--caption-button) center / 16px 14px no-repeat;
+    image-rendering: pixelated;
+  }
+  .title-bar .window-control:active::before {
+    box-shadow: inset 1px 1px #000, inset -1px -1px #fff, inset 2px 2px #808080, inset -2px -2px #dfdfdf;
+  }
+  .title-bar .window-control:active::after { transform: translate(1px, 1px); }
+  .window-control.close { margin-left: 2px; }
+}
