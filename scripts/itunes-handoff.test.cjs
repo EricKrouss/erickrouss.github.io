@@ -22,10 +22,14 @@ function context({ url = `${ORIGIN}/itunes-auth/?${new URLSearchParams({ callbac
   const elements = new Map(["status", "detail", "sign-in", "cancel"].map(id => [id, {
     disabled: true, textContent: "", dataset: {}, listeners: {}, addEventListener(name, handler) { this.listeners[name] = handler; },
   }]));
-  const calls = [], history = [], reports = [];
+  const calls = [], history = [], reports = [], windowEvents = new Map();
   const current = new URL(url);
   const window = {
     location: current,
+    addEventListener(name, handler) {
+      if (!windowEvents.has(name)) windowEvents.set(name, []);
+      windowEvents.get(name).push(handler);
+    },
     history: { replaceState(...args) { history.push(args); } },
     document: { getElementById: id => elements.get(id) },
     atob: value => Buffer.from(value, "base64").toString("binary"),
@@ -45,7 +49,8 @@ function context({ url = `${ORIGIN}/itunes-auth/?${new URLSearchParams({ callbac
     setTimeout: timers?.setTimeout || setTimeout, clearTimeout: timers?.clearTimeout || clearTimeout,
     console: window.console });
   vm.runInContext(shared, sandbox);
-  return { window, sandbox, elements, calls, history, reports,
+  return { window, sandbox, elements, calls, history, reports, windowEvents,
+    emitMessage: event => { for (const handler of windowEvents.get("message") || []) handler(event); },
     runAuth: () => vm.runInContext(auth, sandbox), runPlayer: () => vm.runInContext(player, sandbox) };
 }
 
@@ -176,6 +181,92 @@ test("sign-in failures identify the fixed stage without exposing SDK or callback
       assert.equal(c.elements.get("sign-in").disabled, true);
     } else assert.equal(c.elements.get("sign-in").disabled, false);
   }
+});
+
+test("authorization diagnostics distinguish popup rejection from AUTHORIZED followed by validation rejection", async () => {
+  for (const sawAuthorized of [false, true]) {
+    const listeners = new Map();
+    const music = {
+      addEventListener(name, handler) { listeners.set(name, handler); },
+      async authorize() {
+        const changed = listeners.get("authorizationStatusDidChange");
+        assert.equal(typeof changed, "function", "Observe the public event before opening authorization");
+        if (sawAuthorized) { changed({ authorizationStatus: 3 }); changed({ authorizationStatus: 0 }); }
+        throw { errorCode: "AUTHORIZATION_ERROR", reason: token, name: token,
+          get message() { throw new Error("Raw SDK messages must not be read"); },
+          get data() { throw new Error("Raw SDK data must not be read"); } };
+      },
+    };
+    const c = context({ music });
+    c.runAuth(); await settle();
+    assert.equal(typeof listeners.get("authorizationStatusDidChange"), "function");
+    await c.elements.get("sign-in").listeners.click();
+    assert.equal(c.elements.get("status").dataset.code,
+      sawAuthorized ? "authorization_validation_failed" : "authentication_failed");
+    assert.equal(c.elements.get("status").dataset.sdkCode, "AUTHORIZATION_ERROR");
+    assert(!c.calls.some(([url]) => url === callback));
+    assert(!JSON.stringify([...c.elements.values()].map(element => ({ text: element.textContent, data: element.dataset }))).includes(token));
+  }
+});
+
+test("SDK diagnostics allow only fixed enum values and reset the authorization observation on retry", async () => {
+  let changed, attempts = 0;
+  const music = {
+    addEventListener(_name, handler) { changed = handler; },
+    async authorize() {
+      if (++attempts === 1) changed({ authorizationStatus: 3 });
+      throw { errorCode: token, reason: token, name: token, message: token };
+    },
+  };
+  const c = context({ music });
+  c.runAuth(); await settle();
+  await c.elements.get("sign-in").listeners.click();
+  assert.equal(c.elements.get("status").dataset.code, "authorization_validation_failed");
+  assert.equal(c.elements.get("status").dataset.sdkCode, "UNKNOWN");
+  await c.elements.get("sign-in").listeners.click();
+  assert.equal(c.elements.get("status").dataset.code, "authentication_failed");
+  assert.equal(c.elements.get("status").dataset.sdkCode, "UNKNOWN");
+});
+
+test("popup diagnostics record only bounded allowlisted method names from the exact Apple origin during authorize", async () => {
+  let rejectAuthorization;
+  const c = context({ music: { authorize: () => new Promise((_, reject) => { rejectAuthorization = reject; }) } });
+  c.runAuth(); await settle();
+  assert.equal(c.windowEvents.get("message")?.length, 1);
+  const origin = "https://authorize.music.apple.com";
+  const emit = (method, extra = {}) => c.emitMessage({ origin, data: { jsonrpc: "2.0", method, ...extra } });
+  emit("authorize");
+  assert.equal(c.elements.get("status").dataset.popupEvents, undefined, "Ignore messages before an attempt");
+  const signing = c.elements.get("sign-in").listeners.click();
+  let sensitiveReads = 0;
+  const data = { jsonrpc: "2.0", method: "authorize" };
+  for (const field of ["params", "result", "error", "id", "token"]) {
+    Object.defineProperty(data, field, { get() { sensitiveReads++; throw new Error("Sensitive RPC field must not be read"); } });
+  }
+  c.emitMessage({ origin, data });
+  assert.equal(c.elements.get("status").dataset.popupEvents, "authorize");
+  assert.equal(sensitiveReads, 0);
+  for (const foreign of ["https://authorize.music.apple.com.attacker.example", "https://music.apple.com", origin + "/"]) {
+    c.emitMessage({ origin: foreign, get data() { sensitiveReads++; throw new Error("Foreign RPC data must not be read"); } });
+  }
+  c.emitMessage({ origin, data: { jsonrpc: 2, method: "close" } });
+  emit(token);
+  assert.equal(sensitiveReads, 0);
+  assert.equal(c.elements.get("status").dataset.popupEvents, "authorize");
+  const methods = ["close", "decline", "switchUserId", "thirdPartyInfo", "unavailable", "authorize", "close", "thirdPartyInfo", "authorize"];
+  for (const method of methods) emit(method);
+  const last = methods.slice(-8).join(",");
+  assert.equal(c.elements.get("status").dataset.popupEvents, last);
+  rejectAuthorization(new Error("offline rejection")); await signing;
+  emit("decline");
+  assert.equal(c.elements.get("status").dataset.popupEvents, last, "Ignore messages after authorize settles");
+  const retry = c.elements.get("sign-in").listeners.click();
+  assert.equal(c.elements.get("status").dataset.popupEvents, "");
+  assert.equal(c.windowEvents.get("message").length, 1, "Retry must not add another window listener");
+  emit("unavailable");
+  assert.equal(c.elements.get("status").dataset.popupEvents, "unavailable");
+  rejectAuthorization(new Error("offline retry rejection")); await retry;
+  assert(!JSON.stringify(c.elements.get("status").dataset).includes(token));
 });
 
 test("callback timeout permits sixty seconds for the local-network permission decision and emits only a fixed code", async () => {
