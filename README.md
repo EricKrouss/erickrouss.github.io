@@ -105,3 +105,17 @@ Run `node --test scripts/check-musickit.test.cjs` for credential-free checks.
 This integration validates developer signing only. It does not authorize an
 Apple Music subscriber or establish browser-to-client protected playback.
 GitHub Pages itself remains a static site.
+
+The iTunes client now opens `/itunes-auth/` for its own MusicKit authorization.
+That page returns the subscriber token only to the client's one-time, random
+loopback callback. `/itunes-player/` is the app-owned protected player; normal
+browser visits do not authorize or play music there. The native client owns its
+token-request bridge and displays the library, artwork and controls itself.
+
+`Refresh public MusicKit developer token` builds the static site and publishes
+a 24-hour developer JWT restricted to `https://erickrouss.github.io`, renewing
+every six hours. This public developer token is separate from the private
+signing key and subscriber tokens. The refresh never runs the article publisher.
+The regular site build also signs the developer-token document, so subsequent
+deployments retain the authentication route. No private signing key or subscriber
+token is written into Pages, repository files, or workflow logs.

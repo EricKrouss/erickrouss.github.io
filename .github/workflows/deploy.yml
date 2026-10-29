@@ -35,6 +35,12 @@ jobs:
             echo "Standard.site publishing is pending ATPROTO_APP_PASSWORD setup."
           fi
       - run: npm run build
+      - name: Sign the origin-bound public MusicKit token
+        env:
+          MUSICKIT_TEAM_ID: ${{ secrets.MUSICKIT_TEAM_ID }}
+          MUSICKIT_KEY_ID: ${{ secrets.MUSICKIT_KEY_ID }}
+          MUSICKIT_PRIVATE_KEY: ${{ secrets.MUSICKIT_PRIVATE_KEY }}
+        run: node scripts/build-musickit-public-token.cjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
