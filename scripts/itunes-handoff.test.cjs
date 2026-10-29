@@ -52,6 +52,17 @@ function context({ url = `${ORIGIN}/itunes-auth/?${new URLSearchParams({ callbac
 const settle = () => new Promise(resolve => setImmediate(resolve));
 const plain = value => JSON.parse(JSON.stringify(value));
 
+test("static MusicKit pages version every local script using its current content hash", () => {
+  for (const [page, assets] of [
+    ["itunes-auth/index.html", ["itunes-shared/musickit-bootstrap.js", "itunes-auth/auth.js"]],
+    ["itunes-player/index.html", ["itunes-shared/musickit-bootstrap.js", "itunes-player/player.js"]],
+  ]) {
+    const references = [...source(page).matchAll(/<script\b[^>]*\bsrc="([^"]+)"/g)].map(match => match[1]);
+    const expected = assets.map(asset => `/${asset}?v=${crypto.createHash("sha256").update(source(asset)).digest("hex").slice(0, 12)}`);
+    assert.deepEqual(references, expected, `${page} must change script URLs whenever script bytes change`);
+  }
+});
+
 test("callback parsing accepts only the owned numeric loopback callback and independent 43-character state", () => {
   const { window } = context();
   const bootstrap = window.TunesMusicKitBootstrap;
