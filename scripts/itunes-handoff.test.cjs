@@ -19,6 +19,7 @@ const env = { MUSICKIT_TEAM_ID: "TEAMID0000", MUSICKIT_KEY_ID: "KEYID00000",
   MUSICKIT_PRIVATE_KEY: privateKey.export({ type: "pkcs8", format: "pem" }) };
 
 function context({ url = `${ORIGIN}/itunes-auth/?${new URLSearchParams({ callback, state })}`, fetch, music, bridge, timers } = {}) {
+  if (music && typeof music.authorize === "function" && !music.api) music.api = { music: async () => ({ data: { data: [{ id: "us" }] } }) };
   const elements = new Map(["status", "detail", "sign-in", "cancel"].map(id => [id, {
     disabled: true, textContent: "", dataset: {}, listeners: {}, addEventListener(name, handler) { this.listeners[name] = handler; },
   }]));
@@ -125,6 +126,30 @@ test("empty own SDK token fails without posting even if authorize returns a stri
   await c.elements.get("sign-in").listeners.click();
   assert(!c.calls.some(([url]) => url === callback));
   assert.equal(c.elements.get("sign-in").disabled, false);
+});
+
+test("a cached browser authorization is validated before it can return to the client", async () => {
+  let validated = 0;
+  const c = context({ music: { authorize: async () => token, musicUserToken: token,
+    api: { music: async pathname => { assert.equal(pathname, "/v1/me/storefront"); validated++; } } } });
+  c.runAuth(); await settle();
+  await c.elements.get("sign-in").listeners.click();
+  assert.equal(validated, 1);
+  assert.equal(c.calls.filter(([url]) => url === callback).length, 1);
+});
+
+test("a rejected cached browser grant is cleared through MusicKit and cannot loop stale tokens into the client", async () => {
+  let cleared = 0;
+  const c = context({ music: { authorize: async () => token, musicUserToken: token,
+    api: { music: async () => { throw new Error("private response details"); } },
+    unauthorize: async () => { cleared++; } } });
+  c.runAuth(); await settle();
+  await c.elements.get("sign-in").listeners.click();
+  assert.equal(cleared, 1);
+  assert.equal(c.calls.filter(([url]) => url === callback).length, 0);
+  assert.equal(c.elements.get("status").dataset.code, "authorization_validation_failed");
+  assert.equal(c.elements.get("sign-in").disabled, false);
+  assert(!JSON.stringify([...c.elements.values()].map(e => e.textContent)).includes("private response"));
 });
 
 test("cancel posts only cancellation and suppresses a still-pending authorization result", async () => {

@@ -124,6 +124,14 @@
       stage = "authorization_missing";
       const token = music.musicUserToken;
       if (!bootstrap.validUserToken(token)) throw new Error("authorization_failed");
+      // authorize() can return a browser-cached grant without checking it.
+      // Validate through the owning SDK before forwarding it to a new client.
+      stage = "authorization_validation_failed";
+      try { await music.api.music("/v1/me/storefront"); }
+      catch (error) {
+        try { await music.unauthorize(); } catch {}
+        throw error;
+      }
       stage = "callback_unreachable";
       status.textContent = "Connecting to iTunes…";
       await bootstrap.postHandoff(handoff.callback, { state: handoff.state, music_user_token: token });
