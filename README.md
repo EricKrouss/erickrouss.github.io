@@ -89,3 +89,19 @@ Every build emits a `site.standard.document` JSON export per article in `/standa
 Validation: `node --test scripts/standard-site.test.mjs` covers exact article content, repeat publication, record conflicts, verification pages and missing credentials. Tests use a simulated PDS; live publishing requires the account secrets above.
 
 Blog sharing artwork lives in `public/assets/blog/`: a 1200×630 Win98 cover and a 256×256 Outlook Express publication icon. Their editable HTML layout is `docs/blog-artwork.html` (serve the repository root; render at 1200×630, or 256×256 with `?icon`). The publisher uploads both PNGs to the account’s PDS and attaches blob references as the publication’s `icon` and each document’s `coverImage`. The build also emits Open Graph and Twitter large-image metadata. Shared cards may retain earlier previews until the consuming service’s cache expires.
+
+## MusicKit credential check
+
+The manually dispatched **Check MusicKit credentials** workflow uses repository
+secrets `MUSICKIT_PRIVATE_KEY`, `MUSICKIT_KEY_ID`, and `MUSICKIT_TEAM_ID`. It signs
+an ES256 developer token restricted to `https://erickrouss.github.io`, with a
+five-minute lifetime, and sends it to Apple's documented `/v1/test` endpoint.
+The private key and token stay in the runner's process memory. They are not
+logged, uploaded as artifacts, included in Vite variables, or published to Pages.
+The workflow has read-only repository permission and runs only when manually
+requested on `main`.
+
+Run `node --test scripts/check-musickit.test.cjs` for credential-free checks.
+This integration validates developer signing only. It does not authorize an
+Apple Music subscriber or establish browser-to-client protected playback.
+GitHub Pages itself remains a static site.

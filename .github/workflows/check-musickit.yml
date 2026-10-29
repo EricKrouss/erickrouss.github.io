@@ -1,0 +1,30 @@
+name: Check MusicKit credentials
+
+# This job signs and checks a five-minute developer token. It neither deploys
+# a site nor uploads a key/token artifact. No untrusted pull-request execution.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+      - name: Verify signer without credentials
+        run: node --test scripts/check-musickit.test.cjs
+      - name: Verify registered MusicKit key with Apple
+        env:
+          MUSICKIT_TEAM_ID: ${{ secrets.MUSICKIT_TEAM_ID }}
+          MUSICKIT_KEY_ID: ${{ secrets.MUSICKIT_KEY_ID }}
+          MUSICKIT_PRIVATE_KEY: ${{ secrets.MUSICKIT_PRIVATE_KEY }}
+        run: node scripts/check-musickit.cjs
