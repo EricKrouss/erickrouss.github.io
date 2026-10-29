@@ -152,6 +152,24 @@ test("a rejected cached browser grant is cleared through MusicKit and cannot loo
   assert(!JSON.stringify([...c.elements.values()].map(e => e.textContent)).includes("private response"));
 });
 
+test("cancel while cached browser grant validation is pending prevents a late private token return", async () => {
+  let resolveValidation;
+  const music = { authorize: async () => token, musicUserToken: token,
+    api: { music: () => new Promise(resolve => { resolveValidation = resolve; }) } };
+  const c = context({ music });
+  c.runAuth(); await settle();
+  const signing = c.elements.get("sign-in").listeners.click();
+  await settle();
+  assert.equal(typeof resolveValidation, "function");
+  await c.elements.get("cancel").listeners.click();
+  resolveValidation();
+  await signing;
+  const posts = c.calls.filter(([url]) => url === callback);
+  assert.equal(posts.length, 1);
+  assert.deepEqual(JSON.parse(posts[0][1].body), { state, cancelled: true });
+  assert.match(c.elements.get("status").textContent, /cancelled/);
+});
+
 test("cancel posts only cancellation and suppresses a still-pending authorization result", async () => {
   let resolveAuthorization;
   const music = { authorize: () => new Promise(resolve => { resolveAuthorization = resolve; }), musicUserToken: token };

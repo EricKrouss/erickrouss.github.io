@@ -132,6 +132,7 @@
         try { await music.unauthorize(); } catch {}
         throw error;
       }
+      if (attempt !== generation) return;
       stage = "callback_unreachable";
       status.textContent = "Connecting to iTunes…";
       await bootstrap.postHandoff(handoff.callback, { state: handoff.state, music_user_token: token });
