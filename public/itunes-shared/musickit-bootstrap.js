@@ -30,6 +30,12 @@
     return typeof value === "string" && /^[\x21-\x7e]{1,8192}$/.test(value);
   }
 
+  function callbackError(code) {
+    const error = new Error("The iTunes callback did not complete.");
+    error.code = code;
+    return error;
+  }
+
   async function postHandoff(callback, payload) {
     validateCallback(callback);
     if (!payload || !NONCE.test(payload.state)
@@ -37,13 +43,27 @@
       throw new Error("invalid_handoff");
     }
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 15000);
+    let timedOut = false;
+    // The first request may wait for Chrome's local-network permission prompt.
+    const timeout = setTimeout(() => { timedOut = true; controller.abort(); }, 60000);
     try {
-      const response = await root.fetch(callback, {
-        method: "POST", mode: "cors", credentials: "omit", redirect: "error", cache: "no-store",
-        headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload), signal: controller.signal,
-      });
-      if (!response.ok || (await response.json()).ok !== true) throw new Error("handoff_failed");
+      let response;
+      try {
+        response = await root.fetch(callback, {
+          method: "POST", mode: "cors", credentials: "omit", redirect: "error", cache: "no-store",
+          headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload), signal: controller.signal,
+        });
+      } catch {
+        throw callbackError(timedOut ? "callback_timeout" : "callback_unreachable");
+      }
+      if (!response.ok) {
+        throw callbackError([404, 409, 410].includes(response.status) ? "callback_expired" : "callback_rejected");
+      }
+      let body;
+      try { body = await response.json(); } catch {
+        throw callbackError(timedOut ? "callback_timeout" : "callback_rejected");
+      }
+      if (!body || body.ok !== true) throw callbackError("callback_rejected");
     } finally { clearTimeout(timeout); }
   }
 

@@ -18,9 +18,9 @@ const { privateKey } = crypto.generateKeyPairSync("ec", { namedCurve: "P-256" })
 const env = { MUSICKIT_TEAM_ID: "TEAMID0000", MUSICKIT_KEY_ID: "KEYID00000",
   MUSICKIT_PRIVATE_KEY: privateKey.export({ type: "pkcs8", format: "pem" }) };
 
-function context({ url = `${ORIGIN}/itunes-auth/?${new URLSearchParams({ callback, state })}`, fetch, music, bridge } = {}) {
+function context({ url = `${ORIGIN}/itunes-auth/?${new URLSearchParams({ callback, state })}`, fetch, music, bridge, timers } = {}) {
   const elements = new Map(["status", "detail", "sign-in", "cancel"].map(id => [id, {
-    disabled: true, textContent: "", listeners: {}, addEventListener(name, handler) { this.listeners[name] = handler; },
+    disabled: true, textContent: "", dataset: {}, listeners: {}, addEventListener(name, handler) { this.listeners[name] = handler; },
   }]));
   const calls = [], history = [], reports = [];
   const current = new URL(url);
@@ -41,7 +41,8 @@ function context({ url = `${ORIGIN}/itunes-auth/?${new URLSearchParams({ callbac
     tunesPlayerBridge: bridge ? { ...bridge, report: event => reports.push(event) } : undefined,
     console: { log() { throw new Error("unexpected logging"); }, error() { throw new Error("unexpected logging"); } },
   };
-  const sandbox = vm.createContext({ window, URL, URLSearchParams, AbortController, setTimeout, clearTimeout,
+  const sandbox = vm.createContext({ window, URL, URLSearchParams, AbortController,
+    setTimeout: timers?.setTimeout || setTimeout, clearTimeout: timers?.clearTimeout || clearTimeout,
     console: window.console });
   vm.runInContext(shared, sandbox);
   return { window, sandbox, elements, calls, history, reports,
@@ -123,7 +124,7 @@ test("cancel posts only cancellation and suppresses a still-pending authorizatio
   assert.deepEqual(JSON.parse(posts[0][1].body), { state, cancelled: true });
 });
 
-test("callback failure keeps the validated closure available for retry after URL removal", async () => {
+test("callback rejection requires a fresh connection rather than retrying a potentially expired request", async () => {
   let posts = 0;
   const c = context({ music: { authorize: async () => token, musicUserToken: token }, fetch: async url => {
     if (url.startsWith(`${ORIGIN}/itunes-auth/developer-token.json?`)) return { ok: true, json: async () => createPublicToken({ env }) };
@@ -131,10 +132,51 @@ test("callback failure keeps the validated closure available for retry after URL
   } });
   c.runAuth(); await settle();
   await c.elements.get("sign-in").listeners.click();
-  assert.equal(c.elements.get("sign-in").disabled, false);
+  assert.equal(c.elements.get("sign-in").disabled, true);
+  assert.equal(c.elements.get("cancel").disabled, true);
+  assert.equal(c.elements.get("status").dataset.code, "callback_rejected");
+  assert.match(c.elements.get("detail").textContent, /Return to iTunes.*Reconnect/);
   await c.elements.get("sign-in").listeners.click();
-  assert.equal(posts, 2);
+  assert.equal(posts, 1);
   assert.equal(c.history.length, 1);
+});
+
+test("sign-in failures identify the fixed stage without exposing SDK or callback error details", async () => {
+  const privateError = `PRIVATE_SDK_ERROR_${token}`;
+  for (const [failure, expected] of [
+    ["authorize", "authentication_failed"], ["token", "authorization_missing"],
+    ["network", "callback_unreachable"], ["expired", "callback_expired"], ["malformed", "callback_rejected"],
+  ]) {
+    const music = { authorize: async () => { if (failure === "authorize") throw new Error(privateError); },
+      musicUserToken: failure === "token" ? "" : token };
+    const c = context({ music, fetch: async url => {
+      if (url.startsWith(`${ORIGIN}/itunes-auth/developer-token.json?`)) return { ok: true, json: async () => createPublicToken({ env }) };
+      if (failure === "network") throw new TypeError(privateError);
+      if (failure === "expired") return { ok: false, status: 409, json: async () => ({ ok: false }) };
+      return { ok: true, json: async () => { throw new Error(privateError); } };
+    } });
+    c.runAuth(); await settle();
+    await c.elements.get("sign-in").listeners.click();
+    assert.equal(c.elements.get("status").dataset.code, expected);
+    const visible = [...c.elements.values()].map(element => element.textContent).join(" ");
+    assert(!visible.includes(privateError) && !visible.includes(token));
+    if (expected.startsWith("callback_")) {
+      assert.match(visible, /Return to iTunes.*Reconnect/);
+      assert.equal(c.elements.get("sign-in").disabled, true);
+    } else assert.equal(c.elements.get("sign-in").disabled, false);
+  }
+});
+
+test("callback timeout permits sixty seconds for the local-network permission decision and emits only a fixed code", async () => {
+  const delays = [];
+  const c = context({ timers: {
+    setTimeout(callback, delay) { delays.push(delay); queueMicrotask(callback); return 1; }, clearTimeout() {},
+  }, fetch: async (_url, options) => new Promise((_, reject) => {
+    options.signal.addEventListener("abort", () => reject(new Error(token)));
+  }) });
+  await assert.rejects(c.window.TunesMusicKitBootstrap.postHandoff(callback, { state, music_user_token: token }),
+    error => error.code === "callback_timeout" && !error.message.includes(token));
+  assert.deepEqual(delays, [60000]);
 });
 
 test("fresh public JWT validation rejects stale, wrong-origin, or altered metadata before configure", () => {
